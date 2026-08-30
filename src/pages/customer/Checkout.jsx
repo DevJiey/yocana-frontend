@@ -1,4 +1,4 @@
-import { API_URL } from "../../config/api";
+import { API_URL } from "../../config/api"
 import { useEffect, useState } from "react"
 import {
     Link,
@@ -28,6 +28,7 @@ function Checkout() {
 
     const [shippingAddress, setShippingAddress] =
         useState("")
+
     const [savedAddresses, setSavedAddresses] =
         useState([])
 
@@ -77,7 +78,7 @@ function Checkout() {
                 maximumFractionDigits: 2,
             }
         )
-        
+
     const buildShippingAddress = (address) => {
         return [
             address.recipient_name,
@@ -146,7 +147,7 @@ function Checkout() {
                     !data.cart?.items ||
                     data.cart.items.length === 0
                 ) {
-                    navigate("/cart")
+                    navigate("/")
                     return
                 }
 
@@ -175,13 +176,15 @@ function Checkout() {
                     )
                 }
 
-                const addresses = data.addresses || []
+                const addresses =
+                    data.addresses || []
 
                 setSavedAddresses(addresses)
 
                 const defaultAddress =
                     addresses.find(
-                        (address) => address.is_default
+                        (address) =>
+                            address.is_default
                     ) || addresses[0]
 
                 if (defaultAddress) {
@@ -205,6 +208,7 @@ function Checkout() {
             setError(
                 "Please select a shipping address."
             )
+
             return
         }
 
@@ -216,9 +220,6 @@ function Checkout() {
             setLoaderMessage("Placing your order")
             setLoaderOpen(true)
 
-            // ========================================
-            // CREATE ORDER
-            // ========================================
             const response = await apiFetch(
                 `${API_URL}/api/orders/checkout`,
                 {
@@ -245,9 +246,6 @@ function Checkout() {
                 new Event("yocana-cart-updated")
             )
 
-            // ========================================
-            // COD
-            // ========================================
             if (paymentMethod === "COD") {
                 setLoaderStatus("success")
                 setLoaderMessage("Order placed")
@@ -265,20 +263,18 @@ function Checkout() {
                 return
             }
 
-            // ========================================
-            // ONLINE PAYMENT
-            // ========================================
             setLoaderMessage("Preparing payment")
 
-            const paymentResponse = await apiFetch(
-                `${API_URL}/api/payments/online/initialize`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        order_id: createdOrder.id,
-                    }),
-                }
-            )
+            const paymentResponse =
+                await apiFetch(
+                    `${API_URL}/api/payments/online/initialize`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
+                            order_id: createdOrder.id,
+                        }),
+                    }
+                )
 
             const paymentData =
                 await paymentResponse.json()
@@ -299,7 +295,9 @@ function Checkout() {
             setTimeout(() => {
                 setLoaderOpen(false)
 
-                navigate(`/payment/${createdOrder.id}`)
+                navigate(
+                    `/payment/${createdOrder.id}`
+                )
             }, 1400)
         } catch (err) {
             setLoaderOpen(false)
@@ -336,14 +334,16 @@ function Checkout() {
             <main className="min-h-screen bg-[#050505] px-5 pb-20 pt-24 md:px-8 md:pb-28 md:pt-28">
                 <div className="mx-auto max-w-7xl">
 
+                    {/* BACK */}
                     <Link
-                        to="/cart"
+                        to="/"
                         className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.25em] text-white/35 transition hover:text-[#D4AF37]"
                     >
                         <FiArrowLeft size={14} />
-                        Back to Cart
+                        Back to Home
                     </Link>
 
+                    {/* TITLE */}
                     <div className="mt-8 border-b border-white/10 pb-7">
                         <p className="text-[9px] uppercase tracking-[0.35em] text-[#D4AF37]">
                             Complete Your Order
@@ -354,6 +354,7 @@ function Checkout() {
                         </h1>
                     </div>
 
+                    {/* ERROR */}
                     {error && (
                         <div className="mt-6 border border-red-500/20 bg-red-500/[0.04] px-4 py-3">
                             <p className="text-xs text-red-400">
@@ -405,13 +406,16 @@ function Checkout() {
                                             </p>
 
                                             <p className="mt-1 text-[10px] text-white/20">
-                                                Select where you want your order delivered.
+                                                Select where you want
+                                                your order delivered.
                                             </p>
                                         </div>
 
                                         <Link
                                             to="/account"
-                                            state={{ from: "/checkout" }}
+                                            state={{
+                                                from: "/checkout",
+                                            }}
                                             className="text-[8px] uppercase tracking-[0.18em] text-[#D4AF37] transition hover:text-[#E1C35B]"
                                         >
                                             Manage Addresses
@@ -424,7 +428,8 @@ function Checkout() {
                                                 Loading saved addresses...
                                             </p>
                                         </div>
-                                    ) : savedAddresses.length === 0 ? (
+                                    ) : savedAddresses.length ===
+                                        0 ? (
                                         <div className="mt-4 border border-dashed border-white/10 bg-[#050505] p-5">
                                             <FiMapPin
                                                 size={16}
@@ -436,13 +441,16 @@ function Checkout() {
                                             </p>
 
                                             <p className="mt-1 text-[10px] leading-5 text-white/25">
-                                                Add a shipping address from your account
-                                                before placing an order.
+                                                Add a shipping address
+                                                from your account before
+                                                placing an order.
                                             </p>
 
                                             <Link
                                                 to="/account"
-                                                state={{ from: "/checkout" }}
+                                                state={{
+                                                    from: "/checkout",
+                                                }}
                                                 className="mt-4 inline-flex h-9 items-center border border-[#D4AF37]/25 px-3 text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] transition hover:bg-[#D4AF37]/[0.05]"
                                             >
                                                 Add Address
@@ -450,81 +458,95 @@ function Checkout() {
                                         </div>
                                     ) : (
                                         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                                            {savedAddresses.map((address) => {
-                                                const selected =
-                                                    selectedAddressId === address.id
+                                            {savedAddresses.map(
+                                                (address) => {
+                                                    const selected =
+                                                        selectedAddressId ===
+                                                        address.id
 
-                                                return (
-                                                    <button
-                                                        key={address.id}
-                                                        type="button"
-                                                        onClick={() =>
-                                                            selectSavedAddress(address)
-                                                        }
-                                                        className={`relative min-w-0 border p-4 text-left transition ${selected
-                                                            ? "border-[#D4AF37]/60 bg-[#D4AF37]/[0.05]"
-                                                            : "border-white/10 bg-[#050505] hover:border-white/20"
-                                                            }`}
-                                                    >
-                                                        <div className="flex items-start justify-between gap-3">
-                                                            <div className="min-w-0">
-                                                                <div className="flex flex-wrap items-center gap-2">
-                                                                    <p
-                                                                        className={`text-[8px] uppercase tracking-[0.18em] ${selected
-                                                                            ? "text-[#D4AF37]"
-                                                                            : "text-white/40"
-                                                                            }`}
-                                                                    >
-                                                                        {address.label || "Address"}
+                                                    return (
+                                                        <button
+                                                            key={address.id}
+                                                            type="button"
+                                                            onClick={() =>
+                                                                selectSavedAddress(
+                                                                    address
+                                                                )
+                                                            }
+                                                            className={`relative min-w-0 border p-4 text-left transition ${selected
+                                                                    ? "border-[#D4AF37]/60 bg-[#D4AF37]/[0.05]"
+                                                                    : "border-white/10 bg-[#050505] hover:border-white/20"
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-start justify-between gap-3">
+                                                                <div className="min-w-0">
+                                                                    <div className="flex flex-wrap items-center gap-2">
+                                                                        <p
+                                                                            className={`text-[8px] uppercase tracking-[0.18em] ${selected
+                                                                                    ? "text-[#D4AF37]"
+                                                                                    : "text-white/40"
+                                                                                }`}
+                                                                        >
+                                                                            {address.label ||
+                                                                                "Address"}
+                                                                        </p>
+
+                                                                        {address.is_default && (
+                                                                            <span className="border border-[#D4AF37]/20 px-2 py-1 text-[7px] uppercase tracking-[0.14em] text-[#D4AF37]">
+                                                                                Default
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <p className="mt-3 break-words text-sm font-medium text-white/70">
+                                                                        {
+                                                                            address.recipient_name
+                                                                        }
                                                                     </p>
 
-                                                                    {address.is_default && (
-                                                                        <span className="border border-[#D4AF37]/20 px-2 py-1 text-[7px] uppercase tracking-[0.14em] text-[#D4AF37]">
-                                                                            Default
-                                                                        </span>
-                                                                    )}
+                                                                    <p className="mt-1 break-words text-[10px] text-white/30">
+                                                                        {
+                                                                            address.phone
+                                                                        }
+                                                                    </p>
                                                                 </div>
 
-                                                                <p className="mt-3 break-words text-sm font-medium text-white/70">
-                                                                    {address.recipient_name}
-                                                                </p>
-
-                                                                <p className="mt-1 break-words text-[10px] text-white/30">
-                                                                    {address.phone}
-                                                                </p>
+                                                                <div
+                                                                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${selected
+                                                                            ? "border-[#D4AF37] bg-[#D4AF37]"
+                                                                            : "border-white/20"
+                                                                        }`}
+                                                                >
+                                                                    {selected && (
+                                                                        <span className="h-1.5 w-1.5 rounded-full bg-[#050505]" />
+                                                                    )}
+                                                                </div>
                                                             </div>
 
-                                                            <div
-                                                                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${selected
-                                                                    ? "border-[#D4AF37] bg-[#D4AF37]"
-                                                                    : "border-white/20"
-                                                                    }`}
-                                                            >
-                                                                {selected && (
-                                                                    <span className="h-1.5 w-1.5 rounded-full bg-[#050505]" />
-                                                                )}
+                                                            <div className="mt-4 border-t border-white/10 pt-3">
+                                                                <p className="break-words text-[10px] leading-5 text-white/35">
+                                                                    {
+                                                                        address.address_line
+                                                                    }
+                                                                    {address.barangay
+                                                                        ? `, ${address.barangay}`
+                                                                        : ""}
+                                                                </p>
+
+                                                                <p className="break-words text-[10px] leading-5 text-white/35">
+                                                                    {address.city},{" "}
+                                                                    {
+                                                                        address.province
+                                                                    }
+                                                                    {address.postal_code
+                                                                        ? ` ${address.postal_code}`
+                                                                        : ""}
+                                                                </p>
                                                             </div>
-                                                        </div>
-
-                                                        <div className="mt-4 border-t border-white/10 pt-3">
-                                                            <p className="break-words text-[10px] leading-5 text-white/35">
-                                                                {address.address_line}
-                                                                {address.barangay
-                                                                    ? `, ${address.barangay}`
-                                                                    : ""}
-                                                            </p>
-
-                                                            <p className="break-words text-[10px] leading-5 text-white/35">
-                                                                {address.city},{" "}
-                                                                {address.province}
-                                                                {address.postal_code
-                                                                    ? ` ${address.postal_code}`
-                                                                    : ""}
-                                                            </p>
-                                                        </div>
-                                                    </button>
-                                                )
-                                            })}
+                                                        </button>
+                                                    )
+                                                }
+                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -541,7 +563,9 @@ function Checkout() {
                                             </p>
 
                                             <p className="mt-1 text-[9px] leading-4 text-white/25">
-                                                Automatically determined from your selected shipping address.
+                                                Automatically determined
+                                                from your selected shipping
+                                                address.
                                             </p>
                                         </div>
 
@@ -551,7 +575,10 @@ function Checkout() {
                                             </p>
 
                                             <p className="mt-1 text-sm text-[#D4AF37]">
-                                                ₱{formatPrice(shippingFee)}
+                                                ₱
+                                                {formatPrice(
+                                                    shippingFee
+                                                )}
                                             </p>
                                         </div>
                                     </div>
@@ -577,63 +604,79 @@ function Checkout() {
                                     </div>
                                 </div>
 
-                                <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                    {[
-                                        {
-                                            value: "COD",
-                                            label:
-                                                "Cash on Delivery",
-                                        },
-                                        {
-                                            value: "GCASH",
-                                            label: "GCash",
-                                        },
-                                        {
-                                            value: "MAYA",
-                                            label: "Maya",
-                                        },
-                                        {
-                                            value: "CARD",
-                                            label:
-                                                "Credit / Debit Card",
-                                        },
-                                        {
-                                            value: "BANK",
-                                            label:
-                                                "Online Banking",
-                                        },
-                                    ].map((method) => (
-                                        <button
-                                            key={method.value}
-                                            type="button"
-                                            onClick={() =>
-                                                setPaymentMethod(
-                                                    method.value
-                                                )
-                                            }
-                                            className={`border px-4 py-4 text-left transition ${paymentMethod ===
-                                                method.value
-                                                ? "border-[#D4AF37]/60 bg-[#D4AF37]/[0.05]"
-                                                : "border-white/10 hover:border-white/20"
-                                                }`}
-                                        >
-                                            <p className="text-sm text-white">
-                                                {method.label}
-                                            </p>
+                                <div className="mt-7">
+                                    <label
+                                        htmlFor="payment-method"
+                                        className="mb-2 block text-[9px] uppercase tracking-[0.22em] text-white/35"
+                                    >
+                                        Select Payment Method
+                                    </label>
 
-                                            <p className="mt-1 text-[9px] uppercase tracking-[0.15em] text-white/25">
-                                                {method.value}
-                                            </p>
-                                        </button>
-                                    ))}
+                                    <div className="relative">
+                                        <select
+                                            id="payment-method"
+                                            value={paymentMethod}
+                                            onChange={(event) =>
+                                                setPaymentMethod(event.target.value)
+                                            }
+                                            className="h-12 w-full appearance-none border border-white/10 bg-[#050505] px-4 pr-12 text-sm text-white/75 outline-none transition focus:border-[#D4AF37]/60"
+                                        >
+                                            <option value="COD">
+                                                Cash on Delivery
+                                            </option>
+
+                                            <option value="GCASH">
+                                                GCash
+                                            </option>
+
+                                            <option value="MAYA">
+                                                Maya
+                                            </option>
+
+                                            <option value="CARD">
+                                                Credit / Debit Card
+                                            </option>
+
+                                            <option value="BANK">
+                                                Online Banking
+                                            </option>
+                                        </select>
+
+                                        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-[#D4AF37]">
+                                            ▼
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-3 border border-white/[0.07] bg-[#050505] px-4 py-3">
+                                        <p className="text-[8px] uppercase tracking-[0.18em] text-white/25">
+                                            Selected Method
+                                        </p>
+
+                                        <p className="mt-1 text-sm text-[#D4AF37]">
+                                            {paymentMethod === "COD" &&
+                                                "Cash on Delivery"}
+
+                                            {paymentMethod === "GCASH" &&
+                                                "GCash"}
+
+                                            {paymentMethod === "MAYA" &&
+                                                "Maya"}
+
+                                            {paymentMethod === "CARD" &&
+                                                "Credit / Debit Card"}
+
+                                            {paymentMethod === "BANK" &&
+                                                "Online Banking"}
+                                        </p>
+                                    </div>
                                 </div>
 
                                 {paymentMethod !== "COD" && (
                                     <div className="mt-5 border border-[#D4AF37]/15 bg-[#D4AF37]/[0.03] px-4 py-3">
                                         <p className="text-xs leading-5 text-white/35">
-                                            Online payment will
-                                            continue after the order
-                                            has been created.
+                                            Online payment will continue
+                                            after the order has been
+                                            created.
                                         </p>
                                     </div>
                                 )}
@@ -657,7 +700,9 @@ function Checkout() {
                                 <div className="mt-6 space-y-4 border-b border-white/10 pb-6">
                                     {cart.items.map((item) => (
                                         <div
-                                            key={item.cart_item_id}
+                                            key={
+                                                item.cart_item_id
+                                            }
                                             className="flex items-start justify-between gap-4"
                                         >
                                             <div>

@@ -193,13 +193,13 @@ function OrderDetails() {
       ) {
         throw new Error(
           data.message ||
-            "Unable to submit cancellation request"
+          "Unable to submit cancellation request"
         )
       }
 
       setCancelSuccess(
         data.message ||
-          "Cancellation request submitted successfully"
+        "Cancellation request submitted successfully"
       )
 
       setCancelReason("")
@@ -262,13 +262,13 @@ function OrderDetails() {
       ) {
         throw new Error(
           data.message ||
-            "Unable to submit return request"
+          "Unable to submit return request"
         )
       }
 
       setReturnSuccess(
         data.message ||
-          "Return request submitted successfully"
+        "Return request submitted successfully"
       )
 
       setReturnReason("")
@@ -371,7 +371,7 @@ function OrderDetails() {
         ) {
           throw new Error(
             orderData.message ||
-              "Unable to load order"
+            "Unable to load order"
           )
         }
 
@@ -381,7 +381,7 @@ function OrderDetails() {
         ) {
           throw new Error(
             profileData.message ||
-              "Unable to load account"
+            "Unable to load account"
           )
         }
 
@@ -447,10 +447,11 @@ function OrderDetails() {
             </p>
 
             <Link
-              to="/orders"
+              to="/account"
+              state={{ section: "overview" }}
               className="mt-7 inline-flex h-11 items-center justify-center border border-white/15 px-6 text-[9px] uppercase tracking-[0.2em] text-white/60 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
             >
-              Back to Orders
+              Back to My Account
             </Link>
           </div>
         </div>
@@ -496,13 +497,14 @@ function OrderDetails() {
           returnLoading
         }
       >
-        {/* BACK */}
+        {/* BACK TO ACCOUNT */}
         <Link
-          to="/orders"
+          to="/account"
+          state={{ section: "overview" }}
           className="inline-flex items-center gap-2 text-[8px] uppercase tracking-[0.2em] text-white/35 transition hover:text-[#D4AF37]"
         >
           <FiArrowLeft size={13} />
-          Back to My Orders
+          Back to My Account
         </Link>
 
         {/* HEADER */}
@@ -611,53 +613,53 @@ function OrderDetails() {
 
               {tracking?.shipment
                 ?.courier_name && (
-                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div className="min-w-0 border border-white/10 p-4">
-                    <p className="text-[7px] uppercase tracking-[0.2em] text-white/25 sm:text-[8px]">
-                      Courier
-                    </p>
+                  <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="min-w-0 border border-white/10 p-4">
+                      <p className="text-[7px] uppercase tracking-[0.2em] text-white/25 sm:text-[8px]">
+                        Courier
+                      </p>
 
-                    <p className="mt-2 break-words text-xs text-white/65 sm:text-sm">
-                      {
-                        tracking
+                      <p className="mt-2 break-words text-xs text-white/65 sm:text-sm">
+                        {
+                          tracking
+                            .shipment
+                            .courier_name
+                        }
+                      </p>
+                    </div>
+
+                    <div className="min-w-0 border border-white/10 p-4">
+                      <p className="text-[7px] uppercase tracking-[0.2em] text-white/25 sm:text-[8px]">
+                        Tracking Number
+                      </p>
+
+                      <p className="mt-2 break-all text-xs text-white/65 sm:text-sm">
+                        {tracking
                           .shipment
-                          .courier_name
-                      }
-                    </p>
+                          .tracking_number ||
+                          "Not available"}
+                      </p>
+                    </div>
                   </div>
-
-                  <div className="min-w-0 border border-white/10 p-4">
-                    <p className="text-[7px] uppercase tracking-[0.2em] text-white/25 sm:text-[8px]">
-                      Tracking Number
-                    </p>
-
-                    <p className="mt-2 break-all text-xs text-white/65 sm:text-sm">
-                      {tracking
-                        .shipment
-                        .tracking_number ||
-                        "Not available"}
-                    </p>
-                  </div>
-                </div>
-              )}
+                )}
 
               {tracking?.shipment
                 ?.tracking_url && (
-                <a
-                  href={
-                    tracking.shipment
-                      .tracking_url
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-[8px] uppercase tracking-[0.18em] text-[#D4AF37]"
-                >
-                  Track Shipment
-                  <FiExternalLink
-                    size={12}
-                  />
-                </a>
-              )}
+                  <a
+                    href={
+                      tracking.shipment
+                        .tracking_url
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 text-[8px] uppercase tracking-[0.18em] text-[#D4AF37]"
+                  >
+                    Track Shipment
+                    <FiExternalLink
+                      size={12}
+                    />
+                  </a>
+                )}
 
               <div className="mt-6">
                 {tracking?.timeline
@@ -673,7 +675,7 @@ function OrderDetails() {
                           tracking
                             .timeline
                             .length -
-                            1
+                          1
 
                         return (
                           <motion.div
@@ -695,11 +697,10 @@ function OrderDetails() {
                           >
                             <div className="flex flex-col items-center">
                               <div
-                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${
-                                  isLast
-                                    ? "border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#D4AF37]"
-                                    : "border-white/15 text-white/35"
-                                }`}
+                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${isLast
+                                  ? "border-[#D4AF37]/50 bg-[#D4AF37]/10 text-[#D4AF37]"
+                                  : "border-white/15 text-white/35"
+                                  }`}
                               >
                                 {isLast ? (
                                   <FiCheck
@@ -720,18 +721,17 @@ function OrderDetails() {
                                 tracking
                                   .timeline
                                   .length -
-                                  1 && (
-                                <div className="min-h-[55px] w-px bg-white/10" />
-                              )}
+                                1 && (
+                                  <div className="min-h-[55px] w-px bg-white/10" />
+                                )}
                             </div>
 
                             <div className="min-w-0 pb-7">
                               <p
-                                className={`break-words text-xs capitalize sm:text-sm ${
-                                  isLast
-                                    ? "text-[#D4AF37]"
-                                    : "text-white/60"
-                                }`}
+                                className={`break-words text-xs capitalize sm:text-sm ${isLast
+                                  ? "text-[#D4AF37]"
+                                  : "text-white/60"
+                                  }`}
                               >
                                 {
                                   history.status
@@ -796,7 +796,7 @@ function OrderDetails() {
                 <div className="inline-flex border border-[#D4AF37]/20 bg-[#D4AF37]/[0.04] px-3 py-1.5">
                   <span className="text-[7px] uppercase tracking-[0.18em] text-[#D4AF37] sm:text-[8px]">
                     {order.payment_status ===
-                    "paid"
+                      "paid"
                       ? "Payment Successful"
                       : "Payment Pending"}
                   </span>
@@ -805,13 +805,13 @@ function OrderDetails() {
 
               {order.payment_method !==
                 "COD" && (
-                <p className="mt-3 text-[10px] leading-5 text-white/30 sm:text-xs">
-                  {order.payment_status ===
-                  "paid"
-                    ? "Your online payment has been successfully confirmed."
-                    : "Your online payment is still waiting for confirmation."}
-                </p>
-              )}
+                  <p className="mt-3 text-[10px] leading-5 text-white/30 sm:text-xs">
+                    {order.payment_status ===
+                      "paid"
+                      ? "Your online payment has been successfully confirmed."
+                      : "Your online payment is still waiting for confirmation."}
+                  </p>
+                )}
             </section>
 
             {/* SHIPPING */}
@@ -876,19 +876,19 @@ function OrderDetails() {
                 {Number(
                   order.discount_amount
                 ) > 0 && (
-                  <div className="flex justify-between gap-4 text-xs sm:text-sm">
-                    <span className="text-white/30">
-                      Discount
-                    </span>
+                    <div className="flex justify-between gap-4 text-xs sm:text-sm">
+                      <span className="text-white/30">
+                        Discount
+                      </span>
 
-                    <span className="shrink-0 text-white/60">
-                      -₱
-                      {formatPrice(
-                        order.discount_amount
-                      )}
-                    </span>
-                  </div>
-                )}
+                      <span className="shrink-0 text-white/60">
+                        -₱
+                        {formatPrice(
+                          order.discount_amount
+                        )}
+                      </span>
+                    </div>
+                  )}
 
                 <div className="flex items-end justify-between gap-4 border-t border-white/10 pt-5">
                   <span className="text-[8px] uppercase tracking-[0.2em] text-white/30 sm:text-[9px]">
@@ -909,9 +909,9 @@ function OrderDetails() {
             {order.order_status !==
               "shipped" &&
               order.order_status !==
-                "delivered" &&
+              "delivered" &&
               order.order_status !==
-                "cancelled" && (
+              "cancelled" && (
                 <section className="border border-white/10 bg-[#080808] p-4 sm:p-5">
                   <p className="text-[8px] uppercase tracking-[0.22em] text-white/25">
                     Need to cancel?
@@ -944,7 +944,7 @@ function OrderDetails() {
             {order.order_status ===
               "delivered" &&
               order.payment_status ===
-                "paid" && (
+              "paid" && (
                 <section className="border border-white/10 bg-[#080808] p-4 sm:p-5">
                   <p className="text-[8px] uppercase tracking-[0.22em] text-white/25">
                     Need to return?

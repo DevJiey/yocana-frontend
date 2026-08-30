@@ -1,4 +1,4 @@
-import { API_URL } from "../config/api";
+import { API_URL } from "../config/api"
 import { useEffect, useState } from "react"
 import {
   Link,
@@ -19,9 +19,11 @@ import {
 } from "motion/react"
 
 import yocanaLogo from "../assets/yocana-logo-gold.png"
+import CartDrawer from "./cart/CartDrawer"
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
   const [activeSection, setActiveSection] =
@@ -99,11 +101,12 @@ function Navbar() {
   }, [location.pathname])
 
   /* ========================= */
-  /* CLOSE MOBILE MENU */
+  /* CLOSE MENUS ON ROUTE CHANGE */
   /* ========================= */
 
   useEffect(() => {
     setIsOpen(false)
+    setIsCartOpen(false)
 
     if (location.pathname === "/") {
       setActiveSection("home")
@@ -183,11 +186,12 @@ function Navbar() {
   }, [])
 
   /* ========================= */
-  /* SCROLL TO HOME SECTION */
+  /* SCROLL TO SECTION */
   /* ========================= */
 
   const scrollToSection = (id) => {
     setIsOpen(false)
+    setIsCartOpen(false)
 
     if (location.pathname !== "/") {
       navigate("/")
@@ -240,194 +244,148 @@ function Navbar() {
     }`
   }
 
-  return (
-    <header
-      className={`fixed left-0 top-0 z-50 w-full border-b transition-all duration-300 ${
-        isScrolled
-          ? "border-white/10 bg-[#030303]/95 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl"
-          : "border-white/[0.06] bg-[#030303]/80 backdrop-blur-lg"
-      }`}
+  /* ========================= */
+  /* OPEN CART */
+  /* ========================= */
+
+  const handleOpenCart = () => {
+    const token =
+      localStorage.getItem("yocana_token")
+
+    if (!token) {
+      setIsOpen(false)
+
+      navigate("/login", {
+        state: {
+          from:
+            location.pathname +
+            location.search,
+        },
+      })
+
+      return
+    }
+
+    setIsOpen(false)
+    setIsCartOpen(true)
+  }
+
+  /* ========================= */
+  /* CART BUTTON */
+  /* ========================= */
+
+  const CartButton = () => (
+    <motion.div
+      animate={
+        cartPulse
+          ? {
+              scale: [
+                1,
+                1.18,
+                0.94,
+                1,
+              ],
+            }
+          : {
+              scale: 1,
+            }
+      }
+      transition={{
+        duration: 0.55,
+      }}
+      className="relative"
     >
-      <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-5 md:h-[72px] md:px-8">
-        {/* LOGO */}
-        <button
-          type="button"
-          onClick={() =>
-            scrollToSection("home")
-          }
-          className="flex items-center"
-          aria-label="Go to home"
-        >
-          <img
-            src={yocanaLogo}
-            alt="YOCANA"
-            className="h-auto w-[72px] select-none object-contain sm:w-[76px] md:w-[82px]"
-            draggable="false"
-          />
-        </button>
-
-        {/* ===================== */}
-        {/* DESKTOP NAV */}
-        {/* ===================== */}
-
-        <nav className="hidden items-center gap-8 md:flex">
-          {/* HOME */}
-          <button
-            type="button"
-            onClick={() =>
-              scrollToSection("home")
-            }
-            className={desktopItemClass(
-              "home"
-            )}
-          >
-            Home
-          </button>
-
-          {/* COLLECTION */}
-          <Link
-            to="/shop"
-            className={`relative text-[10px] uppercase tracking-[0.22em] transition duration-300 ${
-              isCollectionPage
-                ? "text-[#D4AF37]"
-                : "text-white/50 hover:text-white/80"
-            }`}
-          >
-            Collection
-          </Link>
-
-          {/* OUR STORY */}
-          <button
-            type="button"
-            onClick={() =>
-              scrollToSection("story")
-            }
-            className={desktopItemClass(
-              "story"
-            )}
-          >
-            Our Story
-          </button>
-
-          {/* CONTACT */}
-          <button
-            type="button"
-            onClick={() =>
-              scrollToSection("contact")
-            }
-            className={desktopItemClass(
-              "contact"
-            )}
-          >
-            Contact
-          </button>
-        </nav>
-
-        {/* ===================== */}
-        {/* ACTIONS */}
-        {/* ===================== */}
-
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* ACCOUNT */}
-          <Link
-            to="/account"
-            className="hidden h-9 w-9 items-center justify-center text-white/60 transition duration-300 hover:text-[#D4AF37] sm:flex"
-            aria-label="Account"
-          >
-            <FiUser size={18} />
-          </Link>
-
-          {/* CART */}
-          <motion.div
-            animate={
-              cartPulse
-                ? {
-                    scale: [
-                      1,
-                      1.18,
-                      0.94,
-                      1,
-                    ],
-                  }
-                : {
-                    scale: 1,
-                  }
-            }
-            transition={{
-              duration: 0.55,
-            }}
-            className="relative"
-          >
-            <Link
-              id="yocana-cart-target"
-              to="/cart"
-              className="relative flex h-9 w-9 items-center justify-center text-white/60 transition duration-300 hover:text-[#D4AF37]"
-              aria-label={`Cart with ${cartCount} items`}
-            >
-              <motion.div
-                animate={
-                  cartPulse
-                    ? {
-                        rotate: [
-                          0,
-                          -10,
-                          10,
-                          -6,
-                          0,
-                        ],
-                      }
-                    : {
-                        rotate: 0,
-                      }
+      <button
+        id="yocana-cart-target"
+        type="button"
+        onClick={handleOpenCart}
+        className="relative flex h-9 w-9 items-center justify-center text-white/60 transition duration-300 hover:text-[#D4AF37]"
+        aria-label={`Cart with ${cartCount} items`}
+        aria-haspopup="dialog"
+        aria-expanded={isCartOpen}
+      >
+        <motion.div
+          animate={
+            cartPulse
+              ? {
+                  rotate: [
+                    0,
+                    -10,
+                    10,
+                    -6,
+                    0,
+                  ],
                 }
-                transition={{
-                  duration: 0.5,
-                }}
-              >
-                <FiShoppingBag size={19} />
-              </motion.div>
+              : {
+                  rotate: 0,
+                }
+          }
+          transition={{
+            duration: 0.5,
+          }}
+        >
+          <FiShoppingBag size={19} />
+        </motion.div>
 
-              <AnimatePresence mode="popLayout">
-                {cartCount > 0 && (
-                  <motion.span
-                    key={cartCount}
-                    initial={{
-                      scale: 0,
-                      opacity: 0,
-                    }}
-                    animate={{
-                      scale: 1,
-                      opacity: 1,
-                    }}
-                    exit={{
-                      scale: 0,
-                      opacity: 0,
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 24,
-                    }}
-                    className="absolute right-0 top-0 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-[#D4AF37] px-1 text-[8px] font-semibold leading-none text-[#030303]"
-                  >
-                    {cartCount > 99
-                      ? "99+"
-                      : cartCount}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Link>
-          </motion.div>
+        <AnimatePresence mode="popLayout">
+          {cartCount > 0 && (
+            <motion.span
+              key={cartCount}
+              initial={{
+                scale: 0,
+                opacity: 0,
+              }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+              }}
+              exit={{
+                scale: 0,
+                opacity: 0,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 24,
+              }}
+              className="absolute right-0 top-0 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-[#D4AF37] px-1 text-[8px] font-semibold leading-none text-[#030303]"
+            >
+              {cartCount > 99
+                ? "99+"
+                : cartCount}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </button>
+    </motion.div>
+  )
 
-          {/* MOBILE MENU */}
+  return (
+    <>
+      <header
+        className={`fixed left-0 top-0 z-50 w-full border-b transition-all duration-300 ${
+          isScrolled
+            ? "border-white/10 bg-[#030303]/95 shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+            : "border-white/[0.06] bg-[#030303]/80 backdrop-blur-lg"
+        }`}
+      >
+        {/* ================================= */}
+        {/* MOBILE HEADER */}
+        {/* ================================= */}
+
+        <div className="relative mx-auto flex h-[68px] w-full items-center justify-between px-4 md:hidden">
+
+          {/* LEFT - HAMBURGER */}
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              setIsCartOpen(false)
+
               setIsOpen(
                 (current) => !current
               )
-            }
-            className="flex h-9 w-9 items-center justify-center text-white/70 transition duration-300 hover:text-[#D4AF37] md:hidden"
+            }}
+            className="flex h-10 w-10 items-center justify-center text-white/70 transition duration-300 hover:text-[#D4AF37]"
             aria-label={
               isOpen
                 ? "Close menu"
@@ -436,75 +394,109 @@ function Navbar() {
             aria-expanded={isOpen}
           >
             {isOpen ? (
-              <FiX size={22} />
+              <FiX size={21} />
             ) : (
-              <FiMenu size={22} />
+              <FiMenu size={21} />
             )}
           </button>
+
+          {/* CENTER - LOGO */}
+          <button
+            type="button"
+            onClick={() =>
+              scrollToSection("home")
+            }
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            aria-label="Go to home"
+          >
+            <img
+              src={yocanaLogo}
+              alt="YOCANA"
+              className="h-auto w-[68px] select-none object-contain"
+              draggable="false"
+            />
+          </button>
+
+          {/* RIGHT - ACCOUNT + CART */}
+          <div className="flex items-center gap-1">
+            <Link
+              to="/account"
+              className="flex h-9 w-9 items-center justify-center text-white/60 transition duration-300 hover:text-[#D4AF37]"
+              aria-label="Account"
+            >
+              <FiUser size={18} />
+            </Link>
+
+            <CartButton />
+          </div>
         </div>
-      </div>
 
-      {/* ========================= */}
-      {/* MOBILE MENU */}
-      {/* ========================= */}
+        {/* ================================= */}
+        {/* DESKTOP HEADER */}
+        {/* ================================= */}
 
-      <div
-        className={`overflow-hidden border-t border-white/[0.06] bg-[#050505] transition-all duration-500 md:hidden ${
-          isOpen
-            ? "max-h-[520px] opacity-100"
-            : "max-h-0 border-transparent opacity-0"
-        }`}
-      >
-        <div className="px-5 py-6">
-          <nav className="flex flex-col">
-            {/* HOME */}
+        <div className="mx-auto hidden h-[72px] max-w-7xl items-center justify-between px-8 md:flex">
+
+          {/* LOGO */}
+          <button
+            type="button"
+            onClick={() =>
+              scrollToSection("home")
+            }
+            className="flex items-center"
+            aria-label="Go to home"
+          >
+            <img
+              src={yocanaLogo}
+              alt="YOCANA"
+              className="h-auto w-[82px] select-none object-contain"
+              draggable="false"
+            />
+          </button>
+
+          {/* DESKTOP NAV */}
+          <nav className="flex items-center gap-8">
             <button
               type="button"
               onClick={() =>
                 scrollToSection("home")
               }
-              className={mobileItemClass(
+              className={desktopItemClass(
                 "home"
               )}
             >
               Home
             </button>
 
-            {/* COLLECTION */}
             <Link
               to="/shop"
-              onClick={() =>
-                setIsOpen(false)
-              }
-              className={`border-b border-white/[0.06] py-4 text-[11px] uppercase tracking-[0.22em] transition ${
+              className={`relative text-[10px] uppercase tracking-[0.22em] transition duration-300 ${
                 isCollectionPage
                   ? "text-[#D4AF37]"
-                  : "text-white/65 hover:text-[#D4AF37]"
+                  : "text-white/50 hover:text-white/80"
               }`}
             >
               Collection
             </Link>
 
-            {/* OUR STORY */}
             <button
               type="button"
               onClick={() =>
                 scrollToSection("story")
               }
-              className={mobileItemClass(
+              className={desktopItemClass(
                 "story"
               )}
             >
               Our Story
             </button>
 
-            {/* CONTACT */}
             <button
               type="button"
               onClick={() =>
                 scrollToSection("contact")
               }
-              className={mobileItemClass(
+              className={desktopItemClass(
                 "contact"
               )}
             >
@@ -512,39 +504,99 @@ function Navbar() {
             </button>
           </nav>
 
-          {/* MOBILE ACCOUNT */}
-          <Link
-            to="/account"
-            onClick={() =>
-              setIsOpen(false)
-            }
-            className="mt-5 flex items-center justify-between border border-white/10 px-4 py-4 transition duration-300 hover:border-[#D4AF37]/40"
-          >
-            <div className="flex items-center gap-3">
-              <FiUser
-                size={17}
-                className="text-[#D4AF37]"
-              />
+          {/* DESKTOP ACTIONS */}
+          <div className="flex items-center gap-3">
+            <Link
+              to="/account"
+              className="flex h-9 w-9 items-center justify-center text-white/60 transition duration-300 hover:text-[#D4AF37]"
+              aria-label="Account"
+            >
+              <FiUser size={18} />
+            </Link>
 
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/70">
-                  My Account
-                </p>
-
-                <p className="mt-1 text-[9px] text-white/25">
-                  Sign in or view your
-                  profile
-                </p>
-              </div>
-            </div>
-
-            <span className="text-[#D4AF37]">
-              →
-            </span>
-          </Link>
+            <CartButton />
+          </div>
         </div>
-      </div>
-    </header>
+
+        {/* ================================= */}
+        {/* MOBILE MENU DRAWER */}
+        {/* ================================= */}
+
+        <div
+          className={`overflow-hidden border-t border-white/[0.06] bg-[#050505] transition-all duration-500 md:hidden ${
+            isOpen
+              ? "max-h-[400px] opacity-100"
+              : "max-h-0 border-transparent opacity-0"
+          }`}
+        >
+          <div className="px-5 py-5">
+            <nav className="flex flex-col">
+
+              <button
+                type="button"
+                onClick={() =>
+                  scrollToSection("home")
+                }
+                className={mobileItemClass(
+                  "home"
+                )}
+              >
+                Home
+              </button>
+
+              <Link
+                to="/shop"
+                onClick={() =>
+                  setIsOpen(false)
+                }
+                className={`border-b border-white/[0.06] py-4 text-[11px] uppercase tracking-[0.22em] transition ${
+                  isCollectionPage
+                    ? "text-[#D4AF37]"
+                    : "text-white/65 hover:text-[#D4AF37]"
+                }`}
+              >
+                Collection
+              </Link>
+
+              <button
+                type="button"
+                onClick={() =>
+                  scrollToSection("story")
+                }
+                className={mobileItemClass(
+                  "story"
+                )}
+              >
+                Our Story
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  scrollToSection("contact")
+                }
+                className={mobileItemClass(
+                  "contact"
+                )}
+              >
+                Contact
+              </button>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* ================================= */}
+      {/* CART DRAWER */}
+      {/* ================================= */}
+
+      <CartDrawer
+        open={isCartOpen}
+        onClose={() =>
+          setIsCartOpen(false)
+        }
+      />
+    </>
   )
 }
 
