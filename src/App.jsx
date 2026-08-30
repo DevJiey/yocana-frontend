@@ -8,6 +8,8 @@ import { AnimatePresence } from "motion/react"
 import Home from "./pages/public/Home"
 import Login from "./pages/public/Login"
 import Register from "./pages/public/Register"
+import ForgotPassword from "./pages/public/ForgotPassword"
+import ResetPassword from "./pages/public/ResetPassword"
 import Shop from "./pages/public/Shop"
 import ProductDetails from "./pages/public/ProductDetails"
 import Account from "./pages/customer/Account"
@@ -67,6 +69,16 @@ function App() {
           <Route
             path="/login"
             element={<Login />}
+          />
+
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
           />
 
           <Route
