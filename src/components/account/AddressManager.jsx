@@ -12,6 +12,13 @@ import {
 } from "react-icons/fi"
 
 import BrandLoader from "../BrandLoader"
+import {
+    getProvincesAndRegions,
+    getLocalities,
+    getBarangays,
+    matchOption,
+} from "../../utils/phAddressHelper"
+import { getPostalCode } from "../../utils/phZipCodes"
 
 function AddressManager() {
     const token = localStorage.getItem("yocana_token")
@@ -41,6 +48,19 @@ function AddressManager() {
         postal_code: "",
     })
 
+    // Cascading address state
+    const [provinces, setProvinces] = useState([])
+    const [localities, setLocalities] = useState([])
+    const [barangays, setBarangays] = useState([])
+
+    const [selectedProvinceCode, setSelectedProvinceCode] = useState("")
+    const [selectedLocalityCode, setSelectedLocalityCode] = useState("")
+    const [selectedBarangayCode, setSelectedBarangayCode] = useState("")
+
+    const [loadingProvinces, setLoadingProvinces] = useState(false)
+    const [loadingLocalities, setLoadingLocalities] = useState(false)
+    const [loadingBarangays, setLoadingBarangays] = useState(false)
+
     const showSuccess = (message) => {
         setLoaderStatus("success")
         setLoaderMessage(message)
@@ -61,6 +81,12 @@ function AddressManager() {
             province: "",
             postal_code: "",
         })
+
+        setSelectedProvinceCode("")
+        setSelectedLocalityCode("")
+        setSelectedBarangayCode("")
+        setLocalities([])
+        setBarangays([])
 
         setEditingAddress(null)
         setFormOpen(false)
@@ -110,6 +136,29 @@ function AddressManager() {
 
     useEffect(() => {
         loadAddresses()
+
+        let isMounted = true
+        const initProvinces = async () => {
+            try {
+                setLoadingProvinces(true)
+                const list = await getProvincesAndRegions()
+                if (isMounted) {
+                    setProvinces(list)
+                }
+            } catch (err) {
+                console.error("Failed to load provinces", err)
+            } finally {
+                if (isMounted) {
+                    setLoadingProvinces(false)
+                }
+            }
+        }
+
+        initProvinces()
+
+        return () => {
+            isMounted = false
+        }
     }, [])
 
     const handleChange = (event) => {
@@ -118,6 +167,81 @@ function AddressManager() {
         setForm((previous) => ({
             ...previous,
             [name]: value,
+        }))
+    }
+
+    const handleProvinceChange = async (event) => {
+        const code = event.target.value
+        setSelectedProvinceCode(code)
+        setSelectedLocalityCode("")
+        setSelectedBarangayCode("")
+        setLocalities([])
+        setBarangays([])
+
+        const prov = provinces.find((p) => p.code === code)
+        const provName = prov ? prov.name : ""
+
+        setForm((previous) => ({
+            ...previous,
+            province: provName,
+            city: "",
+            barangay: "",
+            postal_code: "",
+        }))
+
+        if (code) {
+            try {
+                setLoadingLocalities(true)
+                const locs = await getLocalities(code)
+                setLocalities(locs)
+            } catch (err) {
+                console.error("Failed to load cities", err)
+            } finally {
+                setLoadingLocalities(false)
+            }
+        }
+    }
+
+    const handleCityChange = async (event) => {
+        const code = event.target.value
+        setSelectedLocalityCode(code)
+        setSelectedBarangayCode("")
+        setBarangays([])
+
+        const loc = localities.find((l) => l.code === code)
+        const cityName = loc ? loc.name : ""
+        const autoPostal = getPostalCode(cityName, form.province)
+
+        setForm((previous) => ({
+            ...previous,
+            city: cityName,
+            barangay: "",
+            postal_code: autoPostal || previous.postal_code || "",
+        }))
+
+        if (code) {
+            try {
+                setLoadingBarangays(true)
+                const brgys = await getBarangays(code)
+                setBarangays(brgys)
+            } catch (err) {
+                console.error("Failed to load barangays", err)
+            } finally {
+                setLoadingBarangays(false)
+            }
+        }
+    }
+
+    const handleBarangayChange = (event) => {
+        const code = event.target.value
+        setSelectedBarangayCode(code)
+
+        const brgy = barangays.find((b) => b.code === code)
+        const brgyName = brgy ? brgy.name : ""
+
+        setForm((previous) => ({
+            ...previous,
+            barangay: brgyName,
         }))
     }
 
@@ -135,11 +259,17 @@ function AddressManager() {
             postal_code: "",
         })
 
+        setSelectedProvinceCode("")
+        setSelectedLocalityCode("")
+        setSelectedBarangayCode("")
+        setLocalities([])
+        setBarangays([])
+
         setError("")
         setFormOpen(true)
     }
 
-    const handleEditAddress = (address) => {
+    const handleEditAddress = async (address) => {
         setEditingAddress(address)
 
         setForm({
@@ -153,8 +283,49 @@ function AddressManager() {
             postal_code: address.postal_code || "",
         })
 
+        setSelectedProvinceCode("")
+        setSelectedLocalityCode("")
+        setSelectedBarangayCode("")
+        setLocalities([])
+        setBarangays([])
+
         setError("")
         setFormOpen(true)
+
+        try {
+            let provList = provinces
+            if (provList.length === 0) {
+                setLoadingProvinces(true)
+                provList = await getProvincesAndRegions()
+                setProvinces(provList)
+                setLoadingProvinces(false)
+            }
+
+            const matchedProv = matchOption(provList, address.province)
+            if (matchedProv) {
+                setSelectedProvinceCode(matchedProv.code)
+                setLoadingLocalities(true)
+                const locs = await getLocalities(matchedProv.code)
+                setLocalities(locs)
+                setLoadingLocalities(false)
+
+                const matchedLoc = matchOption(locs, address.city)
+                if (matchedLoc) {
+                    setSelectedLocalityCode(matchedLoc.code)
+                    setLoadingBarangays(true)
+                    const brgys = await getBarangays(matchedLoc.code)
+                    setBarangays(brgys)
+                    setLoadingBarangays(false)
+
+                    const matchedBrgy = matchOption(brgys, address.barangay)
+                    if (matchedBrgy) {
+                        setSelectedBarangayCode(matchedBrgy.code)
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Error populating address fields for edit:", err)
+        }
     }
 
     const handleSubmit = async (event) => {
@@ -164,11 +335,12 @@ function AddressManager() {
             !form.recipient_name.trim() ||
             !form.phone.trim() ||
             !form.address_line.trim() ||
+            !form.province.trim() ||
             !form.city.trim() ||
-            !form.province.trim()
+            !form.barangay.trim()
         ) {
             setError(
-                "Recipient name, phone, address, city, and province are required."
+                "Recipient name, phone, complete address, province, city, and barangay are required."
             )
             return
         }
@@ -448,20 +620,6 @@ function AddressManager() {
                                 />
                             </div>
 
-                            <div>
-                                <label className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/25">
-                                    Postal Code
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="postal_code"
-                                    value={form.postal_code}
-                                    onChange={handleChange}
-                                    className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40"
-                                />
-                            </div>
-
                             <div className="sm:col-span-2">
                                 <label className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/25">
                                     Complete Address
@@ -479,16 +637,34 @@ function AddressManager() {
 
                             <div>
                                 <label className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/25">
-                                    Barangay
+                                    Province / Region
                                 </label>
 
-                                <input
-                                    type="text"
-                                    name="barangay"
-                                    value={form.barangay}
-                                    onChange={handleChange}
-                                    className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40"
-                                />
+                                <select
+                                    name="province"
+                                    value={selectedProvinceCode}
+                                    onChange={handleProvinceChange}
+                                    disabled={actionLoading || loadingProvinces}
+                                    className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    <option value="" className="bg-[#0c0c0c] text-white/40">
+                                        {loadingProvinces ? "Loading Provinces..." : "Select Province / Region"}
+                                    </option>
+                                    {provinces.map((prov) => (
+                                        <option
+                                            key={prov.code}
+                                            value={prov.code}
+                                            className="bg-[#0c0c0c] text-white"
+                                        >
+                                            {prov.name}
+                                        </option>
+                                    ))}
+                                    {form.province && !provinces.some((p) => p.name.toLowerCase() === form.province.toLowerCase()) && (
+                                        <option value={form.province} className="bg-[#0c0c0c] text-white">
+                                            {form.province}
+                                        </option>
+                                    )}
+                                </select>
                             </div>
 
                             <div>
@@ -496,25 +672,89 @@ function AddressManager() {
                                     City / Municipality
                                 </label>
 
-                                <input
-                                    type="text"
+                                <select
                                     name="city"
-                                    value={form.city}
-                                    onChange={handleChange}
-                                    className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40"
-                                />
+                                    value={selectedLocalityCode}
+                                    onChange={handleCityChange}
+                                    disabled={actionLoading || !selectedProvinceCode || loadingLocalities}
+                                    className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    <option value="" className="bg-[#0c0c0c] text-white/40">
+                                        {!selectedProvinceCode
+                                            ? "Select Province First"
+                                            : loadingLocalities
+                                            ? "Loading Cities..."
+                                            : "Select City / Municipality"}
+                                    </option>
+                                    {localities.map((loc) => (
+                                        <option
+                                            key={loc.code}
+                                            value={loc.code}
+                                            className="bg-[#0c0c0c] text-white"
+                                        >
+                                            {loc.name}
+                                        </option>
+                                    ))}
+                                    {form.city && !localities.some((l) => l.name.toLowerCase() === form.city.toLowerCase()) && (
+                                        <option value={form.city} className="bg-[#0c0c0c] text-white">
+                                            {form.city}
+                                        </option>
+                                    )}
+                                </select>
                             </div>
 
-                            <div className="sm:col-span-2">
+                            <div>
                                 <label className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/25">
-                                    Province / Region
+                                    Barangay
+                                </label>
+
+                                <select
+                                    name="barangay"
+                                    value={selectedBarangayCode}
+                                    onChange={handleBarangayChange}
+                                    disabled={actionLoading || !selectedLocalityCode || loadingBarangays}
+                                    className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    <option value="" className="bg-[#0c0c0c] text-white/40">
+                                        {!selectedLocalityCode
+                                            ? "Select City First"
+                                            : loadingBarangays
+                                            ? "Loading Barangays..."
+                                            : "Select Barangay"}
+                                    </option>
+                                    {barangays.map((brgy) => (
+                                        <option
+                                            key={brgy.code}
+                                            value={brgy.code}
+                                            className="bg-[#0c0c0c] text-white"
+                                        >
+                                            {brgy.name}
+                                        </option>
+                                    ))}
+                                    {form.barangay && !barangays.some((b) => b.name.toLowerCase() === form.barangay.toLowerCase()) && (
+                                        <option value={form.barangay} className="bg-[#0c0c0c] text-white">
+                                            {form.barangay}
+                                        </option>
+                                    )}
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className="mb-2 block text-[8px] uppercase tracking-[0.18em] text-white/25">
+                                    Postal Code
+                                    {form.postal_code && (
+                                        <span className="ml-1 text-[8px] lowercase tracking-normal text-[#D4AF37]/70">
+                                            (auto-filled)
+                                        </span>
+                                    )}
                                 </label>
 
                                 <input
                                     type="text"
-                                    name="province"
-                                    value={form.province}
+                                    name="postal_code"
+                                    value={form.postal_code}
                                     onChange={handleChange}
+                                    placeholder="4-digit ZIP code"
                                     className="h-11 w-full border border-white/10 bg-[#050505] px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/40"
                                 />
                             </div>

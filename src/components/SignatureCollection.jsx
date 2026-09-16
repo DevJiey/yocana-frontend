@@ -102,12 +102,6 @@ function SignatureCollection() {
                   }}
                 />
 
-                {/* Gold outer ring */}
-                <div className="absolute h-[250px] w-[250px] rounded-full border border-[#D4AF37]/10 sm:h-[310px] sm:w-[310px] md:h-[340px] md:w-[340px]" />
-
-                {/* Inner dark ring */}
-                <div className="absolute h-[195px] w-[195px] rounded-full border border-white/[0.035] sm:h-[245px] sm:w-[245px] md:h-[270px] md:w-[270px]" />
-
                 {/* Product number */}
                 <span className="absolute right-5 top-5 text-[9px] tracking-[0.3em] text-white/20">
                   {product.number}

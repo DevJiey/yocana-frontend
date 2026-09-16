@@ -89,9 +89,6 @@ function Shop() {
                                         }}
                                     />
 
-                                    {/* Gold Ring */}
-                                    <div className="absolute h-[260px] w-[260px] rounded-full border border-[#D4AF37]/10 sm:h-[320px] sm:w-[320px] md:h-[370px] md:w-[370px]" />
-
                                     {/* Bottle */}
                                     <motion.img
                                         src={product.image}

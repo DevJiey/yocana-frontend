@@ -138,7 +138,7 @@ function OrderDetails() {
       setTimeout(() => {
         setPageLoaderOpen(false)
 
-        navigate("/login", {
+        navigate("/", {
           replace: true,
         })
       }, 1300)

@@ -484,7 +484,7 @@ function Account() {
       showSuccess(
         "Logged Out Successfully",
         () => {
-          navigate("/login", {
+          navigate("/", {
             replace: true,
           })
         }
@@ -740,9 +740,9 @@ function Account() {
                             )
                           }
                           className={`h-9 shrink-0 border px-4 text-[8px] uppercase tracking-[0.15em] transition sm:h-10 sm:text-[9px] ${orderFilter ===
-                              filter.id
-                              ? "border-[#D4AF37] bg-[#D4AF37] font-semibold text-[#050505]"
-                              : "border-white/10 text-white/35 hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+                            filter.id
+                            ? "border-[#D4AF37] bg-[#D4AF37] font-semibold text-[#050505]"
+                            : "border-white/10 text-white/35 hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
                             }`}
                         >
                           {filter.label}

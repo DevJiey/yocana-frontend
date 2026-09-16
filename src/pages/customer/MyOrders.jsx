@@ -117,7 +117,7 @@ function MyOrders() {
       setTimeout(() => {
         setLoaderOpen(false)
 
-        navigate("/login", {
+        navigate("/", {
           replace: true,
         })
       }, 1300)
@@ -197,7 +197,7 @@ function MyOrders() {
         ) {
           throw new Error(
             ordersData.message ||
-              "Unable to load your orders"
+            "Unable to load your orders"
           )
         }
 
@@ -207,7 +207,7 @@ function MyOrders() {
         ) {
           throw new Error(
             profileData.message ||
-              "Unable to load account"
+            "Unable to load account"
           )
         }
 
