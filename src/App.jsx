@@ -13,7 +13,6 @@ import ResetPassword from "./pages/public/ResetPassword"
 import Shop from "./pages/public/Shop"
 import ProductDetails from "./pages/public/ProductDetails"
 import Account from "./pages/customer/Account"
-import Cart from "./pages/customer/Cart"
 import Checkout from "./pages/customer/Checkout"
 import OrderConfirmation from "./pages/customer/OrderConfirmation"
 import MyOrders from "./pages/customer/MyOrders"
@@ -92,15 +91,6 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={["customer"]}>
                 <Account />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/cart"
-            element={
-              <ProtectedRoute allowedRoles={["customer"]}>
-                <Cart />
               </ProtectedRoute>
             }
           />
