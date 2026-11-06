@@ -17,6 +17,7 @@ import {
 } from "react-icons/fi"
 
 import BrandLoader from "../../components/BrandLoader"
+import GoogleSignIn from "../../components/auth/GoogleSignIn"
 import yocanaLogo from "../../assets/yocana-logo-gold.png"
 
 function Register() {
@@ -171,10 +172,14 @@ function Register() {
     }
   }
 
-  const handleGoogleRegister = () => {
-    setError(
-      "Google account registration is not connected yet."
-    )
+  const handleGoogleRegisterSuccess = () => {
+    const requested = location.state?.from
+    const destination = typeof requested === "string" &&
+      requested.startsWith("/") && !requested.startsWith("//")
+      ? requested
+      : "/account"
+
+    navigate(destination, { replace: true })
   }
 
   return (
@@ -492,20 +497,12 @@ function Register() {
             <div className="h-px flex-1 bg-white/10" />
           </div>
 
-          {/* GOOGLE */}
-          <button
-            type="button"
-            onClick={
-              handleGoogleRegister
-            }
-            className="flex h-11 w-full items-center justify-center gap-3 border border-white/10 bg-[#050505] px-4 text-[8px] uppercase tracking-[0.16em] text-white/60 transition hover:border-[#D4AF37]/30 hover:text-white"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[11px] font-semibold text-[#4285F4]">
-              G
-            </span>
-
-            Continue with Google
-          </button>
+          {/* GOOGLE — same account creation/sign-in backend flow */}
+          <GoogleSignIn
+            onSignIn={handleGoogleRegisterSuccess}
+            onError={setError}
+            onBusyChange={setLoading}
+          />
 
           {/* LOGIN */}
           <div className="mt-6 text-center">

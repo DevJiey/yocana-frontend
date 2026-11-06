@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ianlabicani/geoph-lite": "^2.0.0",
+    "@react-oauth/google": "^0.13.5",
     "@tailwindcss/vite": "^4.3.3",
     "motion": "^13.1.1",
     "react": "^19.2.8",
