@@ -11,3 +11,82 @@ body {
   background: #050505;
   color: #ffffff;
 }
+
+/* ==========================================================================
+   YOCANA LUXURY TAGLINE SHINE / LIGHT SWEEP (SALUBONGAN)
+   - "Your Presence.": Sweeps Left to Right (100% -> 0%)
+   - "Your Signature.": Sweeps Right to Left (0% -> 100%)
+   - Intersecting / Salubongan light beams with center luster bloom
+   ========================================================================== */
+
+@keyframes shinePresence {
+  0% {
+    background-position: 100% 0;
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.45));
+  }
+  100% {
+    background-position: 0% 0;
+    filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+  }
+}
+
+@keyframes shineSignature {
+  0% {
+    background-position: 0% 0;
+    filter: drop-shadow(0 0 0px rgba(212, 175, 55, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 28px rgba(212, 175, 55, 0.55));
+  }
+  100% {
+    background-position: 100% 0;
+    filter: drop-shadow(0 0 0px rgba(212, 175, 55, 0));
+  }
+}
+
+.yocana-shimmer-presence {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.65) 38%,
+    rgba(255, 255, 255, 0.95) 46%,
+    #ffffff 50%,
+    rgba(255, 255, 255, 0.95) 54%,
+    rgba(255, 255, 255, 0.65) 62%,
+    rgba(255, 255, 255, 0.65) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shinePresence 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  display: inline-block;
+  will-change: background-position, filter;
+}
+
+.yocana-shimmer-signature {
+  background: linear-gradient(
+    115deg,
+    #c49726 0%,
+    #c49726 38%,
+    #f3c64f 45%,
+    #ffe28a 48%,
+    #ffffff 50%,
+    #ffe28a 52%,
+    #f3c64f 55%,
+    #c49726 62%,
+    #c49726 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shineSignature 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  display: inline-block;
+  will-change: background-position, filter;
+}

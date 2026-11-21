@@ -18,12 +18,15 @@ import {
   FiPackage,
   FiClock,
   FiArrowRight,
+  FiArrowLeft,
   FiShoppingBag,
 } from "react-icons/fi"
 
 import BrandLoader from "../../components/BrandLoader"
 import AddressManager from "../../components/account/AddressManager"
 import CustomerAccountLayout from "../../layouts/CustomerAccountLayout"
+import hommeImage from "../../assets/yocana-homme.png"
+import femmeImage from "../../assets/yocana-femme.png"
 
 function Account() {
   const navigate = useNavigate()
@@ -163,6 +166,28 @@ function Account() {
     }
 
     return "border-[#D4AF37]/20 bg-[#D4AF37]/[0.05] text-[#D4AF37]"
+  }
+
+  const getOrderThumbnail = (order) => {
+    const firstItem = order?.items?.[0]
+    if (firstItem?.image_url && typeof firstItem.image_url === "string" && firstItem.image_url.startsWith("http")) {
+      return firstItem.image_url
+    }
+    const name = (firstItem?.product_name || firstItem?.name || "").toLowerCase()
+    if (name.includes("femme") || name.includes("women") || name.includes("red")) {
+      return femmeImage
+    }
+    return hommeImage
+  }
+
+  const getOrderItemsSummary = (order) => {
+    if (!order?.items || order.items.length === 0) {
+      return { title: "YOCANA Fragrance", count: 1, extraItems: 0 }
+    }
+    const first = order.items[0]
+    const title = first.product_name || "YOCANA Fragrance"
+    const extraItems = Math.max(0, order.items.length - 1)
+    return { title, count: order.items.length, extraItems }
   }
 
   const showSuccess = (
@@ -680,6 +705,30 @@ function Account() {
           </div>
         )}
 
+        {cameFromCheckout && (
+          <div className="mb-6 flex flex-col gap-4 rounded border border-[#D4AF37]/35 bg-[#D4AF37]/[0.08] p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📦</span>
+              <div>
+                <p className="text-sm font-medium text-white">
+                  Setting your delivery address for Checkout
+                </p>
+                <p className="mt-0.5 text-xs text-white/50">
+                  After adding or choosing an address, tap below to return to your order.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => navigate("/checkout")}
+              className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-5 text-xs font-semibold uppercase tracking-wider text-black shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] active:scale-95"
+            >
+              <FiArrowLeft size={14} /> Back to Checkout
+            </button>
+          </div>
+        )}
+
         {/* ========================= */}
         {/* ACCOUNT OVERVIEW */}
         {/* ========================= */}
@@ -739,10 +788,10 @@ function Account() {
                               filter.id
                             )
                           }
-                          className={`h-9 shrink-0 border px-4 text-[8px] uppercase tracking-[0.15em] transition sm:h-10 sm:text-[9px] ${orderFilter ===
+                          className={`h-9 shrink-0 rounded-full border px-4 text-[8px] uppercase tracking-[0.15em] backdrop-blur-md transition-all duration-300 sm:h-10 sm:text-[9px] ${orderFilter ===
                             filter.id
-                            ? "border-[#D4AF37] bg-[#D4AF37] font-semibold text-[#050505]"
-                            : "border-white/10 text-white/35 hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+                            ? "border-[#FFE28A]/40 bg-[#D4AF37]/90 font-semibold text-[#050505] shadow-[0_4px_15px_rgba(212,175,55,0.3)]"
+                            : "border-white/10 bg-white/[0.03] text-white/40 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
                             }`}
                         >
                           {filter.label}
@@ -775,7 +824,7 @@ function Account() {
 
                     <Link
                       to="/shop"
-                      className="mt-6 inline-flex h-10 items-center justify-center gap-2 bg-[#D4AF37] px-5 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] transition hover:bg-[#E1C35B]"
+                      className="mt-6 inline-flex h-10 items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/90 px-6 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] active:scale-95"
                     >
                       Explore Collection
                       <FiArrowRight
@@ -805,121 +854,180 @@ function Account() {
 
                 {/* ORDER LIST */}
 
-                {filteredOrders.length >
-                  0 && (
-                    <div className="mt-5 space-y-3 sm:space-y-4">
-                      {filteredOrders.map(
-                        (
-                          order,
-                          index
-                        ) => (
-                          <motion.article
-                            key={order.id}
-                            initial={{
-                              opacity: 0,
-                              y: 8,
-                            }}
-                            animate={{
-                              opacity: 1,
-                              y: 0,
-                            }}
-                            transition={{
-                              duration: 0.25,
-                              delay:
-                                index *
-                                0.025,
-                            }}
-                            className="group min-w-0 border border-white/10 bg-[#080808] p-4 transition hover:border-white/20 sm:p-5 md:p-6"
-                          >
-                            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                {filteredOrders.length > 0 && (
+                  <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-1 sm:gap-4">
+                    {filteredOrders.map((order, index) => {
+                      const itemsSummary = getOrderItemsSummary(order)
+                      const thumbnail = getOrderThumbnail(order)
 
-                              {/* LEFT */}
+                      return (
+                        <motion.article
+                          key={order.id}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            duration: 0.25,
+                            delay: index * 0.025,
+                          }}
+                          className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/85 p-2.5 backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/45 hover:bg-[#0c0c0c] hover:shadow-[0_4px_25px_rgba(212,175,55,0.12)] sm:rounded-none sm:p-5 md:p-6"
+                        >
+                          {/* ===================== */}
+                          {/* MOBILE LAYOUT (< sm)  */}
+                          {/* ===================== */}
+                          <div className="flex flex-1 flex-col justify-between sm:hidden">
+                            {/* Product Picture Container */}
+                            <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.05] via-[#080808] to-black/60 p-2">
+                              {/* Ambient gold glow */}
+                              <div className="pointer-events-none absolute inset-0 bg-[#D4AF37]/5 blur-md" />
 
-                              <div className="flex min-w-0 items-start gap-4">
-                                {/* TEMPORARY PRODUCT PLACEHOLDER */}
+                              <img
+                                src={thumbnail}
+                                alt={itemsSummary.title}
+                                className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.85)] transition-transform duration-500 group-hover:scale-105"
+                              />
 
-                                <div className="flex h-[72px] w-[72px] shrink-0 items-center justify-center border border-white/10 bg-[#050505] sm:h-[82px] sm:w-[82px]">
-                                  <FiPackage
-                                    size={20}
-                                    className="text-[#D4AF37]/50"
-                                  />
+                              {itemsSummary.extraItems > 0 && (
+                                <span className="absolute right-1.5 top-1.5 z-20 rounded-full border border-[#D4AF37]/30 bg-black/80 px-1.5 py-0.5 text-[7px] font-semibold text-[#D4AF37] backdrop-blur-sm">
+                                  +{itemsSummary.extraItems}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Order Info */}
+                            <div className="mt-2.5 min-w-0">
+                              <p className="truncate text-[7px] font-medium uppercase tracking-[0.16em] text-[#D4AF37]">
+                                {order.order_number}
+                              </p>
+
+                              <h4 className="mt-1 line-clamp-1 text-[11px] font-medium leading-tight text-white/90">
+                                {itemsSummary.title}
+                              </h4>
+
+                              <div className="mt-1 flex items-center gap-1 text-[8px] text-white/30">
+                                <FiClock size={9} className="shrink-0" />
+                                <span className="truncate">{formatDate(order.created_at)}</span>
+                              </div>
+                            </div>
+
+                            {/* Status, Price, and Action */}
+                            <div className="mt-2.5 border-t border-white/10 pt-2">
+                              <div className="flex items-center justify-between gap-1">
+                                <div
+                                  className={`inline-flex max-w-[55%] truncate border px-1.5 py-0.5 text-[7px] uppercase tracking-[0.1em] ${getStatusClasses(
+                                    order.order_status
+                                  )}`}
+                                >
+                                  <span className="truncate">
+                                    {displayStatus(order.order_status)}
+                                  </span>
                                 </div>
 
-                                <div className="min-w-0">
-                                  <p className="text-[7px] uppercase tracking-[0.2em] text-white/20 sm:text-[8px]">
-                                    Order Number
-                                  </p>
-
-                                  <h3 className="mt-1.5 break-all text-sm font-medium text-[#D4AF37] sm:text-base">
-                                    {order.order_number}
-                                  </h3>
-
-                                  <div className="mt-2 flex items-center gap-2 text-[9px] text-white/25 sm:text-[10px]">
-                                    <FiClock
-                                      size={11}
-                                      className="shrink-0"
-                                    />
-
-                                    {formatDate(
-                                      order.created_at
-                                    )}
-                                  </div>
-                                </div>
+                                <p className="text-[11px] font-semibold text-white">
+                                  ₱{formatPrice(order.total_amount)}
+                                </p>
                               </div>
 
-                              {/* RIGHT */}
+                              <Link
+                                to={`/orders/${order.id}`}
+                                className="mt-2.5 inline-flex h-7 w-full items-center justify-center gap-1 rounded-full border border-white/10 bg-white/[0.04] text-[8px] font-medium uppercase tracking-[0.12em] text-white/60 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10 hover:text-[#D4AF37] active:scale-95"
+                              >
+                                View Order
+                                <FiArrowRight size={9} />
+                              </Link>
+                            </div>
+                          </div>
 
-                              <div className="grid min-w-0 grid-cols-2 gap-4 border-t border-white/10 pt-4 md:min-w-[340px] md:grid-cols-[1fr_1fr_auto] md:items-center md:border-0 md:pt-0">
-                                <div className="min-w-0">
-                                  <p className="text-[7px] uppercase tracking-[0.18em] text-white/20">
-                                    Status
-                                  </p>
+                          {/* ===================== */}
+                          {/* DESKTOP LAYOUT (>= sm)*/}
+                          {/* ===================== */}
+                          <div className="hidden min-w-0 sm:flex sm:flex-col sm:gap-5 md:flex-row md:items-center md:justify-between">
+                            {/* LEFT: Product Picture + Info */}
+                            <div className="flex min-w-0 items-start gap-4">
+                              <div className="relative flex h-[82px] w-[82px] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.04] via-[#080808] to-black/60 p-2">
+                                <div className="pointer-events-none absolute inset-0 bg-[#D4AF37]/5 blur-md" />
 
-                                  <div
-                                    className={`mt-2 inline-flex max-w-full border px-2.5 py-1.5 text-[8px] uppercase tracking-[0.12em] ${getStatusClasses(
-                                      order.order_status
-                                    )}`}
-                                  >
-                                    <span className="truncate">
-                                      {displayStatus(
-                                        order.order_status
-                                      )}
+                                <img
+                                  src={thumbnail}
+                                  alt={itemsSummary.title}
+                                  className="relative z-10 max-h-full max-w-full object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-105"
+                                />
+
+                                {itemsSummary.extraItems > 0 && (
+                                  <span className="absolute right-1 top-1 z-20 rounded-full border border-[#D4AF37]/30 bg-black/80 px-1.5 py-0.5 text-[8px] font-semibold text-[#D4AF37] backdrop-blur-sm">
+                                    +{itemsSummary.extraItems}
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="min-w-0">
+                                <p className="text-[7px] uppercase tracking-[0.2em] text-white/20 sm:text-[8px]">
+                                  Order Number
+                                </p>
+
+                                <h3 className="mt-1 break-all text-sm font-medium text-[#D4AF37] sm:text-base">
+                                  {order.order_number}
+                                </h3>
+
+                                <p className="mt-1 line-clamp-1 text-xs text-white/80">
+                                  {itemsSummary.title}
+                                  {itemsSummary.extraItems > 0 && (
+                                    <span className="ml-1.5 text-[11px] text-white/40">
+                                      (+{itemsSummary.extraItems} more)
                                     </span>
-                                  </div>
-                                </div>
+                                  )}
+                                </p>
 
-                                <div className="min-w-0 text-right md:text-left">
-                                  <p className="text-[7px] uppercase tracking-[0.18em] text-white/20">
-                                    Total
-                                  </p>
-
-                                  <p className="mt-2 text-sm font-medium text-white/80 sm:text-base">
-                                    ₱
-                                    {formatPrice(
-                                      order.total_amount
-                                    )}
-                                  </p>
-                                </div>
-
-                                <div className="col-span-2 md:col-span-1">
-                                  <Link
-                                    to={`/orders/${order.id}`}
-                                    className="inline-flex h-9 w-full items-center justify-center gap-2 border border-white/10 px-3 text-[8px] uppercase tracking-[0.14em] text-white/45 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37] md:w-auto"
-                                  >
-                                    View Order
-
-                                    <FiArrowRight
-                                      size={11}
-                                    />
-                                  </Link>
+                                <div className="mt-2 flex items-center gap-2 text-[9px] text-white/25 sm:text-[10px]">
+                                  <FiClock size={11} className="shrink-0" />
+                                  {formatDate(order.created_at)}
                                 </div>
                               </div>
                             </div>
-                          </motion.article>
-                        )
-                      )}
-                    </div>
-                  )}
+
+                            {/* RIGHT: Status, Total, View button */}
+                            <div className="grid min-w-0 grid-cols-2 gap-4 border-t border-white/10 pt-4 md:min-w-[340px] md:grid-cols-[1fr_1fr_auto] md:items-center md:border-0 md:pt-0">
+                              <div className="min-w-0">
+                                <p className="text-[7px] uppercase tracking-[0.18em] text-white/20">
+                                  Status
+                                </p>
+
+                                <div
+                                  className={`mt-2 inline-flex max-w-full border px-2.5 py-1.5 text-[8px] uppercase tracking-[0.12em] ${getStatusClasses(
+                                    order.order_status
+                                  )}`}
+                                >
+                                  <span className="truncate">
+                                    {displayStatus(order.order_status)}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="min-w-0 text-right md:text-left">
+                                <p className="text-[7px] uppercase tracking-[0.18em] text-white/20">
+                                  Total
+                                </p>
+
+                                <p className="mt-2 text-sm font-medium text-white/80 sm:text-base">
+                                  ₱{formatPrice(order.total_amount)}
+                                </p>
+                              </div>
+
+                              <div className="col-span-2 md:col-span-1">
+                                <Link
+                                  to={`/orders/${order.id}`}
+                                  className="inline-flex h-9 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-[8px] uppercase tracking-[0.14em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] md:w-auto"
+                                >
+                                  View Order
+                                  <FiArrowRight size={11} />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.article>
+                      )
+                    })}
+                  </div>
+                )}
               </section>
             </>
           )}
@@ -971,7 +1079,7 @@ function Account() {
                   <button
                     type="button"
                     onClick={handleEdit}
-                    className="flex h-10 w-fit items-center gap-2 border border-[#D4AF37]/25 px-4 text-[8px] uppercase tracking-[0.18em] text-[#D4AF37] transition hover:bg-[#D4AF37]/[0.05]"
+                    className="flex h-10 w-fit items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-5 text-[8px] uppercase tracking-[0.18em] text-[#D4AF37] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/20"
                   >
                     <FiEdit3 size={13} />
                     Edit Profile
@@ -1171,7 +1279,7 @@ function Account() {
                         disabled={
                           actionLoading
                         }
-                        className="flex h-10 items-center gap-2 bg-[#D4AF37] px-4 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] transition hover:bg-[#E1C35B] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-10 items-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-6 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         <FiCheck size={13} />
                         Save Changes
@@ -1185,7 +1293,7 @@ function Account() {
                         disabled={
                           actionLoading
                         }
-                        className="flex h-10 items-center gap-2 border border-white/10 px-4 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-white/20 hover:text-white"
+                        className="flex h-10 items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/30 hover:text-white active:scale-95"
                       >
                         <FiX size={13} />
                         Cancel

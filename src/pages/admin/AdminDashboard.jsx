@@ -187,7 +187,7 @@ function AdminDashboard() {
             <button
               type="button"
               onClick={() => fetchDashboard(true)}
-              className="flex h-10 w-fit items-center justify-center gap-2 border border-white/10 px-4 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+              className="inline-flex h-9 sm:h-10 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition-all hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
             >
               <FiRefreshCw size={12} />
               Refresh
@@ -203,19 +203,19 @@ function AdminDashboard() {
           )}
 
           {/* STAT CARDS */}
-          <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4">
             {stats.map((stat) => {
               const Icon = stat.icon
 
               return (
                 <div
                   key={stat.label}
-                  className={`relative overflow-hidden border p-4 sm:p-5 ${
+                  className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border p-3.5 sm:p-5 backdrop-blur-md transition-all duration-300 hover:scale-[1.02] ${
                     stat.warning
                       ? "border-yellow-500/20 bg-yellow-500/[0.025]"
                       : stat.highlight
                         ? "border-[#D4AF37]/20 bg-[#D4AF37]/[0.025]"
-                        : "border-white/10 bg-[#080808]"
+                        : "border-white/10 bg-[#080808]/80 hover:border-white/20 hover:bg-[#0c0c0c]"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -266,95 +266,6 @@ function AdminDashboard() {
             })}
           </div>
 
-          {/* QUICK LINKS */}
-          <div className="mt-8">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="text-[8px] uppercase tracking-[0.22em] text-[#D4AF37]">
-                  Management
-                </p>
-
-                <h2 className="mt-2 text-lg text-white">
-                  Quick Access
-                </h2>
-              </div>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-              <Link
-                to="/admin/orders"
-                className="group border border-white/10 bg-[#080808] p-4 transition hover:border-[#D4AF37]/30"
-              >
-                <FiShoppingBag
-                  size={16}
-                  className="text-white/25 transition group-hover:text-[#D4AF37]"
-                />
-
-                <p className="mt-4 text-xs text-white/65">
-                  Orders
-                </p>
-
-                <p className="mt-1 text-[8px] text-white/20">
-                  Manage customer orders
-                </p>
-              </Link>
-
-              <Link
-                to="/admin/products"
-                className="group border border-white/10 bg-[#080808] p-4 transition hover:border-[#D4AF37]/30"
-              >
-                <FiPackage
-                  size={16}
-                  className="text-white/25 transition group-hover:text-[#D4AF37]"
-                />
-
-                <p className="mt-4 text-xs text-white/65">
-                  Products
-                </p>
-
-                <p className="mt-1 text-[8px] text-white/20">
-                  Manage catalog
-                </p>
-              </Link>
-
-              <Link
-                to="/admin/inventory"
-                className="group border border-white/10 bg-[#080808] p-4 transition hover:border-[#D4AF37]/30"
-              >
-                <FiBox
-                  size={16}
-                  className="text-white/25 transition group-hover:text-[#D4AF37]"
-                />
-
-                <p className="mt-4 text-xs text-white/65">
-                  Inventory
-                </p>
-
-                <p className="mt-1 text-[8px] text-white/20">
-                  Monitor stock
-                </p>
-              </Link>
-
-              <Link
-                to="/admin/payments"
-                className="group border border-white/10 bg-[#080808] p-4 transition hover:border-[#D4AF37]/30"
-              >
-                <FiDollarSign
-                  size={16}
-                  className="text-white/25 transition group-hover:text-[#D4AF37]"
-                />
-
-                <p className="mt-4 text-xs text-white/65">
-                  Payments
-                </p>
-
-                <p className="mt-1 text-[8px] text-white/20">
-                  Review transactions
-                </p>
-              </Link>
-            </div>
-          </div>
-
           {/* RECENT ORDERS */}
           <div className="mt-8">
             <div className="flex items-end justify-between gap-4 border-b border-white/10 pb-4">
@@ -370,14 +281,14 @@ function AdminDashboard() {
 
               <Link
                 to="/admin/orders"
-                className="shrink-0 text-[8px] uppercase tracking-[0.16em] text-white/30 transition hover:text-[#D4AF37]"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1 text-[8px] uppercase tracking-[0.16em] text-white/40 backdrop-blur-md transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
               >
                 View All
               </Link>
             </div>
 
             {!dashboard?.recent_orders?.length ? (
-              <div className="border-x border-b border-white/10 bg-[#080808] px-5 py-12 text-center">
+              <div className="mt-4 rounded-2xl border border-white/10 bg-[#080808]/80 px-5 py-12 text-center backdrop-blur-md">
                 <FiShoppingBag
                   size={20}
                   className="mx-auto text-white/15"
@@ -388,7 +299,7 @@ function AdminDashboard() {
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-white/10 border-x border-b border-white/10 bg-[#080808]">
+              <div className="mt-4 divide-y divide-white/10 overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/80 backdrop-blur-md">
                 {dashboard.recent_orders.map(
                   (order) => (
                     <Link

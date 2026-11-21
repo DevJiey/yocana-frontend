@@ -62,10 +62,16 @@ function Checkout() {
     const token =
         localStorage.getItem("yocana_token")
 
-    const shippingFee =
-        shippingRegion === "Metro Manila"
-            ? 100
-            : 180
+    const totalQuantity = (cart.items || []).reduce(
+        (sum, item) => sum + (Number(item.quantity) || 1),
+        0
+    )
+
+    // Free Shipping on 2+ bottles nationwide, flat ₱50 for single bottle
+    const isFreeShipping =
+        totalQuantity >= 2 || Number(cart.subtotal || 0) >= 2998
+
+    const shippingFee = isFreeShipping ? 0 : 50
 
     const estimatedTotal =
         Number(cart.subtotal || 0) + shippingFee
@@ -331,13 +337,13 @@ function Checkout() {
                 message={loaderMessage}
             />
 
-            <main className="min-h-screen bg-[#050505] px-5 pb-20 pt-24 md:px-8 md:pb-28 md:pt-28">
+            <main className="min-h-screen bg-[#050505] px-3.5 pb-14 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:px-8 md:pb-28 md:pt-28">
                 <div className="mx-auto max-w-7xl">
 
                     {/* BACK */}
                     <Link
                         to="/"
-                        className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.25em] text-white/35 transition hover:text-[#D4AF37]"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-white/50 backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
                     >
                         <FiArrowLeft size={14} />
                         Back to Home
@@ -365,9 +371,9 @@ function Checkout() {
 
                     <form
                         onSubmit={handlePlaceOrder}
-                        className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_370px] lg:gap-12"
+                        className="mt-5 sm:mt-8 grid grid-cols-1 gap-5 sm:gap-8 lg:grid-cols-[1fr_370px] lg:gap-12"
                     >
-                        <div className="space-y-6">
+                        <div className="space-y-4 sm:space-y-6">
 
                             {/* SHIPPING */}
                             <motion.section
@@ -379,7 +385,7 @@ function Checkout() {
                                     opacity: 1,
                                     y: 0,
                                 }}
-                                className="border border-white/10 bg-[#080808] p-5 sm:p-7"
+                                className="rounded-xl sm:rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/85 p-3.5 sm:p-6 backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
                             >
                                 <div className="flex items-center gap-3">
                                     <FiMapPin
@@ -405,7 +411,7 @@ function Checkout() {
                                                 Saved Addresses
                                             </p>
 
-                                            <p className="mt-1 text-[10px] text-white/20">
+                                            <p className="mt-0.5 text-[8.5px] sm:text-[10px] text-white/25">
                                                 Select where you want
                                                 your order delivered.
                                             </p>
@@ -416,7 +422,7 @@ function Checkout() {
                                             state={{
                                                 from: "/checkout",
                                             }}
-                                            className="text-[8px] uppercase tracking-[0.18em] text-[#D4AF37] transition hover:text-[#E1C35B]"
+                                            className="text-[7.5px] sm:text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] transition hover:text-[#E1C35B]"
                                         >
                                             Manage Addresses
                                         </Link>
@@ -451,13 +457,13 @@ function Checkout() {
                                                 state={{
                                                     from: "/checkout",
                                                 }}
-                                                className="mt-4 inline-flex h-9 items-center border border-[#D4AF37]/25 px-3 text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] transition hover:bg-[#D4AF37]/[0.05]"
+                                                className="mt-4 inline-flex h-9 items-center rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 px-4 text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/20"
                                             >
                                                 Add Address
                                             </Link>
                                         </div>
                                     ) : (
-                                        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                                        <div className="mt-3 sm:mt-4 grid gap-2.5 sm:gap-3 sm:grid-cols-2">
                                             {savedAddresses.map(
                                                 (address) => {
                                                     const selected =
@@ -473,9 +479,9 @@ function Checkout() {
                                                                     address
                                                                 )
                                                             }
-                                                            className={`relative min-w-0 border p-4 text-left transition ${selected
-                                                                    ? "border-[#D4AF37]/60 bg-[#D4AF37]/[0.05]"
-                                                                    : "border-white/10 bg-[#050505] hover:border-white/20"
+                                                            className={`relative min-w-0 rounded-xl sm:rounded-2xl border p-3 sm:p-4 text-left backdrop-blur-md transition-all duration-300 ${selected
+                                                                    ? "border-[#D4AF37]/70 bg-[#D4AF37]/[0.08] shadow-[0_0_20px_rgba(212,175,55,0.15)]"
+                                                                    : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
                                                                 }`}
                                                         >
                                                             <div className="flex items-start justify-between gap-3">
@@ -498,13 +504,13 @@ function Checkout() {
                                                                         )}
                                                                     </div>
 
-                                                                    <p className="mt-3 break-words text-sm font-medium text-white/70">
+                                                                    <p className="mt-1.5 sm:mt-2 break-words text-xs sm:text-sm font-medium text-white/80">
                                                                         {
                                                                             address.recipient_name
                                                                         }
                                                                     </p>
 
-                                                                    <p className="mt-1 break-words text-[10px] text-white/30">
+                                                                    <p className="mt-0.5 break-words text-[8.5px] sm:text-[10px] text-white/30">
                                                                         {
                                                                             address.phone
                                                                         }
@@ -523,8 +529,8 @@ function Checkout() {
                                                                 </div>
                                                             </div>
 
-                                                            <div className="mt-4 border-t border-white/10 pt-3">
-                                                                <p className="break-words text-[10px] leading-5 text-white/35">
+                                                            <div className="mt-2.5 sm:mt-3 border-t border-white/10 pt-2 sm:pt-2.5">
+                                                                <p className="break-words text-[8.5px] sm:text-[10px] leading-4 sm:leading-5 text-white/35">
                                                                     {
                                                                         address.address_line
                                                                     }
@@ -556,37 +562,45 @@ function Checkout() {
                                         Delivery Region
                                     </p>
 
-                                    <div className="mt-3 flex flex-col gap-3 border border-[#D4AF37]/20 bg-[#D4AF37]/[0.025] p-4 sm:flex-row sm:items-center sm:justify-between">
+                                    <div className="mt-2 sm:mt-3 flex flex-col gap-2.5 sm:gap-3 rounded-xl border border-[#D4AF37]/20 bg-[#D4AF37]/[0.025] p-3 sm:p-4 sm:flex-row sm:items-center sm:justify-between">
                                         <div>
                                             <p className="text-sm text-white/75">
-                                                {shippingRegion}
+                                                Standard Courier (SPX Express) · {shippingRegion}
                                             </p>
 
-                                            <p className="mt-1 text-[9px] leading-4 text-white/25">
-                                                Automatically determined
-                                                from your selected shipping
-                                                address.
+                                            <p className="mt-0.5 text-[8px] sm:text-[9px] leading-4 text-white/40">
+                                                {isFreeShipping
+                                                    ? "2+ Bottles Promo applied! Enjoy Free Shipping nationwide."
+                                                    : "Flat ₱50 nationwide rate. Add 1 more bottle for Free Shipping!"}
                                             </p>
                                         </div>
 
                                         <div className="shrink-0 sm:text-right">
-                                            <p className="text-[8px] uppercase tracking-[0.16em] text-white/25">
+                                            <p className="text-[7px] sm:text-[8px] uppercase tracking-[0.16em] text-white/25">
                                                 Shipping Fee
                                             </p>
 
-                                            <p className="mt-1 text-sm text-[#D4AF37]">
-                                                ₱
-                                                {formatPrice(
-                                                    shippingFee
-                                                )}
-                                            </p>
+                                            {isFreeShipping ? (
+                                                <div className="mt-1 flex items-center gap-2 sm:justify-end">
+                                                    <span className="text-xs text-white/40 line-through">
+                                                        ₱50.00
+                                                    </span>
+                                                    <span className="rounded bg-emerald-500/15 px-2 py-0.5 text-xs font-semibold text-emerald-400">
+                                                        FREE
+                                                    </span>
+                                                </div>
+                                            ) : (
+                                                <p className="mt-0.5 text-xs sm:text-sm font-semibold text-[#D4AF37]">
+                                                    ₱{formatPrice(shippingFee)}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </motion.section>
 
                             {/* PAYMENT */}
-                            <section className="border border-white/10 bg-[#080808] p-5 sm:p-7">
+                            <section className="rounded-xl sm:rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/85 p-3.5 sm:p-6 backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
                                 <div className="flex items-center gap-3">
                                     <FiCreditCard
                                         className="text-[#D4AF37]"
@@ -619,7 +633,7 @@ function Checkout() {
                                             onChange={(event) =>
                                                 setPaymentMethod(event.target.value)
                                             }
-                                            className="h-12 w-full appearance-none border border-white/10 bg-[#050505] px-4 pr-12 text-sm text-white/75 outline-none transition focus:border-[#D4AF37]/60"
+                                            className="h-9 sm:h-11 w-full appearance-none rounded-full sm:rounded-xl border border-white/10 bg-[#050505] px-4 pr-10 text-xs sm:text-sm text-white/75 outline-none transition focus:border-[#D4AF37]/60"
                                         >
                                             <option value="COD">
                                                 Cash on Delivery
@@ -647,12 +661,12 @@ function Checkout() {
                                         </div>
                                     </div>
 
-                                    <div className="mt-3 border border-white/[0.07] bg-[#050505] px-4 py-3">
-                                        <p className="text-[8px] uppercase tracking-[0.18em] text-white/25">
+                                    <div className="mt-2.5 sm:mt-3 rounded-xl border border-white/[0.07] bg-[#050505] px-3.5 py-2.5 sm:px-4 sm:py-3">
+                                        <p className="text-[7px] sm:text-[8px] uppercase tracking-[0.16em] text-white/25">
                                             Selected Method
                                         </p>
 
-                                        <p className="mt-1 text-sm text-[#D4AF37]">
+                                        <p className="mt-0.5 text-xs sm:text-sm font-semibold text-[#D4AF37]">
                                             {paymentMethod === "COD" &&
                                                 "Cash on Delivery"}
 
@@ -672,8 +686,8 @@ function Checkout() {
                                 </div>
 
                                 {paymentMethod !== "COD" && (
-                                    <div className="mt-5 border border-[#D4AF37]/15 bg-[#D4AF37]/[0.03] px-4 py-3">
-                                        <p className="text-xs leading-5 text-white/35">
+                                    <div className="mt-3.5 sm:mt-5 rounded-xl border border-[#D4AF37]/15 bg-[#D4AF37]/[0.03] px-3.5 py-2.5 sm:px-4 sm:py-3">
+                                        <p className="text-[8.5px] sm:text-xs leading-4 sm:leading-5 text-white/35">
                                             Online payment will continue
                                             after the order has been
                                             created.
@@ -685,7 +699,7 @@ function Checkout() {
 
                         {/* SUMMARY */}
                         <aside>
-                            <div className="sticky top-[96px] border border-white/10 bg-[#080808] p-6 sm:p-7">
+                            <div className="sticky top-[96px] rounded-xl sm:rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/85 p-3.5 sm:p-6 backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.6)]">
                                 <div className="flex items-center gap-3">
                                     <FiPackage
                                         size={16}
@@ -697,7 +711,7 @@ function Checkout() {
                                     </p>
                                 </div>
 
-                                <div className="mt-6 space-y-4 border-b border-white/10 pb-6">
+                                <div className="mt-3.5 sm:mt-5 space-y-2.5 sm:space-y-4 border-b border-white/10 pb-3.5 sm:pb-5">
                                     {cart.items.map((item) => (
                                         <div
                                             key={
@@ -706,16 +720,16 @@ function Checkout() {
                                             className="flex items-start justify-between gap-4"
                                         >
                                             <div>
-                                                <p className="text-sm text-white/70">
+                                                <p className="text-xs sm:text-sm font-medium text-white/80">
                                                     {item.name}
                                                 </p>
 
-                                                <p className="mt-1 text-[10px] text-white/25">
+                                                <p className="mt-0.5 text-[8px] sm:text-[10px] text-white/30">
                                                     Qty {item.quantity}
                                                 </p>
                                             </div>
 
-                                            <p className="text-xs text-white/55">
+                                            <p className="text-[11px] sm:text-xs text-white/60 font-medium">
                                                 ₱
                                                 {formatPrice(
                                                     item.item_subtotal
@@ -725,8 +739,8 @@ function Checkout() {
                                     ))}
                                 </div>
 
-                                <div className="space-y-4 border-b border-white/10 py-6">
-                                    <div className="flex justify-between text-sm">
+                                <div className="space-y-2.5 sm:space-y-3.5 border-b border-white/10 py-3 sm:py-5">
+                                    <div className="flex justify-between text-xs sm:text-sm">
                                         <span className="text-white/35">
                                             Subtotal
                                         </span>
@@ -739,21 +753,24 @@ function Checkout() {
                                         </span>
                                     </div>
 
-                                    <div className="flex justify-between text-sm">
+                                    <div className="flex justify-between text-xs sm:text-sm">
                                         <span className="text-white/35">
                                             Shipping
                                         </span>
 
                                         <span className="text-white/65">
-                                            ₱
-                                            {formatPrice(
-                                                shippingFee
+                                            {isFreeShipping ? (
+                                                <span className="font-medium text-emerald-400">
+                                                    FREE
+                                                </span>
+                                            ) : (
+                                                `₱${formatPrice(shippingFee)}`
                                             )}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="flex items-end justify-between py-6">
+                                <div className="flex items-end justify-between py-3.5 sm:py-5">
                                     <div>
                                         <p className="text-[8px] uppercase tracking-[0.25em] text-white/25">
                                             Total
@@ -764,7 +781,7 @@ function Checkout() {
                                         </p>
                                     </div>
 
-                                    <p className="text-2xl font-medium text-[#D4AF37]">
+                                    <p className="text-lg sm:text-2xl font-semibold text-[#D4AF37]">
                                         ₱
                                         {formatPrice(
                                             estimatedTotal
@@ -775,13 +792,13 @@ function Checkout() {
                                 <button
                                     type="submit"
                                     disabled={placingOrder}
-                                    className="flex h-12 w-full items-center justify-center gap-2 bg-[#D4AF37] text-[9px] font-semibold uppercase tracking-[0.2em] text-[#050505] transition hover:bg-[#E1C35B] disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="flex h-9 sm:h-11 w-full items-center justify-center gap-1.5 sm:gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 text-[8.5px] sm:text-[9px] font-semibold uppercase tracking-[0.2em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_25px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:bg-[#E1C35B] hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                     Place Order
                                     <FiArrowRight size={14} />
                                 </button>
 
-                                <p className="mt-4 text-center text-[9px] leading-5 text-white/20">
+                                <p className="mt-2.5 sm:mt-4 text-center text-[7.5px] sm:text-[9px] leading-4 sm:leading-5 text-white/25">
                                     By placing your order, you
                                     confirm your shipping and
                                     payment information.

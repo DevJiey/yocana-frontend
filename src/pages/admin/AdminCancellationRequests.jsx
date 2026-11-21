@@ -314,7 +314,7 @@ function AdminCancellationRequests() {
                         <button
                             type="button"
                             onClick={() => loadRequests()}
-                            className="flex h-11 w-fit items-center justify-center gap-2 border border-white/10 px-4 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
                         >
                             <FiRefreshCw size={12} />
                             Refresh
@@ -361,7 +361,7 @@ function AdminCancellationRequests() {
                                     return (
                                         <article
                                             key={request.id}
-                                            className="border border-white/10 bg-[#080808] p-4 sm:p-5"
+                                            className="rounded-2xl border border-white/10 bg-[#080808]/80 p-3.5 sm:p-5 backdrop-blur-md transition hover:border-[#D4AF37]/35"
                                         >
                                             {/* TOP */}
                                             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -403,7 +403,7 @@ function AdminCancellationRequests() {
 
                                                 <Link
                                                     to={`/admin/orders/${request.order_id}`}
-                                                    className="flex h-9 w-fit shrink-0 items-center justify-center gap-2 border border-white/10 px-3 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+                                                    className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 text-[8px] uppercase tracking-[0.16em] text-white/50 backdrop-blur-md transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
                                                 >
                                                     View Order
                                                     <FiExternalLink

@@ -67,13 +67,13 @@ function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-9 md:mb-11"
+          className="mb-8 sm:mb-9 md:mb-11"
         >
-          <p className="mb-3 text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] sm:text-[10px]">
+          <p className="mb-2 text-[8px] uppercase tracking-[0.4em] text-[#D4AF37] sm:mb-3 sm:text-[10px]">
             What They Say
           </p>
 
-          <h2 className="max-w-2xl text-3xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
+          <h2 className="max-w-2xl text-2xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
             Worn with confidence.
             <span className="block text-white/35">
               Remembered by others.
@@ -87,7 +87,7 @@ function Testimonials() {
           onMouseLeave={() => setIsPaused(false)}
           className="relative mx-auto max-w-5xl"
         >
-          <div className="overflow-hidden border border-white/10 bg-[#0B0B0B]">
+          <div className="overflow-hidden rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl">
             <AnimatePresence mode="wait">
               <motion.article
                 key={testimonial.id}
@@ -107,7 +107,7 @@ function Testimonials() {
                   duration: 0.32,
                   ease: "easeOut",
                 }}
-                className="flex flex-col justify-between p-6 sm:p-8 md:p-10"
+                className="flex flex-col justify-between p-5 sm:p-8 md:p-10"
               >
                 <div>
                   {/* Stars */}
@@ -122,7 +122,7 @@ function Testimonials() {
                   </div>
 
                   {/* Review */}
-                  <p className="max-w-3xl text-base leading-7 text-white/65 sm:text-lg md:text-xl md:leading-8">
+                  <p className="max-w-3xl text-sm leading-6 text-white/70 sm:text-lg md:text-xl md:leading-8">
                     “{testimonial.text}”
                   </p>
                 </div>
@@ -166,7 +166,7 @@ function Testimonials() {
               <button
                 type="button"
                 onClick={previousSlide}
-                className="flex h-9 w-9 items-center justify-center border border-white/10 text-white/50 transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37] sm:h-10 sm:w-10"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95 sm:h-10 sm:w-10"
                 aria-label="Previous testimonial"
               >
                 <FiChevronLeft size={17} />
@@ -175,7 +175,7 @@ function Testimonials() {
               <button
                 type="button"
                 onClick={nextSlide}
-                className="flex h-9 w-9 items-center justify-center border border-white/10 text-white/50 transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37] sm:h-10 sm:w-10"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95 sm:h-10 sm:w-10"
                 aria-label="Next testimonial"
               >
                 <FiChevronRight size={17} />

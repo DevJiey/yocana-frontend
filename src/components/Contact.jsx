@@ -27,18 +27,18 @@ function Contact() {
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="mb-3 text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] sm:text-[10px]">
+            <p className="mb-2 text-[8px] uppercase tracking-[0.4em] text-[#D4AF37] sm:mb-3 sm:text-[10px]">
               Stay Connected
             </p>
 
-            <h2 className="max-w-xl text-3xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
+            <h2 className="max-w-xl text-2xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
               Be part of
               <span className="block text-white/35">
                 the YOCANA story.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-md text-sm leading-7 text-white/40">
+            <p className="mt-4 max-w-md text-xs leading-6 text-white/40 sm:mt-5 sm:text-sm sm:leading-7">
               Follow YOCANA for fragrance updates, new releases, and moments
               created around your signature presence.
             </p>
@@ -48,7 +48,7 @@ function Contact() {
               <a
                 href="#"
                 aria-label="YOCANA Instagram"
-                className="flex h-10 w-10 items-center justify-center border border-white/10 text-white/45 transition duration-300 hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95"
               >
                 <FiInstagram size={16} />
               </a>
@@ -56,7 +56,7 @@ function Contact() {
               <a
                 href="#"
                 aria-label="YOCANA Facebook"
-                className="flex h-10 w-10 items-center justify-center border border-white/10 text-white/45 transition duration-300 hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95"
               >
                 <FiFacebook size={16} />
               </a>
@@ -64,7 +64,7 @@ function Contact() {
               <a
                 href="mailto:hello@yocana.com"
                 aria-label="Email YOCANA"
-                className="flex h-10 w-10 items-center justify-center border border-white/10 text-white/45 transition duration-300 hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95"
               >
                 <FiMail size={16} />
               </a>
@@ -82,7 +82,7 @@ function Contact() {
             }}
             className="flex items-center"
           >
-            <div className="w-full border border-white/10 bg-[#080808] p-6 sm:p-8 md:p-9">
+            <div className="w-full rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl p-5 sm:p-8 md:p-9">
               <div className="mb-7">
                 <span className="text-[8px] uppercase tracking-[0.35em] text-[#D4AF37]">
                   Newsletter
@@ -107,12 +107,12 @@ function Contact() {
                   type="email"
                   required
                   placeholder="Enter your email address"
-                  className="min-h-12 flex-1 border border-white/10 bg-[#050505] px-4 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#D4AF37]/50"
+                  className="min-h-12 flex-1 rounded-full border border-white/10 bg-white/[0.04] px-6 text-sm text-white backdrop-blur-md outline-none transition placeholder:text-white/25 focus:border-[#D4AF37]/50"
                 />
 
                 <button
                   type="submit"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#D4AF37] px-6 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#050505] transition duration-300 hover:bg-[#E1C35B]"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-8 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_25px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] active:scale-95"
                 >
                   Subscribe
                   <FiArrowUpRight size={15} />

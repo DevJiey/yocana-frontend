@@ -6,6 +6,8 @@ import {
     FiCheckCircle,
     FiClock,
     FiUser,
+    FiCopy,
+    FiCheck,
 } from "react-icons/fi"
 
 import AdminLayout from "../../layouts/AdminLayout"
@@ -15,8 +17,9 @@ function AdminPayments() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
 
-    const [simulatingId, setSimulatingId] = useState(null)
-    const [simulateError, setSimulateError] = useState("")
+    const [confirmingId, setConfirmingId] = useState(null)
+    const [confirmError, setConfirmError] = useState("")
+    const [copiedId, setCopiedId] = useState(null)
 
     const token =
         localStorage.getItem("yocana_token")
@@ -87,13 +90,13 @@ function AdminPayments() {
         }
     }
 
-    const handleSimulateSuccess = async (paymentId) => {
+    const handleConfirmPayment = async (paymentId) => {
         try {
-            setSimulatingId(paymentId)
-            setSimulateError("")
+            setConfirmingId(paymentId)
+            setConfirmError("")
 
             const response = await fetch(
-                `${API_URL}/api/payments/admin/${paymentId}/simulate-online-success`,
+                `${API_URL}/api/payments/admin/${paymentId}/confirm-online`,
                 {
                     method: "PATCH",
                     headers: {
@@ -107,15 +110,15 @@ function AdminPayments() {
             if (!response.ok || !data.success) {
                 throw new Error(
                     data.message ||
-                    "Failed to simulate payment"
+                    "Failed to confirm payment"
                 )
             }
 
             await loadPayments()
         } catch (err) {
-            setSimulateError(err.message)
+            setConfirmError(err.message)
         } finally {
-            setSimulatingId(null)
+            setConfirmingId(null)
         }
     }
 
@@ -147,7 +150,7 @@ function AdminPayments() {
                         <button
                             onClick={loadPayments}
                             disabled={loading}
-                            className="flex h-9 w-fit items-center justify-center gap-2 self-start border border-white/10 px-4 text-[8px] uppercase tracking-[0.2em] text-white/50 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:opacity-40 sm:self-auto"
+                            className="inline-flex h-9 sm:h-10 items-center justify-center gap-2 self-start rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition-all hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] disabled:opacity-40 sm:self-auto"
                         >
                             <FiRefreshCw
                                 size={13}
@@ -161,11 +164,11 @@ function AdminPayments() {
                         </button>
                     </div>
 
-                    {/* SIMULATE ERROR */}
-                    {simulateError && (
+                    {/* ERROR MESSAGE */}
+                    {confirmError && (
                         <div className="mt-6 border border-red-500/20 bg-red-500/[0.04] p-4">
                             <p className="text-sm text-red-400">
-                                {simulateError}
+                                {confirmError}
                             </p>
                         </div>
                     )}
@@ -214,13 +217,10 @@ function AdminPayments() {
                                 const isPending =
                                     payment.status === "pending"
 
-                                const isSimulating =
-                                    simulatingId === payment.id
-
                                 return (
                                     <div
                                         key={payment.id}
-                                        className="border border-white/10 bg-[#080808] p-5 transition hover:border-white/15 md:p-6"
+                                        className="rounded-2xl border border-white/10 bg-[#080808]/80 p-3.5 sm:p-5 md:p-6 backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/45 hover:bg-[#0c0c0c] hover:shadow-[0_4px_25px_rgba(212,175,55,0.12)]"
                                     >
                                         {/* TOP */}
                                         <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
@@ -263,7 +263,7 @@ function AdminPayments() {
 
                                                 {/* STATUS */}
                                                 <div
-                                                    className={`inline-flex w-fit items-center gap-2 border px-3 py-1.5 ${
+                                                    className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-[8px] ${
                                                         isPaid
                                                             ? "border-[#D4AF37]/20 bg-[#D4AF37]/[0.04]"
                                                             : "border-white/10 bg-white/[0.02]"
@@ -294,22 +294,22 @@ function AdminPayments() {
                                                     </span>
                                                 </div>
 
-                                                {/* SIMULATE BUTTON */}
+                                                {/* CONFIRM PAYMENT BUTTON */}
                                                 {isPending && (
                                                     <button
                                                         onClick={() =>
-                                                            handleSimulateSuccess(
+                                                            handleConfirmPayment(
                                                                 payment.id
                                                             )
                                                         }
                                                         disabled={
-                                                            isSimulating
+                                                            confirmingId === payment.id
                                                         }
-                                                        className="flex h-10 items-center justify-center bg-[#D4AF37] px-4 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] transition hover:bg-[#E1C35B] disabled:cursor-not-allowed disabled:opacity-50"
+                                                        className="inline-flex h-9 sm:h-10 items-center justify-center rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/90 px-5 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] shadow-[0_4px_15px_rgba(212,175,55,0.25)] backdrop-blur-md transition-all hover:scale-105 hover:bg-[#E1C35B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                                                     >
-                                                        {isSimulating
-                                                            ? "Processing..."
-                                                            : "Simulate Success"}
+                                                        {confirmingId === payment.id
+                                                            ? "Confirming..."
+                                                            : "Verify & Confirm"}
                                                     </button>
                                                 )}
                                             </div>
@@ -369,16 +369,38 @@ function AdminPayments() {
                                         </div>
 
                                         {/* TRANSACTION REFERENCE */}
-                                        {payment.transaction_reference && (
+                                        {payment.transaction_reference ? (
                                             <div className="mt-5 border-t border-white/10 pt-5">
-                                                <p className="text-[8px] uppercase tracking-[0.2em] text-white/20">
-                                                    Transaction Reference
+                                                <p className="text-[8px] uppercase tracking-[0.2em] text-[#D4AF37]">
+                                                    Customer GCash Reference Number
                                                 </p>
 
-                                                <p className="mt-2 break-all text-xs text-white/40">
-                                                    {
-                                                        payment.transaction_reference
-                                                    }
+                                                <div className="mt-2 flex items-center gap-2">
+                                                    <p className="break-all font-mono text-sm font-semibold text-white/90">
+                                                        {payment.transaction_reference}
+                                                    </p>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(payment.transaction_reference)
+                                                            setCopiedId(payment.id)
+                                                            setTimeout(() => setCopiedId(null), 2000)
+                                                        }}
+                                                        className="p-1 text-white/40 hover:text-[#D4AF37]"
+                                                        title="Copy Reference Number"
+                                                    >
+                                                        {copiedId === payment.id ? (
+                                                            <FiCheck size={13} className="text-emerald-400" />
+                                                        ) : (
+                                                            <FiCopy size={13} />
+                                                        )}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="mt-4 border-t border-white/5 pt-3">
+                                                <p className="text-[10px] text-white/25">
+                                                    Reference number: Not yet submitted by customer
                                                 </p>
                                             </div>
                                         )}

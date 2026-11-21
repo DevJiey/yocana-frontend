@@ -18,6 +18,7 @@ import {
   FiExternalLink,
   FiX,
   FiAlertCircle,
+  FiCopy,
 } from "react-icons/fi"
 
 import BrandLoader from "../../components/BrandLoader"
@@ -33,6 +34,7 @@ function OrderDetails() {
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [copiedTracking, setCopiedTracking] = useState(false)
 
   // Cancellation
   const [showCancelModal, setShowCancelModal] =
@@ -449,7 +451,7 @@ function OrderDetails() {
             <Link
               to="/account"
               state={{ section: "overview" }}
-              className="mt-7 inline-flex h-11 items-center justify-center border border-white/15 px-6 text-[9px] uppercase tracking-[0.2em] text-white/60 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
+              className="mt-7 inline-flex h-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.06] px-6 text-[9px] uppercase tracking-[0.2em] text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/15 hover:text-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] active:scale-95"
             >
               Back to My Account
             </Link>
@@ -501,7 +503,7 @@ function OrderDetails() {
         <Link
           to="/account"
           state={{ section: "overview" }}
-          className="inline-flex items-center gap-2 text-[8px] uppercase tracking-[0.2em] text-white/35 transition hover:text-[#D4AF37]"
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-[8px] uppercase tracking-[0.2em] text-white/50 backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
         >
           <FiArrowLeft size={13} />
           Back to My Account
@@ -611,55 +613,77 @@ function OrderDetails() {
                 </div>
               </div>
 
-              {tracking?.shipment
-                ?.courier_name && (
-                  <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div className="min-w-0 border border-white/10 p-4">
+              {tracking?.shipment?.courier_name && (
+                <div className="mt-5 space-y-3">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="min-w-0 border border-white/10 bg-[#060606] p-4">
                       <p className="text-[7px] uppercase tracking-[0.2em] text-white/25 sm:text-[8px]">
                         Courier
                       </p>
 
-                      <p className="mt-2 break-words text-xs text-white/65 sm:text-sm">
-                        {
-                          tracking
-                            .shipment
-                            .courier_name
-                        }
-                      </p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="font-medium text-xs text-white/85 sm:text-sm">
+                          {tracking.shipment.courier_name}
+                        </span>
+                        {tracking.shipment.courier_name.toLowerCase().includes("spx") && (
+                          <span className="rounded bg-orange-500/10 px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-orange-400 border border-orange-500/20">
+                            Shopee Xpress
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="min-w-0 border border-white/10 p-4">
+                    <div className="min-w-0 border border-white/10 bg-[#060606] p-4">
                       <p className="text-[7px] uppercase tracking-[0.2em] text-white/25 sm:text-[8px]">
                         Tracking Number
                       </p>
 
-                      <p className="mt-2 break-all text-xs text-white/65 sm:text-sm">
-                        {tracking
-                          .shipment
-                          .tracking_number ||
-                          "Not available"}
-                      </p>
+                      <div className="mt-2 flex items-center justify-between gap-2">
+                        <p className="break-all font-mono text-xs text-[#D4AF37] sm:text-sm">
+                          {tracking.shipment.tracking_number || "Not available"}
+                        </p>
+
+                        {tracking.shipment.tracking_number && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(tracking.shipment.tracking_number)
+                              setCopiedTracking(true)
+                              setTimeout(() => setCopiedTracking(false), 2000)
+                            }}
+                            className="shrink-0 p-1 text-white/40 transition hover:text-[#D4AF37]"
+                            title="Copy tracking number"
+                          >
+                            {copiedTracking ? (
+                              <FiCheck size={13} className="text-emerald-400" />
+                            ) : (
+                              <FiCopy size={13} />
+                            )}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                )}
 
-              {tracking?.shipment
-                ?.tracking_url && (
-                  <a
-                    href={
-                      tracking.shipment
-                        .tracking_url
-                    }
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 text-[8px] uppercase tracking-[0.18em] text-[#D4AF37]"
-                  >
-                    Track Shipment
-                    <FiExternalLink
-                      size={12}
-                    />
-                  </a>
-                )}
+                  {tracking.shipment.tracking_url && (
+                    <div className="pt-1">
+                      <a
+                        href={tracking.shipment.tracking_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#D4AF37] transition hover:bg-[#D4AF37]/20"
+                      >
+                        <span>
+                          {tracking.shipment.courier_name.toLowerCase().includes("spx")
+                            ? "Track on SPX Express"
+                            : "Track on Courier Portal"}
+                        </span>
+                        <FiExternalLink size={12} />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="mt-6">
                 {tracking?.timeline
@@ -805,12 +829,26 @@ function OrderDetails() {
 
               {order.payment_method !==
                 "COD" && (
-                  <p className="mt-3 text-[10px] leading-5 text-white/30 sm:text-xs">
-                    {order.payment_status ===
-                      "paid"
-                      ? "Your online payment has been successfully confirmed."
-                      : "Your online payment is still waiting for confirmation."}
-                  </p>
+                  <>
+                    <p className="mt-3 text-[10px] leading-5 text-white/30 sm:text-xs">
+                      {order.payment_status ===
+                        "paid"
+                        ? "Your online payment has been successfully confirmed."
+                        : "Your online payment is still waiting for confirmation."}
+                    </p>
+
+                    {order.payment_status !== "paid" && (
+                      <div className="mt-4 border-t border-white/5 pt-3">
+                        <Link
+                          to={`/payment/${order.id}`}
+                          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-4 py-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:bg-[#E1C35B] active:scale-95"
+                        >
+                          <FiCreditCard size={13} />
+                          <span>View GCash QR & Submit Proof</span>
+                        </Link>
+                      </div>
+                    )}
+                  </>
                 )}
             </section>
 
@@ -933,7 +971,7 @@ function OrderDetails() {
                         true
                       )
                     }}
-                    className="mt-5 flex h-10 w-fit items-center justify-center border border-red-500/20 px-4 text-[8px] uppercase tracking-[0.16em] text-red-400 transition hover:border-red-500/40 hover:bg-red-500/[0.04]"
+                    className="mt-5 flex h-10 w-fit items-center justify-center rounded-full border border-red-500/25 bg-red-500/[0.06] px-5 text-[8px] uppercase tracking-[0.16em] text-red-400 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-red-500/50 hover:bg-red-500/10 active:scale-95"
                   >
                     Request Cancellation
                   </button>
@@ -965,7 +1003,7 @@ function OrderDetails() {
                         true
                       )
                     }}
-                    className="mt-5 flex h-10 w-fit items-center justify-center border border-[#D4AF37]/20 px-4 text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] transition hover:border-[#D4AF37]/40 hover:bg-[#D4AF37]/[0.04]"
+                    className="mt-5 flex h-10 w-fit items-center justify-center rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-5 text-[8px] uppercase tracking-[0.16em] text-[#D4AF37] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/20 active:scale-95"
                   >
                     Request Return
                   </button>
@@ -1061,7 +1099,7 @@ function OrderDetails() {
                   setCancelReason("")
                   setCancelError("")
                 }}
-                className="h-10 w-full border border-white/10 px-4 text-[8px] uppercase tracking-[0.16em] text-white/40 transition hover:border-white/20 hover:text-white sm:w-fit"
+                className="h-10 w-full rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.16em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/20 hover:text-white active:scale-95 sm:w-fit"
               >
                 Keep Order
               </button>
@@ -1072,7 +1110,7 @@ function OrderDetails() {
                   handleCancelRequest
                 }
                 disabled={cancelLoading}
-                className="h-10 w-full bg-red-500/90 px-4 text-[8px] font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
+                className="h-10 w-full rounded-full border border-red-500/35 bg-red-500/90 px-6 text-[8px] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
               >
                 {cancelLoading
                   ? "Submitting..."
@@ -1169,7 +1207,7 @@ function OrderDetails() {
                   setReturnReason("")
                   setReturnError("")
                 }}
-                className="h-10 w-full border border-white/10 px-4 text-[8px] uppercase tracking-[0.16em] text-white/40 transition hover:border-white/20 hover:text-white sm:w-fit"
+                className="h-10 w-full rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.16em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/20 hover:text-white active:scale-95 sm:w-fit"
               >
                 Keep Order
               </button>
@@ -1180,7 +1218,7 @@ function OrderDetails() {
                   handleReturnRequest
                 }
                 disabled={returnLoading}
-                className="h-10 w-full bg-[#D4AF37] px-4 text-[8px] font-semibold uppercase tracking-[0.16em] text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
+                className="h-10 w-full rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-6 text-[8px] font-semibold uppercase tracking-[0.16em] text-black shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_4px_15px_rgba(212,175,55,0.25)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 sm:w-fit"
               >
                 {returnLoading
                   ? "Submitting..."

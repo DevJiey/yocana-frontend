@@ -98,7 +98,7 @@ function AdminLayout({ children }) {
       )}
 
       {/* LINKS */}
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-5">
+      <nav className="flex-1 space-y-1.5 overflow-y-auto px-3 py-5">
         {links.map((link) => (
           <NavLink
             key={link.path}
@@ -106,9 +106,9 @@ function AdminLayout({ children }) {
             end={link.path === "/admin"}
             onClick={() => setSidebarOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 text-xs transition ${isActive
-                ? "bg-[#D4AF37]/[0.08] text-[#D4AF37]"
-                : "text-white/35 hover:bg-white/[0.03] hover:text-white/70"
+              `flex items-center gap-3 rounded-xl px-4 py-3 text-xs transition-all duration-300 ${isActive
+                ? "border border-[#D4AF37]/35 bg-[#D4AF37]/10 font-medium text-[#D4AF37] shadow-[0_2px_12px_rgba(212,175,55,0.15)] backdrop-blur-md"
+                : "text-white/40 hover:border-white/10 hover:bg-white/[0.04] hover:text-white/80"
               }`
             }
           >
@@ -124,7 +124,7 @@ function AdminLayout({ children }) {
         <button
           type="button"
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 px-4 py-3 text-xs text-white/30 transition hover:bg-red-500/[0.05] hover:text-red-400"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-xs text-white/35 transition-all hover:border-red-500/20 hover:bg-red-500/[0.08] hover:text-red-400"
         >
           <FiLogOut size={16} />
 
@@ -140,7 +140,7 @@ function AdminLayout({ children }) {
       {/* DESKTOP SIDEBAR */}
       {/* ========================= */}
 
-      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[240px] flex-col border-r border-white/10 bg-[#080808] md:flex">
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[240px] flex-col border-r border-white/10 bg-[#080808]/85 backdrop-blur-2xl md:flex">
         <SidebarContent />
       </aside>
 
@@ -153,7 +153,7 @@ function AdminLayout({ children }) {
           type="button"
           aria-label="Close admin menu"
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-[2px] md:hidden"
+          className="fixed inset-0 z-40 bg-black/75 backdrop-blur-sm md:hidden"
         />
       )}
 
@@ -162,7 +162,7 @@ function AdminLayout({ children }) {
       {/* ========================= */}
 
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-screen w-[260px] flex-col border-r border-white/10 bg-[#080808] transition-transform duration-300 md:hidden ${sidebarOpen
+        className={`fixed left-0 top-0 z-50 flex h-screen w-[260px] flex-col border-r border-white/10 bg-[#080808]/95 backdrop-blur-2xl transition-transform duration-300 md:hidden ${sidebarOpen
             ? "translate-x-0"
             : "-translate-x-full"
           }`}
@@ -182,7 +182,7 @@ function AdminLayout({ children }) {
           <button
             type="button"
             onClick={() => setSidebarOpen(false)}
-            className="flex h-9 w-9 items-center justify-center border border-white/10 text-white/40 transition hover:border-white/20 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/40 backdrop-blur-md transition hover:border-[#D4AF37]/50 hover:text-white"
             aria-label="Close admin menu"
           >
             <FiX size={17} />
@@ -205,13 +205,13 @@ function AdminLayout({ children }) {
         {/* HEADER */}
         {/* ========================= */}
 
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/10 bg-[#050505]/95 px-4 backdrop-blur md:px-8">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/10 bg-[#050505]/80 px-4 backdrop-blur-xl md:px-8">
           <div className="flex min-w-0 items-center gap-3">
             {/* MOBILE MENU */}
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/10 text-white/50 transition hover:border-[#D4AF37]/30 hover:text-[#D4AF37] md:hidden"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/50 backdrop-blur-md transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37] md:hidden"
               aria-label="Open admin menu"
             >
               <FiMenu size={17} />

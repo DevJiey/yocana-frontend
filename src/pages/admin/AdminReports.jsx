@@ -1107,7 +1107,7 @@ function AdminReports() {
                             <button
                                 type="button"
                                 onClick={handlePrintReport}
-                                className="flex h-10 w-fit items-center justify-center gap-2 border border-white/10 px-4 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+                                className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
                             >
                                 <FiPrinter size={12} />
                                 Print
@@ -1320,7 +1320,7 @@ function AdminReports() {
                                     title="Sales by Date"
                                 />
 
-                                <div className="overflow-hidden border border-white/10 bg-[#080808]">
+                                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/80 backdrop-blur-md">
                                     {!sales?.by_date?.length ? (
                                         <EmptyState message="No sales found for this period." />
                                     ) : (
@@ -1361,7 +1361,7 @@ function AdminReports() {
                                     title="Product Sales"
                                 />
 
-                                <div className="overflow-hidden border border-white/10 bg-[#080808]">
+                                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/80 backdrop-blur-md">
                                     {!sales?.products?.length ? (
                                         <EmptyState message="No product sales found." />
                                     ) : (
@@ -1485,7 +1485,7 @@ function AdminReports() {
                                     title="Orders by Date"
                                 />
 
-                                <div className="overflow-hidden border border-white/10 bg-[#080808]">
+                                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/80 backdrop-blur-md">
                                     {!orders?.by_date?.length ? (
                                         <EmptyState message="No orders found for this period." />
                                     ) : (
@@ -1569,7 +1569,7 @@ function AdminReports() {
                                     title="Current Inventory"
                                 />
 
-                                <div className="overflow-hidden border border-white/10 bg-[#080808]">
+                                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/80 backdrop-blur-md">
                                     {!inventory?.products?.length ? (
                                         <EmptyState message="No inventory records found." />
                                     ) : (
@@ -1707,7 +1707,7 @@ function ReportSummary({
     items,
 }) {
     return (
-        <div className="border border-white/10 bg-[#080808] p-4 sm:p-5">
+        <div className="rounded-2xl border border-white/10 bg-[#080808]/80 p-3.5 sm:p-5 backdrop-blur-md transition hover:border-[#D4AF37]/35">
             <p className="text-sm text-white/70">
                 {title}
             </p>
@@ -1757,7 +1757,7 @@ function DateFilter({
     refreshing,
 }) {
     return (
-        <div className="mt-6 border border-white/10 bg-[#080808] p-4 sm:p-5">
+        <div className="mt-6 rounded-2xl border border-white/10 bg-[#080808]/80 p-3.5 sm:p-5 backdrop-blur-md transition hover:border-[#D4AF37]/35">
             <div className="flex items-center gap-2">
                 <FiCalendar
                     size={13}

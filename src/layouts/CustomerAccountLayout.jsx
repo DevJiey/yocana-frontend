@@ -193,16 +193,27 @@ function CustomerAccountLayout({
             />
           </button>
 
-          {/* CENTER ACCOUNT LABEL */}
-          <button
-            type="button"
-            onClick={goToAccount}
-            className="absolute left-1/2 hidden -translate-x-1/2 md:block"
-          >
-            <p className="text-[9px] uppercase tracking-[0.28em] text-white/35 transition hover:text-[#D4AF37]">
-              My Account
-            </p>
-          </button>
+          {/* CENTER / BACK TO CHECKOUT ACTION */}
+          {cameFromCheckout ? (
+            <button
+              type="button"
+              onClick={returnToCheckout}
+              className="flex items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 px-4 py-1.5 text-[9px] font-semibold uppercase tracking-wider text-[#D4AF37] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(212,175,55,0.15)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37] hover:text-black hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] active:scale-95 sm:text-[10px]"
+            >
+              <FiArrowLeft size={13} />
+              <span>Back to Checkout</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={goToAccount}
+              className="absolute left-1/2 hidden -translate-x-1/2 md:block"
+            >
+              <p className="text-[9px] uppercase tracking-[0.28em] text-white/35 transition hover:text-[#D4AF37]">
+                My Account
+              </p>
+            </button>
+          )}
 
           {/* ========================= */}
           {/* PROFILE BUTTON */}

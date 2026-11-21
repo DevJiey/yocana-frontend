@@ -414,7 +414,7 @@ function ProductDetails() {
 
             <Link
               to="/shop"
-              className="mt-7 inline-flex items-center gap-2 border border-white/15 px-5 py-3 text-[10px] uppercase tracking-[0.2em] text-white/60 transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
+              className="mt-7 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.05] px-6 py-3 text-[10px] uppercase tracking-[0.2em] text-white/70 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/15 hover:text-[#D4AF37]"
             >
               <FiArrowLeft size={14} />
               Back to Collection
@@ -442,18 +442,18 @@ function ProductDetails() {
         }
       />
 
-      <main className="min-h-screen bg-[#050505] px-5 pb-20 pt-24 md:px-8 md:pb-24 md:pt-28">
+      <main className="min-h-screen bg-[#050505] px-4 pb-14 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:px-8 md:pb-24 md:pt-28">
         <div className="mx-auto max-w-7xl">
 
           <Link
             to="/shop"
-            className="mb-7 inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.25em] text-white/35 transition hover:text-[#D4AF37]"
+            className="mb-4 sm:mb-7 inline-flex items-center gap-1.5 text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-white/40 transition hover:text-[#D4AF37]"
           >
             <FiArrowLeft size={14} />
             Back to Collection
           </Link>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-center md:gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 gap-5 sm:gap-8 md:grid-cols-2 md:items-center md:gap-12 lg:gap-16">
 
             {/* PRODUCT IMAGE */}
             <motion.div
@@ -468,18 +468,18 @@ function ProductDetails() {
               transition={{
                 duration: 0.65,
               }}
-              className="relative flex min-h-[410px] items-center justify-center overflow-hidden border border-white/10 bg-[#070707] sm:min-h-[500px] md:min-h-[600px]"
+              className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-xl sm:rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl sm:min-h-[400px] md:min-h-[540px]"
             >
               <div
-                className="absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[95px] sm:h-[330px] sm:w-[330px] md:h-[390px] md:w-[390px]"
+                className="absolute left-1/2 top-1/2 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[45px] sm:blur-[70px] sm:h-[260px] sm:w-[260px] md:h-[390px] md:w-[390px]"
                 style={{
                   background: glow,
                 }}
               />
 
-              <div className="absolute h-[290px] w-[290px] rounded-full border border-[#D4AF37]/10 sm:h-[370px] sm:w-[370px] md:h-[440px] md:w-[440px]" />
+              <div className="absolute h-[150px] w-[150px] rounded-full border border-[#D4AF37]/10 sm:h-[280px] sm:w-[280px] md:h-[440px] md:w-[440px]" />
 
-              <div className="absolute h-[225px] w-[225px] rounded-full border border-white/[0.04] sm:h-[290px] sm:w-[290px] md:h-[350px] md:w-[350px]" />
+              <div className="absolute h-[115px] w-[115px] rounded-full border border-white/[0.04] sm:h-[220px] sm:w-[220px] md:h-[350px] md:w-[350px]" />
 
               <motion.img
                 ref={productImageRef}
@@ -493,18 +493,18 @@ function ProductDetails() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="relative z-10 h-auto w-[260px] select-none object-contain drop-shadow-[0_35px_40px_rgba(0,0,0,0.8)] sm:w-[330px] md:w-[410px]"
+                className="relative z-10 h-auto w-[125px] select-none object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.85)] sm:w-[240px] md:w-[380px]"
                 draggable="false"
               />
 
               <div
-                className="absolute bottom-[70px] left-1/2 h-[5px] w-[150px] -translate-x-1/2 rounded-full blur-[9px] sm:w-[190px]"
+                className="absolute bottom-[35px] sm:bottom-[70px] left-1/2 h-[4px] sm:h-[5px] w-[95px] sm:w-[190px] -translate-x-1/2 rounded-full blur-[6px] sm:blur-[9px]"
                 style={{
                   background: glow,
                 }}
               />
 
-              <div className="absolute bottom-[58px] left-1/2 h-[20px] w-[190px] -translate-x-1/2 rounded-full bg-black/90 blur-xl" />
+              <div className="absolute bottom-[28px] sm:bottom-[58px] left-1/2 h-[12px] sm:h-[20px] w-[120px] sm:w-[190px] -translate-x-1/2 rounded-full bg-black/90 blur-lg sm:blur-xl" />
             </motion.div>
 
             {/* PRODUCT INFO */}
@@ -523,27 +523,44 @@ function ProductDetails() {
               }}
               className="md:py-8"
             >
-              <p className="text-[9px] uppercase tracking-[0.35em] text-[#D4AF37]">
+              <p className="text-[7.5px] sm:text-[9px] uppercase tracking-[0.3em] sm:tracking-[0.35em] text-[#D4AF37]">
                 {product.category} · Eau De Parfum
               </p>
 
-              <h1 className="mt-4 text-4xl font-medium tracking-[-0.04em] text-[#F5F5F5] sm:text-5xl md:text-6xl">
+              <h1 className="mt-1.5 sm:mt-4 text-2xl font-medium tracking-tight text-[#F5F5F5] sm:text-4xl md:text-5xl lg:text-6xl">
                 {product.name}
               </h1>
 
-              <p className="mt-5 text-2xl font-medium text-[#D4AF37]">
-                ₱
-                {Number(product.price).toLocaleString(
-                  "en-PH",
-                  {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </p>
+              <div className="mt-2.5 sm:mt-5 flex flex-wrap items-baseline gap-2 sm:gap-3">
+                <span className="text-xs sm:text-lg md:text-xl font-medium text-white/40 line-through">
+                  ₱
+                  {Number(product.original_price || 2199).toLocaleString(
+                    "en-PH",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}
+                </span>
+
+                <span className="text-lg sm:text-2xl md:text-3xl font-semibold text-[#D4AF37]">
+                  ₱
+                  {Number(product.price).toLocaleString(
+                    "en-PH",
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}
+                </span>
+
+                <span className="rounded-full bg-[#D4AF37]/15 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-semibold tracking-wider text-[#D4AF37]">
+                  SAVE ₱700 (32% OFF)
+                </span>
+              </div>
 
               {/* PRODUCT DETAILS */}
-              <div className="mt-7 flex items-center gap-5 border-y border-white/10 py-5">
+              <div className="mt-3.5 sm:mt-7 flex items-center gap-3 sm:gap-5 border-y border-white/10 py-2.5 sm:py-4">
 
                 <div>
                   <p className="text-[8px] uppercase tracking-[0.28em] text-white/25">
@@ -563,7 +580,7 @@ function ProductDetails() {
                   </p>
 
                   <p
-                    className={`mt-1 text-sm ${isInStock
+                    className={`mt-0.5 text-xs sm:text-sm font-medium ${isInStock
                       ? "text-emerald-400"
                       : "text-red-400"
                       }`}
@@ -588,89 +605,90 @@ function ProductDetails() {
               </div>
 
               {/* DESCRIPTION */}
-              <p className="mt-7 max-w-xl text-sm leading-7 text-white/45 sm:text-[15px]">
+              <p className="mt-3 sm:mt-6 max-w-xl text-xs sm:text-sm leading-5 sm:leading-6 text-white/50">
                 {product.description ||
                   "A distinctive YOCANA fragrance crafted to become part of your presence and signature."}
               </p>
 
               {/* PURCHASE CONTROLS */}
-              <div className="mt-8">
-                <p className="mb-3 text-[8px] uppercase tracking-[0.28em] text-white/30">
+              <div className="mt-4 sm:mt-7">
+                <p className="mb-1.5 sm:mb-2 text-[7.5px] sm:text-[8px] uppercase tracking-[0.25em] text-white/30">
                   Quantity
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 md:gap-6">
-
-                  {/* QUANTITY */}
-                  <div
-                    className={`flex h-12 w-[112px] items-center border ${isInStock
-                      ? "border-white/10"
-                      : "border-white/[0.05] opacity-40"
-                      }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={decreaseQuantity}
-                      disabled={
-                        !isInStock ||
-                        quantity <= 1
-                      }
-                      className="flex h-full w-9 items-center justify-center text-white/45 transition hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:opacity-30"
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    {/* QUANTITY */}
+                    <div
+                      className={`flex h-9 sm:h-10 w-24 sm:w-[105px] items-center rounded-full border backdrop-blur-xl transition ${isInStock
+                        ? "border-white/[0.18] bg-white/[0.04] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]"
+                        : "border-white/[0.05] opacity-40"
+                        }`}
                     >
-                      <FiMinus size={13} />
-                    </button>
+                      <button
+                        type="button"
+                        onClick={decreaseQuantity}
+                        disabled={
+                          !isInStock ||
+                          quantity <= 1
+                        }
+                        className="flex h-full w-8 items-center justify-center rounded-l-full text-white/50 transition hover:bg-white/[0.08] hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <FiMinus size={11} />
+                      </button>
 
-                    <div className="flex flex-1 items-center justify-center text-sm text-white">
-                      {isInStock
-                        ? quantity
-                        : 0}
+                      <div className="flex flex-1 items-center justify-center text-xs sm:text-sm font-medium text-white">
+                        {isInStock
+                          ? quantity
+                          : 0}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={increaseQuantity}
+                        disabled={
+                          !isInStock ||
+                          quantity >= stock
+                        }
+                        className="flex h-full w-8 items-center justify-center rounded-r-full text-white/50 transition hover:bg-white/[0.08] hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <FiPlus size={11} />
+                      </button>
                     </div>
 
+                    {/* ADD TO CART */}
                     <button
                       type="button"
-                      onClick={increaseQuantity}
+                      onClick={handleAddToCart}
                       disabled={
                         !isInStock ||
-                        quantity >= stock
+                        cartOverlay
                       }
-                      className="flex h-full w-9 items-center justify-center text-white/45 transition hover:text-[#D4AF37] disabled:cursor-not-allowed disabled:opacity-30"
+                      className={`inline-flex h-9 sm:h-10 flex-1 sm:flex-initial items-center justify-center gap-1.5 sm:gap-2 rounded-full px-4 sm:px-6 text-[8.5px] sm:text-[9px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${isInStock &&
+                        !cartOverlay
+                        ? "border border-[#FFE28A]/40 bg-[#D4AF37]/90 text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_25px_rgba(212,175,55,0.3)] backdrop-blur-xl hover:scale-105 hover:bg-[#E1C35B] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] active:scale-95"
+                        : "cursor-not-allowed bg-white/10 text-white/25"
+                        }`}
                     >
-                      <FiPlus size={13} />
+                      <FiShoppingBag size={12} />
+
+                      {isInStock
+                        ? "Add to Cart"
+                        : "Out of Stock"}
                     </button>
                   </div>
-
-                  {/* ADD TO CART */}
-                  <button
-                    type="button"
-                    onClick={handleAddToCart}
-                    disabled={
-                      !isInStock ||
-                      cartOverlay
-                    }
-                    className={`inline-flex h-12 items-center justify-center gap-2 px-5 text-[9px] font-semibold uppercase tracking-[0.18em] transition sm:px-5 md:ml-5 ${isInStock &&
-                      !cartOverlay
-                      ? "bg-[#D4AF37] text-[#050505] hover:bg-[#E1C35B]"
-                      : "cursor-not-allowed bg-white/10 text-white/25"
-                      }`}
-                  >
-                    <FiShoppingBag size={15} />
-
-                    {isInStock
-                      ? "Add to Cart"
-                      : "Out of Stock"}
-                  </button>
 
                   {/* BUY NOW */}
                   <button
                     type="button"
                     onClick={handleBuyNow}
                     disabled={!isInStock}
-                    className={`inline-flex h-12 items-center justify-center gap-2 border px-5 text-[9px] font-semibold uppercase tracking-[0.18em] transition sm:px-6 ${isInStock
-                      ? "border-white/15 text-white/65 hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
+                    className={`inline-flex h-9 sm:h-10 w-full sm:w-auto items-center justify-center gap-1.5 sm:gap-2 rounded-full border px-4 sm:px-6 text-[8.5px] sm:text-[9px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${isInStock
+                      ? "border-white/20 bg-white/[0.06] text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl hover:scale-105 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/15 hover:text-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] active:scale-95"
                       : "cursor-not-allowed border-white/[0.05] text-white/20"
                       }`}
                   >
-                    <FiZap size={14} />
+                    <FiZap size={12} />
                     Buy Now
                   </button>
                 </div>
@@ -681,6 +699,35 @@ function ProductDetails() {
                     {cartError}
                   </p>
                 )}
+
+                {/* LUXURY SHIPPING & PROMO PERKS */}
+                <div className="mt-5 sm:mt-8 border-t border-white/10 pt-4 sm:pt-6">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
+                    <div className="flex items-center gap-2.5 rounded-xl border border-white/[0.07] bg-white/[0.02] p-2.5 sm:p-3">
+                      <span className="text-base">✨</span>
+                      <div>
+                        <p className="text-[8.5px] sm:text-[10px] font-medium tracking-wide text-white/80">
+                          FREE Shipping on 2+ Bottles
+                        </p>
+                        <p className="text-[7.5px] sm:text-[9px] text-white/35">
+                          Flat ₱50 nationwide for single bottle
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 rounded border border-white/[0.07] bg-white/[0.02] p-3">
+                      <span className="text-base">🚚</span>
+                      <div>
+                        <p className="text-[10px] font-medium tracking-wide text-white/80">
+                          SPX Express Courier
+                        </p>
+                        <p className="text-[9px] text-white/35">
+                          Door-to-door delivery with live tracking
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>

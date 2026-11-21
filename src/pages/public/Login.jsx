@@ -312,7 +312,7 @@ function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="flex h-11 w-full items-center justify-center bg-[#D4AF37] px-5 text-[8px] font-semibold uppercase tracking-[0.2em] text-[#050505] transition hover:bg-[#E1C35B] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-11 w-full items-center justify-center rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-5 text-[8px] font-semibold uppercase tracking-[0.2em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:bg-[#E1C35B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading
                 ? "Please wait..."
@@ -357,7 +357,7 @@ function Login() {
           <div className="mt-5 border-t border-white/10 pt-5 text-center">
             <Link
               to="/"
-              className="inline-flex items-center justify-center gap-2 text-[8px] uppercase tracking-[0.18em] text-white/25 transition hover:text-[#D4AF37]"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-[8px] uppercase tracking-[0.18em] text-white/40 backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
             >
               <FiArrowLeft size={11} />
               Back to Home

@@ -13,7 +13,7 @@ function Home() {
     <div className="min-h-screen bg-[#050505] text-white">
       <Navbar />
 
-      <main className="pt-[72px]">
+      <main className="pt-0">
         {/* HOME */}
         <section id="home">
           <Hero />

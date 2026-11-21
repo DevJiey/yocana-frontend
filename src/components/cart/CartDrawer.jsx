@@ -507,12 +507,32 @@ function CartDrawer({
                         onClose()
                         navigate("/shop")
                       }}
-                      className="mt-6 border border-[#D4AF37]/30 px-5 py-3 text-[8px] uppercase tracking-[0.2em] text-[#D4AF37] transition hover:bg-[#D4AF37] hover:text-[#050505]"
+                      className="mt-6 inline-flex items-center justify-center rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 px-7 py-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#D4AF37] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/25 hover:border-[#D4AF37] hover:shadow-[0_0_20px_rgba(212,175,55,0.25)] active:scale-95"
                     >
                       Explore Collection
                     </button>
                   </div>
                 )}
+
+              {/* FREE SHIPPING PROGRESS BANNER */}
+              {!loading && cart.items.length > 0 && (() => {
+                const totalQty = cart.items.reduce(
+                  (acc, it) => acc + (Number(it.quantity) || 1),
+                  0
+                );
+                const hasFreeShipping = totalQty >= 2;
+                return (
+                  <div className="mx-5 mb-2 mt-4 rounded border border-[#D4AF37]/25 bg-[#D4AF37]/[0.06] p-2.5 text-center sm:mx-6">
+                    <p className="text-[10px] uppercase tracking-[0.1em] text-[#D4AF37]">
+                      {hasFreeShipping ? (
+                        <span>✨ <strong>FREE SHIPPING</strong> Unlocked (2+ Bottles Promo)</span>
+                      ) : (
+                        <span>✨ Add 1 more bottle for <strong>FREE SHIPPING</strong> nationwide!</span>
+                      )}
+                    </p>
+                  </div>
+                );
+              })()}
 
               {/* ITEMS */}
               {!loading &&
@@ -628,7 +648,7 @@ function CartDrawer({
                                 <div className="mt-4 flex items-end justify-between gap-3">
 
                                   {/* QUANTITY */}
-                                  <div className="flex h-9 items-center border border-white/10">
+                                  <div className="flex h-8 items-center rounded-full border border-white/15 bg-white/[0.04] px-1 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
                                     <button
                                       type="button"
                                       onClick={() =>
@@ -645,14 +665,14 @@ function CartDrawer({
                                         ) <= 1 ||
                                         isUpdating
                                       }
-                                      className="flex h-full w-8 items-center justify-center text-white/40 transition hover:text-[#D4AF37] disabled:opacity-20"
+                                      className="flex h-6 w-6 items-center justify-center rounded-full text-white/40 transition hover:bg-white/[0.08] hover:text-[#D4AF37] disabled:opacity-20"
                                     >
                                       <FiMinus
                                         size={11}
                                       />
                                     </button>
 
-                                    <div className="flex h-full min-w-[34px] items-center justify-center text-[10px] text-white/70">
+                                    <div className="flex h-full min-w-[30px] items-center justify-center text-[10px] font-medium text-white/80">
                                       {isUpdating
                                         ? "..."
                                         : item.quantity}
@@ -675,7 +695,7 @@ function CartDrawer({
                                           maxStock ||
                                         isUpdating
                                       }
-                                      className="flex h-full w-8 items-center justify-center text-white/40 transition hover:text-[#D4AF37] disabled:opacity-20"
+                                      className="flex h-6 w-6 items-center justify-center rounded-full text-white/40 transition hover:bg-white/[0.08] hover:text-[#D4AF37] disabled:opacity-20"
                                     >
                                       <FiPlus
                                         size={11}
@@ -738,7 +758,7 @@ function CartDrawer({
                   <button
                     type="button"
                     onClick={handleCheckout}
-                    className="mt-5 flex h-12 w-full items-center justify-center gap-2 bg-[#D4AF37] text-[8px] font-semibold uppercase tracking-[0.2em] text-[#050505] transition hover:bg-[#E1C35B]"
+                    className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_25px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:bg-[#E1C35B] hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] active:scale-95"
                   >
                     Checkout
                     <FiArrowRight

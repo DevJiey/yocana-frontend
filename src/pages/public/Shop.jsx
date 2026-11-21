@@ -2,6 +2,7 @@ import { motion } from "motion/react"
 import { Link } from "react-router-dom"
 import { FiArrowUpRight } from "react-icons/fi"
 import PublicLayout from "../../layouts/PublicLayout"
+import GoldDustGalaxy from "../../components/GoldDustGalaxy"
 
 import hommeImage from "../../assets/yocana-homme.png"
 import femmeImage from "../../assets/yocana-femme.png"
@@ -13,7 +14,9 @@ const products = [
         type: "Eau De Parfum",
         image: hommeImage,
         glow: "rgba(0, 119, 255, 0.22)",
-        price: "₱0.00",
+        originalPrice: "₱2,199.00",
+        price: "₱1,499.00",
+        discount: "SAVE ₱700",
     },
     {
         id: 2,
@@ -21,15 +24,20 @@ const products = [
         type: "Eau De Parfum",
         image: femmeImage,
         glow: "rgba(210, 15, 30, 0.22)",
-        price: "₱0.00",
+        originalPrice: "₱2,199.00",
+        price: "₱1,499.00",
+        discount: "SAVE ₱700",
     },
 ]
 
 function Shop() {
     return (
         <PublicLayout>
-            <main className="min-h-screen bg-[#050505] px-5 pb-20 pt-28 md:px-8 md:pb-24 md:pt-32">
-                <div className="mx-auto max-w-7xl">
+            <main className="relative min-h-screen overflow-hidden bg-[#050505] px-5 pb-20 pt-28 md:px-8 md:pb-24 md:pt-32">
+                {/* Animated Gold Dust Galaxy Background */}
+                <GoldDustGalaxy />
+
+                <div className="relative mx-auto max-w-7xl">
 
                     {/* HEADER */}
                     <motion.div
@@ -38,19 +46,19 @@ function Shop() {
                         transition={{ duration: 0.6 }}
                         className="mb-10 md:mb-14"
                     >
-                        <p className="mb-3 text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] sm:text-[10px]">
+                        <p className="mb-2 text-[8px] uppercase tracking-[0.4em] text-[#D4AF37] sm:mb-3 sm:text-[10px]">
                             The Collection
                         </p>
 
-                        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-                            <h1 className="max-w-2xl text-4xl font-medium leading-tight tracking-[-0.04em] text-[#F5F5F5] sm:text-5xl md:text-6xl">
+                        <div className="flex flex-col gap-4 sm:gap-5 md:flex-row md:items-end md:justify-between">
+                            <h1 className="max-w-2xl text-2xl font-medium leading-tight tracking-[-0.04em] text-[#F5F5F5] sm:text-5xl md:text-6xl">
                                 Find your
                                 <span className="block text-white/35">
                                     signature fragrance.
                                 </span>
                             </h1>
 
-                            <p className="max-w-sm text-sm leading-7 text-white/40">
+                            <p className="max-w-sm text-xs leading-6 text-white/40 sm:text-sm sm:leading-7">
                                 Explore YOCANA fragrances crafted to leave a distinctive
                                 and memorable presence.
                             </p>
@@ -64,10 +72,10 @@ function Shop() {
                         </p>
                     </div>
 
-                    {/* PRODUCTS */}
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-7">
+                    {/* PRODUCTS (Magkatabi / 2 Columns on Mobile) */}
+                    <div className="grid grid-cols-2 gap-3 sm:gap-6 md:gap-8">
                         {products.map((product, index) => (
-                            <motion.article
+                            <motion.div
                                 key={product.id}
                                 initial={{ opacity: 0, y: 24 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -75,71 +83,122 @@ function Shop() {
                                     duration: 0.6,
                                     delay: index * 0.1,
                                 }}
-                                className="group overflow-hidden border border-white/10 bg-[#080808] transition duration-500 hover:border-[#D4AF37]/25"
                             >
+                                <Link
+                                    to={`/product/${product.id}`}
+                                    aria-label={`View ${product.name}`}
+                                    className="group relative block overflow-hidden rounded-xl sm:rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/60 backdrop-blur-2xl shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.16),0_24px_50px_rgba(0,0,0,0.7)] transition-all duration-500 hover:-translate-y-1.5 hover:border-[#D4AF37]/80 hover:bg-[#121212]/80 hover:shadow-[inset_0_1px_2px_0_rgba(212,175,55,0.35),0_30px_70px_rgba(0,0,0,0.9),0_0_40px_rgba(212,175,55,0.22)] cursor-pointer"
+                                >
+                                    {/* Gold Top Specular Highlight (Glows gold matching the logo) */}
+                                    <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent transition-all duration-500 group-hover:via-[#D4AF37]" />
+                                    <div className="pointer-events-none absolute -inset-full bg-gradient-to-tr from-transparent via-[#D4AF37]/[0.04] to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
-                                {/* PRODUCT IMAGE */}
-                                <div className="relative flex min-h-[370px] items-center justify-center overflow-hidden bg-[#060606] sm:min-h-[430px] md:min-h-[500px]">
+                                {/* AUTOMATIC LUXURY GLOW (Mobile Only: Soft feathered ambient glow, NO sharp lines) */}
+                <div className="md:hidden">
+                  {/* 1. Soft Ambient Diffuse Glow Spot (Feathered, sweeps top-left to bottom-right) */}
+                  <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden rounded-xl">
+                    <motion.div
+                      aria-hidden="true"
+                      className="absolute h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none blur-2xl"
+                      style={{
+                        background:
+                          "radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(212,175,55,0.45) 35%, rgba(212,175,55,0.12) 65%, transparent 80%)",
+                      }}
+                      animate={{
+                        top: ["-10%", "110%"],
+                        left: ["-10%", "110%"],
+                        opacity: [0, 0.9, 0.9, 0],
+                      }}
+                      transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        repeatDelay: 1.8,
+                        ease: [0.35, 0, 0.25, 1],
+                        delay: index * 0.9,
+                      }}
+                    />
+                  </div>
 
-                                    {/* Colored Glow */}
-                                    <div
-                                        className="absolute left-1/2 top-1/2 h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[90px] sm:h-[290px] sm:w-[290px] md:h-[330px] md:w-[330px]"
-                                        style={{
-                                            background: product.glow,
-                                        }}
-                                    />
+                  {/* 2. Soft Golden Rim / Edge Glow (In sync with the glow travel) */}
+                  <motion.div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-30 rounded-xl border border-[#D4AF37]/70"
+                    animate={{
+                      opacity: [0, 0.9, 0],
+                      boxShadow: [
+                        "inset 0 0 0px rgba(212,175,55,0), 0 0 0px rgba(212,175,55,0)",
+                        "inset 0 0 16px rgba(212,175,55,0.35), 0 0 22px rgba(212,175,55,0.3)",
+                        "inset 0 0 0px rgba(212,175,55,0), 0 0 0px rgba(212,175,55,0)",
+                      ],
+                    }}
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                      repeatDelay: 1.8,
+                      ease: "easeInOut",
+                      delay: index * 0.9,
+                    }}
+                  />
+                </div>
 
-                                    {/* Bottle */}
-                                    <motion.img
-                                        src={product.image}
-                                        alt={`YOCANA ${product.name}`}
-                                        animate={{
-                                            y: [0, -8, 0],
-                                        }}
-                                        transition={{
-                                            duration: 5,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                            delay: index * 0.4,
-                                        }}
-                                        whileHover={{
-                                            scale: 1.04,
-                                        }}
-                                        className="relative z-10 h-auto w-[230px] select-none object-contain drop-shadow-[0_30px_38px_rgba(0,0,0,0.8)] sm:w-[280px] md:w-[330px]"
-                                        draggable="false"
-                                    />
+                                    {/* PRODUCT IMAGE */}
+                                    <div className="relative flex min-h-[160px] sm:min-h-[300px] md:min-h-[500px] items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.03] via-transparent to-black/30">
 
-                                    {/* Bottom Shadow */}
-                                    <div className="absolute bottom-12 left-1/2 h-[18px] w-[160px] -translate-x-1/2 rounded-full bg-black/80 blur-xl" />
-                                </div>
+                                        {/* Colored Glow */}
+                                        <div
+                                            className="absolute left-1/2 top-1/2 h-[110px] w-[110px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[45px] sm:blur-[70px] transition-all duration-500 group-hover:scale-110 sm:h-[290px] sm:w-[290px] md:h-[330px] md:w-[330px]"
+                                            style={{
+                                                background: product.glow,
+                                            }}
+                                        />
 
-                                {/* DETAILS */}
-                                <div className="border-t border-white/10 p-5 sm:p-6">
-                                    <p className="text-[8px] uppercase tracking-[0.3em] text-[#D4AF37]">
-                                        {product.type}
-                                    </p>
+                                        {/* Bottle */}
+                                        <motion.img
+                                            src={product.image}
+                                            alt={`YOCANA ${product.name}`}
+                                            animate={{
+                                                y: [0, -6, 0],
+                                            }}
+                                            transition={{
+                                                duration: 5,
+                                                repeat: Infinity,
+                                                ease: "easeInOut",
+                                                delay: index * 0.4,
+                                            }}
+                                            className="relative z-10 h-auto w-[100px] select-none object-contain drop-shadow-[0_15px_22px_rgba(0,0,0,0.85)] transition-transform duration-500 group-hover:scale-105 sm:w-[240px] md:w-[330px]"
+                                            draggable="false"
+                                        />
 
-                                    <div className="mt-3 flex items-end justify-between gap-5">
-                                        <div>
-                                            <h2 className="text-2xl font-medium text-[#F5F5F5]">
+                                        {/* Bottom Shadow */}
+                                        <div className="absolute bottom-6 sm:bottom-12 left-1/2 h-[12px] w-[80px] sm:w-[160px] -translate-x-1/2 rounded-full bg-black/80 blur-lg sm:blur-xl" />
+                                    </div>
+
+                                    {/* DETAILS */}
+                                    <div className="border-t border-white/[0.08] bg-black/35 backdrop-blur-xl p-3 sm:p-5 md:p-6 transition-colors duration-500 group-hover:border-[#D4AF37]/30">
+                                        <p className="text-[7px] sm:text-[8px] uppercase tracking-[0.25em] sm:tracking-[0.3em] text-[#D4AF37]">
+                                            {product.type}
+                                        </p>
+
+                                        <div className="mt-1 sm:mt-2">
+                                            <h2 className="text-sm sm:text-xl md:text-2xl font-medium text-[#F5F5F5] transition-colors duration-300 group-hover:text-[#D4AF37] truncate">
                                                 {product.name}
                                             </h2>
 
-                                            <p className="mt-2 text-sm text-white/35">
-                                                {product.price}
-                                            </p>
+                                            <div className="mt-1 flex flex-wrap items-baseline gap-1.5 sm:mt-2 sm:gap-2.5">
+                                                <span className="text-[10px] font-medium text-white/40 line-through sm:text-sm">
+                                                    {product.originalPrice}
+                                                </span>
+                                                <span className="text-xs font-semibold text-[#D4AF37] sm:text-lg">
+                                                    {product.price}
+                                                </span>
+                                                <span className="rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/15 px-1.5 py-0.5 text-[7px] font-semibold tracking-wider text-[#D4AF37] backdrop-blur-md shadow-[inset_0_1px_0_rgba(212,175,55,0.25)] sm:px-2.5 sm:text-[9px]">
+                                                    {product.discount}
+                                                </span>
+                                            </div>
                                         </div>
-
-                                        <Link
-                                            to={`/product/${product.id}`}
-                                            aria-label={`View ${product.name}`}
-                                            className="flex h-11 w-11 shrink-0 items-center justify-center border border-white/15 text-white/55 transition duration-300 hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black"
-                                        >
-                                            <FiArrowUpRight size={17} />
-                                        </Link>
                                     </div>
-                                </div>
-                            </motion.article>
+                                </Link>
+                            </motion.div>
                         ))}
                     </div>
                 </div>

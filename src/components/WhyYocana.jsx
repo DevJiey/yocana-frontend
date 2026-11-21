@@ -37,13 +37,13 @@ function WhyYocana() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6 }}
-          className="mb-9 max-w-3xl md:mb-11"
+          className="mb-8 max-w-3xl sm:mb-9 md:mb-11"
         >
-          <p className="mb-3 text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] sm:text-[10px]">
+          <p className="mb-2 text-[8px] uppercase tracking-[0.4em] text-[#D4AF37] sm:mb-3 sm:text-[10px]">
             The YOCANA Experience
           </p>
 
-          <h2 className="text-3xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
+          <h2 className="text-2xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
             Made to be noticed.
 
             <span className="block text-white/35">
@@ -93,11 +93,11 @@ function WhyYocana() {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-medium text-[#F5F5F5] sm:text-[22px]">
+                <h3 className="text-lg font-medium text-[#F5F5F5] sm:text-xl md:text-[22px]">
                   {feature.title}
                 </h3>
 
-                <p className="mt-3 max-w-sm text-sm leading-6 text-white/40">
+                <p className="mt-2 text-xs leading-5 text-white/40 sm:mt-3 sm:text-sm sm:leading-6">
                   {feature.text}
                 </p>
 

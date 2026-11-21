@@ -21,6 +21,7 @@ import PaymentPending from "./pages/customer/PaymentPending"
 import AdminDashboard from "./pages/admin/AdminDashboard"
 import LoadingScreen from "./components/LoadingScreen"
 import ProtectedRoute from "./components/auth/ProtectedRoute"
+import ScrollToTop from "./components/common/ScrollToTop"
 import AdminPayments from "./pages/admin/AdminPayments"
 import AdminOrders from "./pages/admin/AdminOrders"
 import AdminOrderDetails from "./pages/admin/AdminOrderDetails"
@@ -48,6 +49,7 @@ function App() {
       </AnimatePresence>
 
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* PUBLIC */}
           <Route

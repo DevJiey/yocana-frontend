@@ -12,6 +12,8 @@ import {
 } from "react-icons/fi"
 
 import AdminLayout from "../../layouts/AdminLayout"
+import hommeImage from "../../assets/yocana-homme.png"
+import femmeImage from "../../assets/yocana-femme.png"
 import BrandLoader from "../../components/BrandLoader"
 
 function AdminInventory() {
@@ -353,7 +355,7 @@ function AdminInventory() {
                         <button
                             type="button"
                             onClick={refreshData}
-                            className="flex h-10 w-fit items-center justify-center gap-2 border border-white/10 px-4 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+                            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
                         >
                             <FiRefreshCw size={12} />
                             Refresh
@@ -362,7 +364,7 @@ function AdminInventory() {
 
                     {/* SUMMARY */}
                     <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                        <div className="border border-white/10 bg-[#080808] p-4">
+                        <div className="rounded-2xl border border-white/10 bg-[#080808]/80 p-3 sm:p-4 backdrop-blur-md transition hover:border-[#D4AF37]/35">
                             <p className="text-[7px] uppercase tracking-[0.2em] text-white/20">
                                 Products
                             </p>
@@ -372,7 +374,7 @@ function AdminInventory() {
                             </p>
                         </div>
 
-                        <div className="border border-white/10 bg-[#080808] p-4">
+                        <div className="rounded-2xl border border-white/10 bg-[#080808]/80 p-3 sm:p-4 backdrop-blur-md transition hover:border-[#D4AF37]/35">
                             <p className="text-[7px] uppercase tracking-[0.2em] text-white/20">
                                 Total Units
                             </p>
@@ -442,7 +444,7 @@ function AdminInventory() {
                     {activeTab === "inventory" && (
                         <>
                             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                                <div className="flex h-11 min-w-0 flex-1 items-center border border-white/10 bg-[#080808] focus-within:border-[#D4AF37]/30">
+                                <div className="flex h-10 min-w-0 flex-1 items-center rounded-full border border-white/10 bg-[#080808]/80 backdrop-blur-md focus-within:border-[#D4AF37]/50">
                                     <FiSearch
                                         size={14}
                                         className="ml-4 shrink-0 text-white/20"
@@ -518,7 +520,7 @@ function AdminInventory() {
                                         return (
                                             <article
                                                 key={item.id}
-                                                className={`border bg-[#080808] p-4 sm:p-5 ${isOutOfStock
+                                                className={`rounded-2xl border bg-[#080808]/80 p-3.5 sm:p-5 backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/45 hover:bg-[#0c0c0c] hover:shadow-[0_4px_25px_rgba(212,175,55,0.12)] ${isOutOfStock
                                                         ? "border-red-500/20"
                                                         : item.is_low_stock
                                                             ? "border-yellow-500/20"

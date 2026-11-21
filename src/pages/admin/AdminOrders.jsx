@@ -154,7 +154,7 @@ function AdminOrders() {
                         <button
                             onClick={loadOrders}
                             disabled={loading}
-                            className="flex h-9 w-fit items-center justify-center gap-2 self-start border border-white/10 px-4 text-[8px] uppercase tracking-[0.2em] text-white/50 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37] disabled:opacity-40 sm:self-auto"
+                            className="inline-flex h-9 sm:h-10 items-center justify-center gap-2 self-start rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition-all hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] disabled:opacity-40 sm:self-auto"
                         >
                             <FiRefreshCw
                                 size={13}
@@ -169,7 +169,7 @@ function AdminOrders() {
 
                     {/* SEARCH + FILTER */}
                     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                        <div className="flex h-12 flex-1 items-center border border-white/10 bg-[#080808] transition focus-within:border-[#D4AF37]/30">
+                        <div className="flex h-10 min-w-0 flex-1 items-center rounded-full border border-white/10 bg-[#080808]/80 backdrop-blur-md focus-within:border-[#D4AF37]/50">
                             <div className="flex h-10 w-11 items-center justify-center text-white/25">
                                 <FiSearch size={14} />
                             </div>
@@ -266,7 +266,7 @@ function AdminOrders() {
                                             `/admin/orders/${order.id}`
                                         )
                                     }
-                                    className="block w-full border border-white/10 bg-[#080808] p-5 text-left transition hover:border-[#D4AF37]/25 md:p-6"
+                                    className="block w-full rounded-2xl border border-white/10 bg-[#080808]/80 p-3.5 sm:p-5 text-left backdrop-blur-md transition-all duration-300 hover:border-[#D4AF37]/45 hover:bg-[#0c0c0c] hover:shadow-[0_4px_25px_rgba(212,175,55,0.12)] md:p-6"
                                 >
                                     <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                                         <div>
@@ -298,7 +298,7 @@ function AdminOrders() {
                                         </div>
 
                                         <div
-                                            className={`inline-flex w-fit border px-3 py-1.5 text-[8px] uppercase tracking-[0.2em] ${getStatusStyle(
+                                            className={`inline-flex w-fit rounded-full border px-3 py-1 text-[8px] uppercase tracking-[0.2em] backdrop-blur-sm ${getStatusStyle(
                                                 order.order_status
                                             )}`}
                                         >

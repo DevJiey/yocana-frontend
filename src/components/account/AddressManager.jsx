@@ -1,5 +1,6 @@
 import { API_URL } from "../../config/api";
 import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import {
     FiMapPin,
     FiPlus,
@@ -9,6 +10,8 @@ import {
     FiX,
     FiHome,
     FiStar,
+    FiArrowLeft,
+    FiArrowRight,
 } from "react-icons/fi"
 
 import BrandLoader from "../BrandLoader"
@@ -21,6 +24,9 @@ import {
 import { getPostalCode } from "../../utils/phZipCodes"
 
 function AddressManager() {
+    const navigate = useNavigate()
+    const location = useLocation()
+    const cameFromCheckout = location.state?.from === "/checkout"
     const token = localStorage.getItem("yocana_token")
 
     const [addresses, setAddresses] = useState([])
@@ -121,7 +127,12 @@ function AddressManager() {
                 )
             }
 
-            setAddresses(data.addresses || [])
+            const fetched = data.addresses || []
+            setAddresses(fetched)
+
+            if (cameFromCheckout && fetched.length === 0) {
+                setFormOpen(true)
+            }
 
             if (showLoader) {
                 setLoaderOpen(false)
@@ -396,9 +407,15 @@ function AddressManager() {
 
             showSuccess(
                 editingAddress
-                    ? "Address Updated"
-                    : "Address Added"
+                    ? (cameFromCheckout ? "Address Updated! Returning to Checkout..." : "Address Updated")
+                    : (cameFromCheckout ? "Address Added! Returning to Checkout..." : "Address Added")
             )
+
+            if (cameFromCheckout) {
+                setTimeout(() => {
+                    navigate("/checkout")
+                }, 1300)
+            }
         } catch (error) {
             setLoaderOpen(false)
             setError(error.message)
@@ -529,7 +546,7 @@ function AddressManager() {
                             type="button"
                             onClick={handleAddAddress}
                             disabled={actionLoading}
-                            className="flex h-10 w-fit items-center gap-2 border border-[#D4AF37]/25 px-4 text-[8px] uppercase tracking-[0.18em] text-[#D4AF37] transition hover:bg-[#D4AF37]/[0.05] disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex h-10 w-fit items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 px-5 text-[9px] uppercase tracking-[0.18em] text-[#D4AF37] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_15px_rgba(212,175,55,0.15)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/20 hover:shadow-[0_0_20px_rgba(212,175,55,0.25)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             <FiPlus size={13} />
                             Add Address
@@ -569,7 +586,7 @@ function AddressManager() {
                                 type="button"
                                 onClick={resetForm}
                                 disabled={actionLoading}
-                                className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/10 text-white/35 transition hover:border-white/20 hover:text-white"
+                                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/40 backdrop-blur-md transition hover:border-white/20 hover:text-white"
                             >
                                 <FiX size={14} />
                             </button>
@@ -764,7 +781,7 @@ function AddressManager() {
                             <button
                                 type="submit"
                                 disabled={actionLoading}
-                                className="flex h-10 w-fit items-center gap-2 bg-[#D4AF37] px-4 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] transition hover:bg-[#E1C35B] disabled:cursor-not-allowed disabled:opacity-50"
+                                className="flex h-10 w-fit items-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-6 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_6px_20px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <FiCheck size={13} />
 
@@ -777,7 +794,7 @@ function AddressManager() {
                                 type="button"
                                 onClick={resetForm}
                                 disabled={actionLoading}
-                                className="flex h-10 w-fit items-center gap-2 border border-white/10 px-4 text-[8px] uppercase tracking-[0.18em] text-white/40 transition hover:border-white/20 hover:text-white"
+                                className="flex h-10 w-fit items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.18em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/30 hover:text-white active:scale-95"
                             >
                                 <FiX size={13} />
                                 Cancel
@@ -812,7 +829,7 @@ function AddressManager() {
                                 <button
                                     type="button"
                                     onClick={handleAddAddress}
-                                    className="mt-4 flex h-9 w-fit items-center gap-2 border border-[#D4AF37]/25 px-3 text-[8px] uppercase tracking-[0.15em] text-[#D4AF37]"
+                                    className="mt-4 flex h-9 w-fit items-center gap-2 rounded-full border border-[#D4AF37]/35 bg-[#D4AF37]/10 px-4 text-[8px] uppercase tracking-[0.15em] text-[#D4AF37] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/20"
                                 >
                                     <FiPlus size={12} />
                                     Add Address
@@ -824,9 +841,9 @@ function AddressManager() {
                             {addresses.map((address) => (
                                 <article
                                     key={address.id}
-                                    className={`relative min-w-0 border p-4 sm:p-5 ${address.is_default
-                                        ? "border-[#D4AF37]/30 bg-[#D4AF37]/[0.025]"
-                                        : "border-white/10 bg-[#050505]"
+                                    className={`relative min-w-0 rounded-2xl border p-4 backdrop-blur-md transition-all duration-300 sm:p-5 ${address.is_default
+                                        ? "border-[#D4AF37]/50 bg-[#D4AF37]/[0.05] shadow-[0_0_20px_rgba(212,175,55,0.1)]"
+                                        : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
                                         }`}
                                 >
                                     <div className="flex items-start justify-between gap-3">
@@ -876,13 +893,30 @@ function AddressManager() {
                                     </div>
 
                                     <div className="mt-5 flex flex-wrap gap-2">
+                                        {cameFromCheckout && (
+                                            <button
+                                                type="button"
+                                                onClick={async () => {
+                                                    if (!address.is_default) {
+                                                        await handleSetDefault(address.id)
+                                                    }
+                                                    navigate("/checkout")
+                                                }}
+                                                disabled={actionLoading}
+                                                className="flex h-9 w-fit items-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 px-4 text-[8px] font-semibold uppercase tracking-[0.14em] text-black shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_4px_15px_rgba(212,175,55,0.25)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] active:scale-95 disabled:opacity-50"
+                                            >
+                                                <FiCheck size={12} />
+                                                Deliver Here & Checkout
+                                            </button>
+                                        )}
+
                                         <button
                                             type="button"
                                             onClick={() =>
                                                 handleEditAddress(address)
                                             }
                                             disabled={actionLoading}
-                                            className="flex h-9 w-fit items-center gap-2 border border-white/10 px-3 text-[8px] uppercase tracking-[0.14em] text-white/45 transition hover:border-[#D4AF37]/25 hover:text-[#D4AF37] disabled:opacity-50"
+                                            className="flex h-9 w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 text-[8px] uppercase tracking-[0.14em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/25 hover:text-white active:scale-95 disabled:opacity-50"
                                         >
                                             <FiEdit3 size={11} />
                                             Edit
@@ -895,7 +929,7 @@ function AddressManager() {
                                                     handleSetDefault(address.id)
                                                 }
                                                 disabled={actionLoading}
-                                                className="flex h-9 w-fit items-center gap-2 border border-[#D4AF37]/20 px-3 text-[8px] uppercase tracking-[0.14em] text-[#D4AF37] transition hover:bg-[#D4AF37]/[0.05] disabled:opacity-50"
+                                                className="flex h-9 w-fit items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-4 text-[8px] uppercase tracking-[0.14em] text-[#D4AF37] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-[#D4AF37]/20 active:scale-95 disabled:opacity-50"
                                             >
                                                 <FiCheck size={11} />
                                                 Set Default
@@ -906,7 +940,7 @@ function AddressManager() {
                                             type="button"
                                             onClick={() => setDeleteTarget(address)}
                                             disabled={actionLoading}
-                                            className="flex h-9 w-fit items-center gap-2 border border-red-500/20 px-3 text-[8px] uppercase tracking-[0.14em] text-red-400 transition hover:border-red-500/40 hover:bg-red-500/[0.04] disabled:opacity-50"
+                                            className="flex h-9 w-fit items-center gap-2 rounded-full border border-red-500/25 bg-red-500/[0.05] px-4 text-[8px] uppercase tracking-[0.14em] text-red-400 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-red-500/50 hover:bg-red-500/10 active:scale-95 disabled:opacity-50"
                                         >
                                             <FiTrash2 size={11} />
                                             Delete
@@ -974,7 +1008,7 @@ function AddressManager() {
                                 type="button"
                                 onClick={() => setDeleteTarget(null)}
                                 disabled={actionLoading}
-                                className="flex h-10 w-fit items-center justify-center border border-white/10 px-4 text-[8px] uppercase tracking-[0.16em] text-white/45 transition hover:border-white/20 hover:text-white disabled:opacity-50"
+                                className="flex h-10 w-fit items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 text-[8px] uppercase tracking-[0.16em] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-white/20 hover:text-white active:scale-95 disabled:opacity-50"
                             >
                                 Cancel
                             </button>
@@ -983,7 +1017,7 @@ function AddressManager() {
                                 type="button"
                                 onClick={handleDelete}
                                 disabled={actionLoading}
-                                className="flex h-10 w-fit items-center justify-center gap-2 border border-red-500/30 bg-red-500/[0.08] px-4 text-[8px] uppercase tracking-[0.16em] text-red-400 transition hover:bg-red-500/[0.14] disabled:opacity-50"
+                                className="flex h-10 w-fit items-center justify-center gap-2 rounded-full border border-red-500/35 bg-red-500/[0.1] px-5 text-[8px] uppercase tracking-[0.16em] text-red-400 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-red-500/[0.2] active:scale-95 disabled:opacity-50"
                             >
                                 <FiTrash2 size={11} />
                                 Delete Address

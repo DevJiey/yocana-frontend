@@ -16,11 +16,11 @@ function OurStory() {
           transition={{ duration: 0.65 }}
           className="md:pr-4"
         >
-          <p className="mb-3 text-[9px] uppercase tracking-[0.4em] text-[#D4AF37] sm:text-[10px]">
+          <p className="mb-2 text-[8px] uppercase tracking-[0.4em] text-[#D4AF37] sm:mb-3 sm:text-[10px]">
             Our Story
           </p>
 
-          <h2 className="max-w-xl text-3xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
+          <h2 className="max-w-xl text-2xl font-medium leading-tight tracking-[-0.03em] text-[#F5F5F5] sm:text-4xl md:text-5xl">
             More than a fragrance.
 
             <span className="block text-white/35">
@@ -28,7 +28,7 @@ function OurStory() {
             </span>
           </h2>
 
-          <div className="mt-6 max-w-lg space-y-4 text-sm leading-7 text-white/40 sm:text-[15px]">
+          <div className="mt-4 max-w-lg space-y-3 text-xs leading-6 text-white/40 sm:mt-6 sm:space-y-4 sm:text-[15px] sm:leading-7">
             <p>
               YOCANA is created for people who understand that presence is
               remembered long after a moment has passed.
@@ -58,7 +58,7 @@ function OurStory() {
           transition={{ duration: 0.7 }}
           className="relative"
         >
-          <div className="relative min-h-[330px] overflow-hidden border border-white/10 bg-[#0B0B0B] sm:min-h-[380px] md:min-h-[420px]">
+          <div className="relative min-h-[250px] overflow-hidden rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl sm:min-h-[350px] md:min-h-[420px]">
 
             {/* Gold ambient lighting */}
             <div className="absolute left-1/2 top-1/2 h-[230px] w-[230px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]/6 blur-[90px]" />

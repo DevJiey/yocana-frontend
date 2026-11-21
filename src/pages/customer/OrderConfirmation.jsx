@@ -264,7 +264,7 @@ function OrderConfirmation() {
                     <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <Link
                             to="/orders"
-                            className="flex h-12 items-center justify-center gap-2 border border-white/15 text-[9px] uppercase tracking-[0.2em] text-white/60 transition hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
+                            className="flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.06] text-[9px] uppercase tracking-[0.2em] text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_8px_20px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/15 hover:text-[#D4AF37] hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] active:scale-95"
                         >
                             <FiPackage size={14} />
                             View My Orders
@@ -272,7 +272,7 @@ function OrderConfirmation() {
 
                         <Link
                             to="/shop"
-                            className="flex h-12 items-center justify-center gap-2 bg-[#D4AF37] text-[9px] font-semibold uppercase tracking-[0.2em] text-[#050505] transition hover:bg-[#E1C35B]"
+                            className="flex h-12 items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_25px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:bg-[#E1C35B] hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] active:scale-95"
                         >
                             <FiShoppingBag size={14} />
                             Continue Shopping
