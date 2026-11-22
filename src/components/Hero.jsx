@@ -3,9 +3,11 @@ import { Link } from "react-router-dom"
 import { motion, useScroll, useTransform } from "motion/react"
 import { FiArrowDown, FiArrowUpRight, FiStar } from "react-icons/fi"
 
-import studioBaseImage from "../assets/studio-box-base.png"
-import studioLidOutsideImage from "../assets/studio-box-lid-outside.png"
-import studioLidInsideImage from "../assets/studio-box-lid-inside.png"
+import boxFrame1 from "../assets/unboxing/box-frame-1.webp"
+import boxFrame2 from "../assets/unboxing/box-frame-2.webp"
+import boxFrame3 from "../assets/unboxing/box-frame-3.webp"
+import boxFrame4 from "../assets/unboxing/box-frame-4.webp"
+import boxFrame5 from "../assets/unboxing/box-frame-5.webp"
 import bottleHommeImage from "../assets/bottle-homme.png"
 import bottleFemmeImage from "../assets/bottle-femme.png"
 
@@ -94,63 +96,51 @@ function Hero() {
   )
 
   /* =========================================================
-     3. PHYSICAL 3D BOX UNBOXING
-     - 0.18: Box is CLOSED shut. Closed lid covers base.
-     - 0.18 to 0.46: Scroll down slowly -> Box physically OPENS in 3D!
-     - Closed lid rotates backward in 3D (-95deg) and lifts.
-     - Golden cavity glow flares out from inside.
-     - Open inside lid unfolds upright (0deg) with gold logo.
-     - Reverse scroll -> Lid reverses and CLOSES shut smoothly!
+     3. 5-FRAME SEQUENTIAL LUXURY BOX UNBOXING
+     - Frame 1: Box is CLOSED shut with gold foil logo.
+     - Frame 2: Box begins cracking open, showing gold interior rim.
+     - Frame 3: Box opens to half, revealing velvet interior.
+     - Frame 4: Box opens to ~75%, cavity fully accessible.
+     - Frame 5: Box fully open upright with gold Yocana flower logo.
+     - Reverse scroll smoothly closes the box frame-by-frame.
      ========================================================= */
-  // CLOSED LID (Outer leather + gold logo): Lifts and tilts back in 3D
-  const lidOutsideRotateX = useTransform(
+  const frame1Opacity = useTransform(
     scrollYProgress,
-    [0.18, 0.28, 0.42],
-    [0, -45, -95]
+    [0.08, 0.14, 0.18, 0.22],
+    [0, 1, 1, 0]
   )
-
-  const lidOutsideY = useTransform(
+  const frame2Opacity = useTransform(
     scrollYProgress,
-    [0.18, 0.28, 0.42],
-    [0, -35, -90]
+    [0.17, 0.22, 0.24, 0.28],
+    [0, 1, 1, 0]
   )
-
-  const lidOutsideOpacity = useTransform(
+  const frame3Opacity = useTransform(
     scrollYProgress,
-    [0.18, 0.30, 0.38],
-    [1, 1, 0]
+    [0.23, 0.28, 0.30, 0.34],
+    [0, 1, 1, 0]
   )
-
-  // OPEN LID (Inner velvet + gold logo): Unfolds upright into position
-  const lidInsideRotateX = useTransform(
+  const frame4Opacity = useTransform(
     scrollYProgress,
-    [0.26, 0.38, 0.48],
-    [85, 30, 0]
+    [0.29, 0.34, 0.36, 0.40],
+    [0, 1, 1, 0]
   )
-
-  const lidInsideY = useTransform(
+  const frame5Opacity = useTransform(
     scrollYProgress,
-    [0.26, 0.38, 0.48],
-    [45, 15, 0]
-  )
-
-  const lidInsideOpacity = useTransform(
-    scrollYProgress,
-    [0.26, 0.34, 0.44],
-    [0, 0.5, 1]
+    [0.35, 0.40, 0.42, 0.48],
+    [0, 1, 1, 0]
   )
 
   // Golden cavity glow when lid opens
   const cavityGlowOpacity = useTransform(
     scrollYProgress,
-    [0.20, 0.36, 0.48],
-    [0, 1, 0]
+    [0.22, 0.36, 0.46],
+    [0, 0.9, 0]
   )
 
   const cavityGlowScale = useTransform(
     scrollYProgress,
-    [0.20, 0.36, 0.55],
-    [0.4, 1.5, 1.8]
+    [0.22, 0.36, 0.50],
+    [0.4, 1.4, 1.7]
   )
 
   /* =========================================================
@@ -264,31 +254,15 @@ function Hero() {
       className="relative h-[340vh] overflow-clip bg-[#030303]"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* Dynamic 3D Luxury Atmosphere Glow */}
-        <motion.div
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[55vw] w-[55vw] max-h-[750px] max-w-[750px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]"
-          style={{
-            opacity: useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.65, 0.95, 0.85, 0.3]),
-            background: useTransform(
-              scrollYProgress,
-              [0, 0.30, 0.58, 0.85, 1],
-              [
-                "radial-gradient(circle, rgba(212,175,55,0.22) 0%, rgba(0,0,0,0) 70%)",
-                "radial-gradient(circle, rgba(212,175,55,0.32) 0%, rgba(0,0,0,0) 70%)",
-                "radial-gradient(circle, rgba(0,119,255,0.22) 30%, rgba(220,20,35,0.22) 70%)",
-                "radial-gradient(circle, rgba(212,175,55,0.25) 0%, rgba(0,0,0,0) 70%)",
-                "radial-gradient(circle, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%)",
-              ]
-            ),
-          }}
-        />
+        {/* Luxury Atmosphere Glow (Static hardware-accelerated GPU layer, 0 CPU re-renders) */}
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[60vw] w-[60vw] max-h-[650px] max-w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.18)_0%,rgba(8,125,255,0.08)_45%,transparent_70%)] blur-2xl sm:blur-3xl opacity-80" />
 
         {/* Ambient Dark Gradients */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(3,3,3,0.85)_90%)]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#030303] to-transparent" />
 
-        {/* Delicate Golden Grid lines */}
-        <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(212,175,55,.25)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,.25)_1px,transparent_1px)] [background-size:100px_100px] [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" />
+        {/* Delicate Golden Grid lines (Desktop only to prevent mobile compositing penalty) */}
+        <div className="pointer-events-none absolute inset-0 hidden sm:block opacity-[0.05] [background-image:linear-gradient(rgba(212,175,55,.25)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,.25)_1px,transparent_1px)] [background-size:100px_100px]" />
 
         {/* =========================================================
             HEADER TITLE / INTRO (Scroll to Unbox)
@@ -309,13 +283,40 @@ function Hero() {
             <span>YOCANA FRAGRANCE HOUSE</span>
           </div>
 
-          <h1 className="mx-auto mt-4 sm:mt-5 flex max-w-4xl flex-col items-center text-[32px] sm:text-6xl md:text-7xl lg:text-[96px] font-medium leading-[0.96] tracking-[-0.05em]">
-            <span className="yocana-shimmer-presence inline-block">
+          <h1
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              e.currentTarget.style.setProperty("--tagline-x", `${e.clientX - rect.left}px`)
+              e.currentTarget.style.setProperty("--tagline-y", `${e.clientY - rect.top}px`)
+            }}
+            className="group/tagline relative pointer-events-auto cursor-default mx-auto mt-4 sm:mt-5 flex max-w-4xl flex-col items-center text-[32px] sm:text-6xl md:text-7xl lg:text-[96px] font-medium leading-[0.96] tracking-[-0.05em] select-none"
+          >
+            {/* 1. Base Tagline: Always softly shining on both desktop & mobile */}
+            <span className="yocana-presence-shine inline-block">
               Your Presence.
             </span>
-            <span className="yocana-shimmer-signature mt-1.5 inline-block sm:mt-2.5">
+            <span className="yocana-signature-shine mt-1.5 inline-block sm:mt-2.5">
               Your Signature.
             </span>
+
+            {/* 2. Desktop White Light Spotlight (Ang mouse cursor mismo ang nagpapailaw sa text sa white kapag dumaan o naka-stop) */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 hidden sm:flex flex-col items-center opacity-0 transition-opacity duration-200 group-hover/tagline:opacity-100"
+              style={{
+                WebkitMaskImage:
+                  "radial-gradient(160px circle at var(--tagline-x, 50%) var(--tagline-y, 50%), black 0%, black 40%, transparent 100%)",
+                maskImage:
+                  "radial-gradient(160px circle at var(--tagline-x, 50%) var(--tagline-y, 50%), black 0%, black 40%, transparent 100%)",
+              }}
+            >
+              <span className="text-white inline-block drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]">
+                Your Presence.
+              </span>
+              <span className="text-white mt-1.5 inline-block sm:mt-2.5 drop-shadow-[0_0_14px_rgba(255,255,255,0.95)]">
+                Your Signature.
+              </span>
+            </div>
           </h1>
         </motion.div>
 
@@ -333,9 +334,9 @@ function Hero() {
         </motion.div>
 
         {/* =========================================================
-            PHYSICAL 3D UNBOXING & BOTTLE LAUNCH STAGE
+            5-FRAME UNBOXING & BOTTLE LAUNCH STAGE
            ========================================================= */}
-        <div className="absolute inset-0 flex items-center justify-center [perspective:1600px] pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           {/* CENTER LUXURY BOX ASSEMBLY */}
           <motion.div
             style={{
@@ -343,66 +344,67 @@ function Hero() {
               scale: boxAssemblyScale,
               y: boxAssemblyY,
             }}
-            className="relative flex flex-col items-center justify-center [transform-style:preserve-3d]"
+            className="relative flex items-center justify-center"
           >
-            {/* Golden Cavity Light Flare (Bursts when lid opens) */}
-            <motion.div
-              style={{
-                opacity: cavityGlowOpacity,
-                scale: cavityGlowScale,
-              }}
-              className="pointer-events-none absolute z-10 h-[280px] w-[280px] rounded-full bg-gradient-to-r from-[#D4AF37]/45 via-[#FFE28A]/35 to-transparent blur-3xl"
-            />
-
-            {/* 1. OPEN LID (Upright standing lid with gold Yocana flower) */}
-            <motion.div
-              style={{
-                rotateX: lidInsideRotateX,
-                y: lidInsideY,
-                opacity: lidInsideOpacity,
-                transformOrigin: "bottom center",
-              }}
-              className="relative z-15 flex items-center justify-center [transform-style:preserve-3d]"
-            >
-              <img
-                src={studioLidInsideImage}
-                alt="YOCANA Open Box Lid Interior"
-                className="h-auto w-[180px] select-none object-contain drop-shadow-[0_25px_40px_rgba(0,0,0,0.9)] sm:w-[240px] md:w-[280px]"
-                draggable="false"
-              />
-            </motion.div>
-
-            {/* 2. BASE + CLOSED LID STACK */}
-            <div className="relative z-20 flex items-center justify-center -mt-1 sm:-mt-1.5 [transform-style:preserve-3d]">
-              {/* Base with gold rim & velvet cutout */}
-              <img
-                src={studioBaseImage}
-                alt="YOCANA Box Base"
-                className="h-auto w-[180px] select-none object-contain drop-shadow-[0_45px_70px_rgba(0,0,0,0.98)] sm:w-[240px] md:w-[280px]"
-                draggable="false"
-              />
-
-              {/* Closed Lid (Tilts backward in 3D to uncover the gold rim and cavity) */}
+            {/* Box Stack Container (768x1024 aspect ratio, base perfectly anchored) */}
+            <div className="relative w-[210px] sm:w-[270px] md:w-[320px] lg:w-[360px] aspect-[3/4] flex items-center justify-center">
+              {/* Golden Cavity Light Flare (Bursts when lid opens) */}
               <motion.div
                 style={{
-                  rotateX: lidOutsideRotateX,
-                  y: lidOutsideY,
-                  opacity: lidOutsideOpacity,
-                  transformOrigin: "top center",
+                  opacity: cavityGlowOpacity,
+                  scale: cavityGlowScale,
                 }}
-                className="absolute inset-0 z-25 flex items-center justify-center [transform-style:preserve-3d]"
-              >
-                <img
-                  src={studioLidOutsideImage}
-                  alt="YOCANA Box Closed Lid"
-                  className="h-auto w-[180px] select-none object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] sm:w-[240px] md:w-[280px]"
-                  draggable="false"
-                />
-              </motion.div>
-            </div>
+                className="pointer-events-none absolute z-10 h-[220px] w-[220px] sm:h-[280px] sm:w-[280px] rounded-full bg-gradient-to-r from-[#D4AF37]/45 via-[#FFE28A]/35 to-transparent blur-2xl sm:blur-3xl"
+              />
 
-            {/* Floor Ambient Shadow */}
-            <div className="absolute -bottom-8 left-1/2 h-8 w-[70%] -translate-x-1/2 rounded-full bg-black/90 blur-2xl" />
+              {/* Frame 1: Closed Box */}
+              <motion.img
+                src={boxFrame1}
+                alt="YOCANA Box Closed"
+                style={{ opacity: frame1Opacity }}
+                className="absolute inset-0 h-full w-full select-none object-contain transform-gpu"
+                draggable="false"
+              />
+
+              {/* Frame 2: Box Cracking Open */}
+              <motion.img
+                src={boxFrame2}
+                alt="YOCANA Box Opening"
+                style={{ opacity: frame2Opacity }}
+                className="absolute inset-0 h-full w-full select-none object-contain transform-gpu"
+                draggable="false"
+              />
+
+              {/* Frame 3: Box Half Open */}
+              <motion.img
+                src={boxFrame3}
+                alt="YOCANA Box Half Open"
+                style={{ opacity: frame3Opacity }}
+                className="absolute inset-0 h-full w-full select-none object-contain transform-gpu"
+                draggable="false"
+              />
+
+              {/* Frame 4: Box 75% Open */}
+              <motion.img
+                src={boxFrame4}
+                alt="YOCANA Box Nearly Open"
+                style={{ opacity: frame4Opacity }}
+                className="absolute inset-0 h-full w-full select-none object-contain transform-gpu"
+                draggable="false"
+              />
+
+              {/* Frame 5: Box Fully Open with Gold Logo */}
+              <motion.img
+                src={boxFrame5}
+                alt="YOCANA Box Fully Open"
+                style={{ opacity: frame5Opacity }}
+                className="absolute inset-0 h-full w-full select-none object-contain transform-gpu"
+                draggable="false"
+              />
+
+              {/* Floor Ambient Shadow */}
+              <div className="absolute -bottom-6 left-1/2 h-8 w-[75%] -translate-x-1/2 rounded-full bg-black/90 blur-xl pointer-events-none" />
+            </div>
           </motion.div>
 
           {/* =======================================================
@@ -418,43 +420,24 @@ function Hero() {
               scale: hommeScale,
               opacity: hommeOpacity,
             }}
-            className="absolute z-35 flex items-center gap-5 sm:gap-7 pointer-events-none"
+            className="absolute z-35 flex items-center gap-5 sm:gap-7 pointer-events-none transform-gpu will-change-transform"
           >
-            {/* POUR HOMME BOTTLE PICTURE (Continuous Luxury Floating Physics) */}
-            <motion.div
-              animate={{
-                y: [-7, 7, -7],
-                rotateZ: [-1.5, 1.2, -1.5],
-                rotateY: [-3.5, 3.5, -3.5],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="relative flex items-center justify-center [transform-style:preserve-3d]"
-            >
-              {/* Sapphire Blue Ambient Glow (Breathing luxury aura) */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.15, 1],
-                  opacity: [0.65, 0.95, 0.65],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="pointer-events-none absolute -inset-8 rounded-full bg-[#087DFF]/35 blur-3xl"
+            {/* POUR HOMME BOTTLE PICTURE (Crystal-clear luxury bottle with halo aura BEHIND) */}
+            <div className="relative flex items-center justify-center">
+              {/* Sapphire Blue Ambient Halo strictly BEHIND the bottle */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#087DFF]/40 blur-2xl sm:blur-3xl"
               />
 
+              {/* Crystal-clear bottle in FRONT with crisp depth */}
               <img
                 src={bottleHommeImage}
                 alt="YOCANA Pour Homme Bottle"
-                className="h-[185px] w-auto select-none object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.98)] sm:h-[260px] md:h-[320px] lg:h-[370px]"
+                className="relative z-10 h-[185px] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.95)] sm:h-[260px] md:h-[320px] lg:h-[370px]"
                 draggable="false"
               />
-            </motion.div>
+            </div>
 
             {/* POUR HOMME EDITORIAL STORY (Desktop) */}
             <motion.div
@@ -468,8 +451,8 @@ function Hero() {
                 POUR HOMME
               </h2>
               <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-base font-semibold text-[#D4AF37]">₱1,499</span>
-                <span className="text-xs text-white/40 line-through">₱2,199</span>
+                <span className="text-base font-semibold text-[#D4AF37]">₱1,699</span>
+                <span className="text-xs text-white/40 line-through">₱2,299</span>
               </div>
               <p className="mt-1 text-[9px] uppercase tracking-[0.2em] text-[#D4AF37]">
                 Extrait de Parfum · 50 ML
@@ -500,45 +483,24 @@ function Hero() {
               scale: femmeScale,
               opacity: femmeOpacity,
             }}
-            className="absolute z-35 flex items-center gap-5 sm:gap-7 flex-row-reverse pointer-events-none"
+            className="absolute z-35 flex items-center gap-5 sm:gap-7 flex-row-reverse pointer-events-none transform-gpu will-change-transform"
           >
-            {/* POUR FEMME BOTTLE PICTURE (Continuous Luxury Floating Physics, Offset Phase) */}
-            <motion.div
-              animate={{
-                y: [7, -7, 7],
-                rotateZ: [1.5, -1.2, 1.5],
-                rotateY: [3.5, -3.5, 3.5],
-              }}
-              transition={{
-                duration: 5.6,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.3,
-              }}
-              className="relative flex items-center justify-center [transform-style:preserve-3d]"
-            >
-              {/* Ruby Red Ambient Glow (Breathing luxury aura) */}
-              <motion.div
-                animate={{
-                  scale: [1.15, 1, 1.15],
-                  opacity: [0.95, 0.65, 0.95],
-                }}
-                transition={{
-                  duration: 4.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.2,
-                }}
-                className="pointer-events-none absolute -inset-8 rounded-full bg-[#E31B23]/35 blur-3xl"
+            {/* POUR FEMME BOTTLE PICTURE (Crystal-clear luxury bottle with halo aura BEHIND) */}
+            <div className="relative flex items-center justify-center">
+              {/* Ruby Red Ambient Halo strictly BEHIND the bottle */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E31B23]/40 blur-2xl sm:blur-3xl"
               />
 
+              {/* Crystal-clear bottle in FRONT with crisp depth */}
               <img
                 src={bottleFemmeImage}
                 alt="YOCANA Pour Femme Bottle"
-                className="h-[185px] w-auto select-none object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.98)] sm:h-[260px] md:h-[320px] lg:h-[370px]"
+                className="relative z-10 h-[185px] w-auto select-none object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.95)] sm:h-[260px] md:h-[320px] lg:h-[370px]"
                 draggable="false"
               />
-            </motion.div>
+            </div>
 
             {/* POUR FEMME EDITORIAL STORY (Desktop) */}
             <motion.div
@@ -552,8 +514,8 @@ function Hero() {
                 POUR FEMME
               </h2>
               <div className="mt-1 flex items-baseline justify-end gap-2">
-                <span className="text-base font-semibold text-[#D4AF37]">₱1,499</span>
-                <span className="text-xs text-white/40 line-through">₱2,199</span>
+                <span className="text-base font-semibold text-[#D4AF37]">₱1,699</span>
+                <span className="text-xs text-white/40 line-through">₱2,299</span>
               </div>
               <p className="mt-1 text-[9px] uppercase tracking-[0.2em] text-[#D4AF37]">
                 Extrait de Parfum · 50 ML
@@ -590,7 +552,7 @@ function Hero() {
               Pour Homme &amp; Pour Femme
             </h3>
             <p className="mt-0.5 text-[11px] text-white/60">
-              <span className="font-semibold text-[#D4AF37]">₱1,499 each</span> · 50ml Extrait De Parfum
+              <span className="font-semibold text-[#D4AF37]">₱1,699 each</span> · 50ml Extrait De Parfum
             </p>
             <div className="mt-2.5 flex items-center justify-center gap-2">
               <Link
@@ -625,7 +587,7 @@ function Hero() {
           </h2>
 
           <p className="mt-2 text-xs text-white/60">
-            ₱2,998 for both · Free Nationwide Shipping
+            ₱3,398 for both · Free Nationwide Shipping
           </p>
 
           <div className="mt-5 flex items-center justify-center">

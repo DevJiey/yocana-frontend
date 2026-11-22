@@ -160,39 +160,123 @@ function AdminReports() {
             filename = "yocana-sales-report.csv"
 
             rows = [
-                ["Date", "Paid Orders", "Total Sales"],
+                ["=== DAILY SALES SUMMARY ==="],
+                ["Date", "Paid Orders", "Total Sales (PHP)"],
                 ...(sales?.by_date || []).map((item) => [
                     formatDate(item.sale_date),
                     item.total_orders,
                     Number(item.total_sales || 0).toFixed(2),
                 ]),
+                [],
+                ["=== PRODUCT SALES PERFORMANCE ==="],
+                [
+                    "Product Name",
+                    "Category",
+                    "Units Sold",
+                    "Total Revenue (PHP)",
+                ],
+                ...(sales?.products || []).map((product) => [
+                    product.product_name,
+                    product.category,
+                    product.quantity_sold,
+                    Number(product.product_sales || 0).toFixed(2),
+                ]),
             ]
         } else if (activeTab === "orders") {
             filename = "yocana-orders-report.csv"
 
-            rows = [
-                ["Date", "Total Orders"],
-                ...(orders?.by_date || []).map((item) => [
-                    formatDate(item.order_date),
-                    item.total_orders,
-                ]),
-            ]
+            if (orders?.list?.length) {
+                rows = [
+                    [
+                        "Order Number",
+                        "Order Date",
+                        "Customer Name",
+                        "Customer Email",
+                        "Phone Number",
+                        "Items Purchased (Ano ang Binili)",
+                        "Total Amount (PHP)",
+                        "Payment Method",
+                        "Payment Status",
+                        "Order Status",
+                        "Recipient Name",
+                        "City",
+                        "Province",
+                    ],
+                    ...orders.list.map((order) => {
+                        const customerName =
+                            `${order.first_name || ""} ${order.last_name || ""}`.trim() ||
+                            order.recipient_name ||
+                            "—"
+
+                        let itemsStr = "—"
+                        if (
+                            Array.isArray(order.items) &&
+                            order.items.length > 0
+                        ) {
+                            itemsStr = order.items
+                                .map(
+                                    (it) =>
+                                        `${it.product_name || "Fragrance"} (${it.quantity}x)`
+                                )
+                                .join(" | ")
+                        }
+
+                        return [
+                            order.order_number || "—",
+                            formatDate(order.created_at),
+                            customerName,
+                            order.email || "—",
+                            order.recipient_phone ||
+                                order.user_phone ||
+                                "—",
+                            itemsStr,
+                            Number(order.total_amount || 0).toFixed(2),
+                            order.payment_method || "—",
+                            (order.payment_status || "").toUpperCase(),
+                            (order.order_status || "").toUpperCase(),
+                            order.recipient_name || customerName,
+                            order.shipping_city || "—",
+                            order.shipping_province || "—",
+                        ]
+                    }),
+                ]
+            } else {
+                rows = [
+                    ["Date", "Total Orders"],
+                    ...(orders?.by_date || []).map((item) => [
+                        formatDate(item.order_date),
+                        item.total_orders,
+                    ]),
+                ]
+            }
         } else if (activeTab === "inventory") {
             filename = "yocana-inventory-report.csv"
 
             rows = [
                 [
-                    "Product",
+                    "Product Name",
                     "Category",
                     "Current Stock",
                     "Low Stock Threshold",
+                    "Stock Status",
                 ],
-                ...(inventory?.products || []).map((product) => [
-                    product.product_name,
-                    product.category,
-                    product.current_stock,
-                    product.low_stock_threshold,
-                ]),
+                ...(inventory?.products || []).map((product) => {
+                    const stock = Number(product.current_stock || 0)
+                    const threshold = Number(
+                        product.low_stock_threshold || 0
+                    )
+                    let status = "In Stock"
+                    if (stock === 0) status = "Out of Stock"
+                    else if (stock <= threshold) status = "Low Stock"
+
+                    return [
+                        product.product_name,
+                        product.category,
+                        product.current_stock,
+                        product.low_stock_threshold,
+                        status,
+                    ]
+                }),
             ]
         } else {
             filename = "yocana-overview-report.csv"
@@ -200,7 +284,7 @@ function AdminReports() {
             rows = [
                 ["Metric", "Value"],
                 [
-                    "Total Sales",
+                    "Total Sales (PHP)",
                     Number(
                         overview?.sales?.total_sales || 0
                     ).toFixed(2),
@@ -210,11 +294,27 @@ function AdminReports() {
                     overview?.orders?.total_orders || 0,
                 ],
                 [
+                    "Pending Orders",
+                    overview?.orders?.pending_orders || 0,
+                ],
+                [
+                    "Completed Orders",
+                    overview?.orders?.completed_orders || 0,
+                ],
+                [
+                    "Cancelled Orders",
+                    overview?.orders?.cancelled_orders || 0,
+                ],
+                [
+                    "Returned Orders",
+                    overview?.orders?.returned_orders || 0,
+                ],
+                [
                     "Products Sold",
                     overview?.products?.products_sold || 0,
                 ],
                 [
-                    "Current Stock",
+                    "Current Available Stock",
                     overview?.inventory?.current_stock || 0,
                 ],
                 [
@@ -234,11 +334,13 @@ function AdminReports() {
             return `"${stringValue.replace(/"/g, '""')}"`
         }
 
-        const csvContent = rows
-            .map((row) =>
-                row.map(escapeCSV).join(",")
-            )
-            .join("\n")
+        const csvContent =
+            "\uFEFF" +
+            rows
+                .map((row) =>
+                    row.map(escapeCSV).join(",")
+                )
+                .join("\n")
 
         const blob = new Blob([csvContent], {
             type: "text/csv;charset=utf-8;",
@@ -598,6 +700,67 @@ function AdminReports() {
             </tr>
           `
 
+            const detailedOrderRows = orders?.list?.length
+                ? orders.list
+                      .map((o, idx) => {
+                          const customerName =
+                              `${o.first_name || ""} ${o.last_name || ""}`.trim() ||
+                              o.recipient_name ||
+                              "—"
+
+                          const itemsList =
+                              Array.isArray(o.items) && o.items.length > 0
+                                  ? o.items
+                                        .map(
+                                            (it) =>
+                                                `<strong>${escapeHTML(
+                                                    it.product_name || "Fragrance"
+                                                )}</strong> (${it.quantity}x)`
+                                        )
+                                        .join("<br/>")
+                                  : "—"
+
+                          return `
+                <tr>
+                  <td class="number text-muted">${idx + 1}</td>
+                  <td><strong>${escapeHTML(o.order_number)}</strong><br/><span style="color:#666;font-size:9px;">${escapeHTML(formatDate(o.created_at))}</span></td>
+                  <td><strong>${escapeHTML(customerName)}</strong><br/><span style="color:#0284c7;font-size:9.5px;">${escapeHTML(o.email || "—")}</span></td>
+                  <td>${itemsList}</td>
+                  <td>${escapeHTML(o.payment_method)} (${escapeHTML(o.payment_status?.toUpperCase())})</td>
+                  <td><span style="display:inline-block;padding:2px 6px;border-radius:3px;font-size:8px;font-weight:600;background:#eee;">${escapeHTML(o.order_status?.toUpperCase())}</span></td>
+                  <td class="number"><strong>${escapeHTML(formatCurrency(o.total_amount))}</strong></td>
+                </tr>
+              `
+                      })
+                      .join("")
+                : ""
+
+            const detailedSection = orders?.list?.length
+                ? `
+      <section>
+        <h3>Detailed Orders Breakdown</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width:25px;">#</th>
+              <th>Order Number & Date</th>
+              <th>Customer Name & Email</th>
+              <th>Items Purchased (Ano ang Binili)</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th class="number">Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${detailedOrderRows}
+          </tbody>
+        </table>
+      </section>
+      `
+                : ""
+
             reportBody = `
       <section>
         <h3>Order Summary</h3>
@@ -656,6 +819,8 @@ function AdminReports() {
           </tbody>
         </table>
       </section>
+
+      ${detailedSection}
     `
         }
 
@@ -1519,6 +1684,82 @@ function AdminReports() {
                                         </div>
                                     )}
                                 </div>
+
+                                {orders?.list?.length > 0 && (
+                                    <>
+                                        <SectionHeader
+                                            eyebrow="Transactions"
+                                            title="Detailed Orders List"
+                                        />
+
+                                        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#080808]/80 backdrop-blur-md">
+                                            <div className="divide-y divide-white/10">
+                                                {orders.list.map((order) => {
+                                                    const customerName =
+                                                        `${order.first_name || ""} ${order.last_name || ""}`.trim() ||
+                                                        order.recipient_name ||
+                                                        "—"
+
+                                                    return (
+                                                        <div
+                                                            key={order.id}
+                                                            className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+                                                        >
+                                                            <div className="min-w-0">
+                                                                <div className="flex items-center gap-2">
+                                                                    <p className="text-sm font-medium text-white">
+                                                                        {order.order_number}
+                                                                    </p>
+                                                                    <span className="text-[10px] text-white/30">
+                                                                        • {formatDate(order.created_at)}
+                                                                    </span>
+                                                                </div>
+
+                                                                <p className="mt-1 text-xs text-white/70">
+                                                                    <span className="font-medium text-white/90">
+                                                                        {customerName}
+                                                                    </span>{" "}
+                                                                    <span className="text-white/40">
+                                                                        ({order.email})
+                                                                    </span>
+                                                                </p>
+
+                                                                {Array.isArray(order.items) &&
+                                                                    order.items.length > 0 && (
+                                                                        <div className="mt-2 flex flex-wrap gap-1.5">
+                                                                            {order.items.map(
+                                                                                (it, idx) => (
+                                                                                    <span
+                                                                                        key={idx}
+                                                                                        className="rounded border border-white/10 bg-white/[0.03] px-2 py-0.5 text-[11px] text-white/75"
+                                                                                    >
+                                                                                        <span className="mr-1 font-semibold text-[#D4AF37]">
+                                                                                            {it.quantity}x
+                                                                                        </span>
+                                                                                        {it.product_name ||
+                                                                                            "Fragrance"}
+                                                                                    </span>
+                                                                                )
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                            </div>
+
+                                                            <div className="flex items-center justify-between gap-4 sm:flex-col sm:items-end sm:text-right">
+                                                                <p className="text-sm font-medium text-[#D4AF37]">
+                                                                    {formatCurrency(order.total_amount)}
+                                                                </p>
+                                                                <span className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-0.5 text-[9px] uppercase tracking-wider text-white/50">
+                                                                    {order.order_status}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         )}
 

@@ -69,7 +69,7 @@ function Checkout() {
 
     // Free Shipping on 2+ bottles nationwide, flat ₱50 for single bottle
     const isFreeShipping =
-        totalQuantity >= 2 || Number(cart.subtotal || 0) >= 2998
+        totalQuantity >= 2 || Number(cart.subtotal || 0) >= 3398
 
     const shippingFee = isFreeShipping ? 0 : 50
 

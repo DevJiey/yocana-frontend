@@ -14,9 +14,9 @@ const products = [
         type: "Eau De Parfum",
         image: hommeImage,
         glow: "rgba(0, 119, 255, 0.22)",
-        originalPrice: "₱2,199.00",
-        price: "₱1,499.00",
-        discount: "SAVE ₱700",
+        originalPrice: "₱2,299.00",
+        price: "₱1,699.00",
+        discount: "SAVE ₱600",
     },
     {
         id: 2,
@@ -24,9 +24,9 @@ const products = [
         type: "Eau De Parfum",
         image: femmeImage,
         glow: "rgba(210, 15, 30, 0.22)",
-        originalPrice: "₱2,199.00",
-        price: "₱1,499.00",
-        discount: "SAVE ₱700",
+        originalPrice: "₱2,299.00",
+        price: "₱1,699.00",
+        discount: "SAVE ₱600",
     },
 ]
 

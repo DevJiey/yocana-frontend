@@ -15,9 +15,9 @@ const products = [
     image: hommeImage,
     glow: "rgba(0, 119, 255, 0.22)",
     glowStrong: "rgba(0, 145, 255, 0.30)",
-    originalPrice: "₱2,199.00",
-    price: "₱1,499.00",
-    discount: "SAVE ₱700",
+    originalPrice: "₱2,299.00",
+    price: "₱1,699.00",
+    discount: "SAVE ₱600",
     description:
       "A confident expression crafted for a presence that speaks without saying a word.",
   },
@@ -29,9 +29,9 @@ const products = [
     image: femmeImage,
     glow: "rgba(210, 15, 30, 0.22)",
     glowStrong: "rgba(255, 25, 35, 0.30)",
-    originalPrice: "₱2,199.00",
-    price: "₱1,499.00",
-    discount: "SAVE ₱700",
+    originalPrice: "₱2,299.00",
+    price: "₱1,699.00",
+    discount: "SAVE ₱600",
     description:
       "An elegant expression designed to leave a graceful and unforgettable impression.",
   },
@@ -96,50 +96,45 @@ function SignatureCollection() {
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent transition-all duration-500 group-hover:via-[#D4AF37]" />
                 <div className="pointer-events-none absolute -inset-full bg-gradient-to-tr from-transparent via-[#D4AF37]/[0.04] to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
-                                                {/* AUTOMATIC LUXURY GLOW (Mobile Only: Soft feathered ambient glow, NO sharp lines) */}
+                                                {/* AUTOMATIC LUXURY GLOW (Mobile Only: GPU-accelerated diffuse ambient glow, 0 layout reflow) */}
                 <div className="md:hidden">
-                  {/* 1. Soft Ambient Diffuse Glow Spot (Feathered, sweeps top-left to bottom-right) */}
+                  {/* 1. Soft Ambient Diffuse Glow Spot (Feathered, GPU-accelerated translate) */}
                   <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden rounded-xl">
                     <motion.div
                       aria-hidden="true"
-                      className="absolute h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none blur-2xl"
+                      className="absolute left-0 top-0 h-44 w-44 rounded-full pointer-events-none blur-2xl transform-gpu will-change-transform"
                       style={{
                         background:
-                          "radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(212,175,55,0.45) 35%, rgba(212,175,55,0.12) 65%, transparent 80%)",
+                          "radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(212,175,55,0.4) 35%, rgba(212,175,55,0.1) 65%, transparent 80%)",
                       }}
                       animate={{
-                        top: ["-10%", "110%"],
-                        left: ["-10%", "110%"],
-                        opacity: [0, 0.9, 0.9, 0],
+                        x: ["-20%", "130%"],
+                        y: ["-20%", "130%"],
+                        opacity: [0, 0.85, 0.85, 0],
                       }}
                       transition={{
-                        duration: 1.8,
+                        duration: 2.2,
                         repeat: Infinity,
-                        repeatDelay: 1.8,
+                        repeatDelay: 2.5,
                         ease: [0.35, 0, 0.25, 1],
-                        delay: index * 0.9,
+                        delay: index * 1.1,
                       }}
                     />
                   </div>
 
-                  {/* 2. Soft Golden Rim / Edge Glow (In sync with the glow travel) */}
+                  {/* 2. Soft Golden Rim Glow (Pure GPU opacity, 0 paint thrash) */}
                   <motion.div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 z-30 rounded-xl border border-[#D4AF37]/70"
+                    className="pointer-events-none absolute inset-0 z-30 rounded-xl border border-[#D4AF37]/50 shadow-[inset_0_0_12px_rgba(212,175,55,0.25)] transform-gpu"
                     animate={{
                       opacity: [0, 0.9, 0],
-                      boxShadow: [
-                        "inset 0 0 0px rgba(212,175,55,0), 0 0 0px rgba(212,175,55,0)",
-                        "inset 0 0 16px rgba(212,175,55,0.35), 0 0 22px rgba(212,175,55,0.3)",
-                        "inset 0 0 0px rgba(212,175,55,0), 0 0 0px rgba(212,175,55,0)",
-                      ],
                     }}
                     transition={{
-                      duration: 1.8,
+                      duration: 2.2,
                       repeat: Infinity,
-                      repeatDelay: 1.8,
+                      repeatDelay: 2.5,
                       ease: "easeInOut",
-                      delay: index * 0.9,
+                      delay: index * 1.1,
                     }}
                   />
                 </div>
@@ -168,19 +163,10 @@ function SignatureCollection() {
                     {product.number}
                   </span>
 
-                  {/* Perfume Bottle */}
-                  <motion.img
+                  {/* Perfume Bottle (Static luxury display - 0 lag) */}
+                  <img
                     src={product.image}
                     alt={`YOCANA ${product.name}`}
-                    animate={{
-                      y: [0, -6, 0],
-                    }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: index * 0.5,
-                    }}
                     className="relative z-10 h-auto w-[100px] select-none object-contain drop-shadow-[0_15px_22px_rgba(0,0,0,0.85)] transition-transform duration-500 group-hover:scale-105 sm:w-[220px] md:w-[310px]"
                     draggable="false"
                   />

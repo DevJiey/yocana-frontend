@@ -534,7 +534,7 @@ function ProductDetails() {
               <div className="mt-2.5 sm:mt-5 flex flex-wrap items-baseline gap-2 sm:gap-3">
                 <span className="text-xs sm:text-lg md:text-xl font-medium text-white/40 line-through">
                   ₱
-                  {Number(product.original_price || 2199).toLocaleString(
+                  {Number(product.original_price || 2299).toLocaleString(
                     "en-PH",
                     {
                       minimumFractionDigits: 2,
@@ -545,7 +545,7 @@ function ProductDetails() {
 
                 <span className="text-lg sm:text-2xl md:text-3xl font-semibold text-[#D4AF37]">
                   ₱
-                  {Number(product.price).toLocaleString(
+                  {Number(product.price || 1699).toLocaleString(
                     "en-PH",
                     {
                       minimumFractionDigits: 2,
@@ -554,9 +554,17 @@ function ProductDetails() {
                   )}
                 </span>
 
-                <span className="rounded-full bg-[#D4AF37]/15 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-semibold tracking-wider text-[#D4AF37]">
-                  SAVE ₱700 (32% OFF)
-                </span>
+                {(() => {
+                  const orig = Number(product.original_price || 2299)
+                  const curr = Number(product.price || 1699)
+                  const saveDiff = Math.max(0, orig - curr)
+                  const savePct = Math.round((saveDiff / orig) * 100)
+                  return (
+                    <span className="rounded-full bg-[#D4AF37]/15 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-semibold tracking-wider text-[#D4AF37]">
+                      SAVE ₱{saveDiff.toLocaleString("en-PH")} ({savePct}% OFF)
+                    </span>
+                  )
+                })()}
               </div>
 
               {/* PRODUCT DETAILS */}
