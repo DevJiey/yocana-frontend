@@ -12,8 +12,8 @@ import {
 } from "react-icons/fi"
 
 import AdminLayout from "../../layouts/AdminLayout"
-import hommeImage from "../../assets/yocana-homme.png"
-import femmeImage from "../../assets/yocana-femme.png"
+import hommeImage from "../../assets/collection-homme.webp"
+import femmeImage from "../../assets/collection-femme.webp"
 import BrandLoader from "../../components/BrandLoader"
 
 const emptyForm = {

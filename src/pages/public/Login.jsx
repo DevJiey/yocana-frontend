@@ -16,7 +16,7 @@ import {
 } from "react-icons/fi"
 
 import GoogleSignIn from "../../components/auth/GoogleSignIn"
-import yocanaLogo from "../../assets/yocana-logo-gold.png"
+import yocanaLogo from "../../assets/yocana-logo-gold.webp"
 import { syncGuestCartToAccount } from "../../utils/guestCart"
 
 function Login() {

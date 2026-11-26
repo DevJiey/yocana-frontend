@@ -20,7 +20,7 @@ import {
 
 import AdminLayout from "../../layouts/AdminLayout"
 import BrandLoader from "../../components/BrandLoader"
-import yocanaLogo from "../../assets/yocana-logo-gold.png"
+import yocanaLogo from "../../assets/yocana-logo-gold.webp"
 
 function AdminReports() {
     const [activeTab, setActiveTab] = useState("overview")

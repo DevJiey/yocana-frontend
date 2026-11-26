@@ -15,7 +15,7 @@ import {
   FiBarChart2,
 } from "react-icons/fi"
 
-import yocanaLogo from "../assets/yocana-logo-gold.png"
+import yocanaLogo from "../assets/yocana-logo-gold.webp"
 
 function AdminLayout({ children }) {
   const navigate = useNavigate()

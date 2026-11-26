@@ -8,8 +8,8 @@ import boxFrame2 from "../assets/unboxing/box-frame-2.webp"
 import boxFrame3 from "../assets/unboxing/box-frame-3.webp"
 import boxFrame4 from "../assets/unboxing/box-frame-4.webp"
 import boxFrame5 from "../assets/unboxing/box-frame-5.webp"
-import bottleHommeImage from "../assets/bottle-homme.png"
-import bottleFemmeImage from "../assets/bottle-femme.png"
+import bottleHommeImage from "../assets/bottle-homme.webp"
+import bottleFemmeImage from "../assets/bottle-femme.webp"
 
 const fragrances = [
   {

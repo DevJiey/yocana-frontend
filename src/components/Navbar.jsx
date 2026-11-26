@@ -18,7 +18,7 @@ import {
   AnimatePresence,
 } from "motion/react"
 
-import yocanaLogo from "../assets/yocana-logo-gold.png"
+import yocanaLogo from "../assets/yocana-logo-gold.webp"
 import CartDrawer from "./cart/CartDrawer"
 import { getGuestCart } from "../utils/guestCart"
 

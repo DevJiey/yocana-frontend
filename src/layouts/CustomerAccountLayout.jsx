@@ -16,7 +16,7 @@ import {
   motion,
 } from "motion/react"
 
-import yocanaLogo from "../assets/yocana-logo-gold.png"
+import yocanaLogo from "../assets/yocana-logo-gold.webp"
 
 function CustomerAccountLayout({
   children,

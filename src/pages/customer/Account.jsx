@@ -25,8 +25,8 @@ import {
 import BrandLoader from "../../components/BrandLoader"
 import AddressManager from "../../components/account/AddressManager"
 import CustomerAccountLayout from "../../layouts/CustomerAccountLayout"
-import hommeImage from "../../assets/yocana-homme.png"
-import femmeImage from "../../assets/yocana-femme.png"
+import hommeImage from "../../assets/collection-homme.webp"
+import femmeImage from "../../assets/collection-femme.webp"
 
 function Account() {
   const navigate = useNavigate()

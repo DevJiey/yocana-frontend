@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react"
 import { FiCheck } from "react-icons/fi"
 
-import yocanaLogo from "../assets/yocana-logo-gold.png"
+import yocanaLogo from "../assets/yocana-logo-gold.webp"
 
 function BrandLoader({
   show = false,

@@ -12,7 +12,7 @@ import {
 } from "react-icons/fi"
 
 import { API_URL } from "../../config/api"
-import yocanaLogo from "../../assets/yocana-logo-gold.png"
+import yocanaLogo from "../../assets/yocana-logo-gold.webp"
 
 function ResetPassword() {
   const { token } = useParams()
