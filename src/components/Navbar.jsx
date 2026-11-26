@@ -20,6 +20,7 @@ import {
 
 import yocanaLogo from "../assets/yocana-logo-gold.png"
 import CartDrawer from "./cart/CartDrawer"
+import { getGuestCart } from "../utils/guestCart"
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -124,7 +125,15 @@ function Navbar() {
       localStorage.getItem("yocana_token")
 
     if (!token) {
-      setCartCount(0)
+      const guestCart = getGuestCart()
+      setCartCount(Number(guestCart.total_items || 0))
+
+      if (animate) {
+        setCartPulse(true)
+        setTimeout(() => {
+          setCartPulse(false)
+        }, 650)
+      }
       return
     }
 

@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import GoldDustGalaxy from "./GoldDustGalaxy"
 
 function OurStory() {
   return (
@@ -6,7 +7,8 @@ function OurStory() {
       id="story"
       className="relative overflow-hidden bg-[#050505] px-5 py-16 sm:py-20 md:px-8 md:py-24"
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-2 md:items-center md:gap-14 lg:gap-20">
+      <GoldDustGalaxy />
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 md:grid-cols-2 md:items-center md:gap-14 lg:gap-20">
 
         {/* Story Content */}
         <motion.div

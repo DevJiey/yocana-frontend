@@ -19,6 +19,7 @@ import {
 import BrandLoader from "../../components/BrandLoader"
 import GoogleSignIn from "../../components/auth/GoogleSignIn"
 import yocanaLogo from "../../assets/yocana-logo-gold.png"
+import { syncGuestCartToAccount } from "../../utils/guestCart"
 
 function Register() {
   const navigate = useNavigate()
@@ -172,7 +173,12 @@ function Register() {
     }
   }
 
-  const handleGoogleRegisterSuccess = () => {
+  const handleGoogleRegisterSuccess = async () => {
+    const token = localStorage.getItem("yocana_token")
+    if (token) {
+      await syncGuestCartToAccount(token)
+    }
+
     const requested = location.state?.from
     const destination = typeof requested === "string" &&
       requested.startsWith("/") && !requested.startsWith("//")

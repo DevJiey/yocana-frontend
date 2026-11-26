@@ -15,8 +15,13 @@ import {
   FiArrowRight,
 } from "react-icons/fi"
 
-import hommeImage from "../../assets/yocana-homme.png"
-import femmeImage from "../../assets/yocana-femme.png"
+import {
+  getGuestCart,
+  updateGuestCartItem,
+  removeGuestCartItem,
+} from "../../utils/guestCart"
+import hommeImage from "../../assets/collection-homme.webp"
+import femmeImage from "../../assets/collection-femme.webp"
 
 function CartDrawer({
   open,
@@ -104,7 +109,11 @@ function CartDrawer({
   /* ========================= */
 
   const fetchCart = async () => {
-    if (!token) {
+    const currentToken = localStorage.getItem("yocana_token")
+
+    if (!currentToken) {
+      setError("")
+      setCart(getGuestCart())
       return
     }
 
@@ -117,7 +126,7 @@ function CartDrawer({
         {
           headers: {
             Authorization:
-              `Bearer ${token}`,
+              `Bearer ${currentToken}`,
           },
         }
       )
@@ -160,20 +169,6 @@ function CartDrawer({
       return
     }
 
-    if (!token) {
-      onClose()
-
-      navigate("/login", {
-        state: {
-          from:
-            window.location.pathname +
-            window.location.search,
-        },
-      })
-
-      return
-    }
-
     fetchCart()
   }, [open])
 
@@ -183,7 +178,7 @@ function CartDrawer({
 
   useEffect(() => {
     const handleCartUpdated = () => {
-      if (open && token) {
+      if (open) {
         fetchCart()
       }
     }
@@ -267,6 +262,14 @@ function CartDrawer({
       return
     }
 
+    const currentToken = localStorage.getItem("yocana_token")
+
+    if (!currentToken) {
+      updateGuestCartItem(item.product_id, newQuantity)
+      setCart(getGuestCart())
+      return
+    }
+
     try {
       setUpdatingItem(
         item.cart_item_id
@@ -330,6 +333,14 @@ function CartDrawer({
   /* ========================= */
 
   const removeItem = async (item) => {
+    const currentToken = localStorage.getItem("yocana_token")
+
+    if (!currentToken) {
+      removeGuestCartItem(item.product_id)
+      setCart(getGuestCart())
+      return
+    }
+
     try {
       setRemovingItem(
         item.cart_item_id
@@ -388,7 +399,18 @@ function CartDrawer({
   /* ========================= */
 
   const handleCheckout = () => {
+    const currentToken = localStorage.getItem("yocana_token")
     onClose()
+
+    if (!currentToken) {
+      navigate("/login", {
+        state: {
+          from: "/checkout",
+        },
+      })
+      return
+    }
+
     navigate("/checkout")
   }
 
@@ -760,7 +782,7 @@ function CartDrawer({
                     onClick={handleCheckout}
                     className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full border border-[#FFE28A]/40 bg-[#D4AF37]/95 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_25px_rgba(212,175,55,0.3)] backdrop-blur-xl transition-all duration-300 hover:scale-[1.02] hover:bg-[#E1C35B] hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] active:scale-95"
                   >
-                    Checkout
+                    {localStorage.getItem("yocana_token") ? "Checkout" : "Sign In to Checkout"}
                     <FiArrowRight
                       size={13}
                     />

@@ -17,6 +17,7 @@ import {
 
 import GoogleSignIn from "../../components/auth/GoogleSignIn"
 import yocanaLogo from "../../assets/yocana-logo-gold.png"
+import { syncGuestCartToAccount } from "../../utils/guestCart"
 
 function Login() {
   const navigate = useNavigate()
@@ -115,6 +116,8 @@ function Login() {
         return
       }
 
+      await syncGuestCartToAccount(data.token)
+
       const requested = location.state?.from
       const redirectTo =
         typeof requested === "string" &&
@@ -135,7 +138,12 @@ function Login() {
     }
   }
 
-  const handleGoogleLoginSuccess = () => {
+  const handleGoogleLoginSuccess = async () => {
+    const token = localStorage.getItem("yocana_token")
+    if (token) {
+      await syncGuestCartToAccount(token)
+    }
+
     const requested = location.state?.from
     const destination =
       typeof requested === "string" &&

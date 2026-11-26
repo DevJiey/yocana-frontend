@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import GoldDustGalaxy from "./GoldDustGalaxy"
 import {
   FiArrowUpRight,
   FiInstagram,
@@ -12,12 +13,9 @@ function Contact() {
       id="contact"
       className="relative overflow-hidden bg-[#050505] px-5 py-16 sm:py-20 md:px-8 md:py-24"
     >
-      {/* Background atmosphere */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute bottom-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[#D4AF37]/[0.035] blur-[160px]" />
-      </div>
+      <GoldDustGalaxy />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative z-10 mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
 
           {/* LEFT SIDE */}
@@ -46,7 +44,9 @@ function Contact() {
             {/* Social links */}
             <div className="mt-8 flex items-center gap-3">
               <a
-                href="#"
+                href="https://www.instagram.com/yocanaph/"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="YOCANA Instagram"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95"
               >
@@ -54,7 +54,9 @@ function Contact() {
               </a>
 
               <a
-                href="#"
+                href="https://www.facebook.com/yocanaph"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="YOCANA Facebook"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95"
               >
@@ -62,7 +64,7 @@ function Contact() {
               </a>
 
               <a
-                href="mailto:hello@yocana.com"
+                href="mailto:yocana.ph@gmail.com"
                 aria-label="Email YOCANA"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-[#D4AF37]/50 hover:text-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.2)] active:scale-95"
               >

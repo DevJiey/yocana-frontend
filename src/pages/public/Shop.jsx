@@ -4,8 +4,8 @@ import { FiArrowUpRight } from "react-icons/fi"
 import PublicLayout from "../../layouts/PublicLayout"
 import GoldDustGalaxy from "../../components/GoldDustGalaxy"
 
-import hommeImage from "../../assets/yocana-homme.png"
-import femmeImage from "../../assets/yocana-femme.png"
+import hommeImage from "../../assets/collection-homme.webp"
+import femmeImage from "../../assets/collection-femme.webp"
 
 const products = [
     {
@@ -141,36 +141,17 @@ function Shop() {
                   />
                 </div>
 
-                                    {/* PRODUCT IMAGE */}
-                                    <div className="relative flex min-h-[160px] sm:min-h-[300px] md:min-h-[500px] items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.03] via-transparent to-black/30">
-
-                                        {/* Colored Glow */}
-                                        <div
-                                            className="absolute left-1/2 top-1/2 h-[110px] w-[110px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[45px] sm:blur-[70px] transition-all duration-500 group-hover:scale-110 sm:h-[290px] sm:w-[290px] md:h-[330px] md:w-[330px]"
-                                            style={{
-                                                background: product.glow,
-                                            }}
-                                        />
-
-                                        {/* Bottle */}
-                                        <motion.img
+                                    {/* PRODUCT IMAGE (Mobile: Full-Bleed 4:5 | Desktop: Framed Studio Showcase) */}
+                                    <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#050505] sm:aspect-auto sm:flex sm:h-[360px] sm:items-center sm:justify-center sm:py-3 md:h-[480px] md:py-4">
+                                        <img
                                             src={product.image}
                                             alt={`YOCANA ${product.name}`}
-                                            animate={{
-                                                y: [0, -6, 0],
-                                            }}
-                                            transition={{
-                                                duration: 5,
-                                                repeat: Infinity,
-                                                ease: "easeInOut",
-                                                delay: index * 0.4,
-                                            }}
-                                            className="relative z-10 h-auto w-[100px] select-none object-contain drop-shadow-[0_15px_22px_rgba(0,0,0,0.85)] transition-transform duration-500 group-hover:scale-105 sm:w-[240px] md:w-[330px]"
+                                            className="h-full w-full select-none object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 sm:w-auto sm:max-w-full sm:object-contain sm:[mask-image:linear-gradient(to_right,transparent,black_16%,black_84%,transparent)]"
                                             draggable="false"
                                         />
 
-                                        {/* Bottom Shadow */}
-                                        <div className="absolute bottom-6 sm:bottom-12 left-1/2 h-[12px] w-[80px] sm:w-[160px] -translate-x-1/2 rounded-full bg-black/80 blur-lg sm:blur-xl" />
+                                        {/* Seamless Edge Vignette */}
+                                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-black/25" />
                                     </div>
 
                                     {/* DETAILS */}

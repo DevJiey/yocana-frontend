@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { FiPlus, FiMinus } from "react-icons/fi"
+import GoldDustGalaxy from "./GoldDustGalaxy"
 
 const faqs = [
   {
@@ -45,8 +46,9 @@ function FAQ() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#080808] px-5 py-16 sm:py-20 md:px-8 md:py-24">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden bg-[#050505] px-5 py-16 sm:py-20 md:px-8 md:py-24">
+      <GoldDustGalaxy />
+      <div className="relative z-10 mx-auto max-w-7xl">
 
         {/* Heading */}
         <motion.div

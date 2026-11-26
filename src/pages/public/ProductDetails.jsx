@@ -17,8 +17,10 @@ import {
 
 import PublicLayout from "../../layouts/PublicLayout"
 import BrandLoader from "../../components/BrandLoader"
-import hommeImage from "../../assets/yocana-homme.png"
-import femmeImage from "../../assets/yocana-femme.png"
+import GoldDustGalaxy from "../../components/GoldDustGalaxy"
+import { addToGuestCart } from "../../utils/guestCart"
+import hommeImage from "../../assets/collection-homme.webp"
+import femmeImage from "../../assets/collection-femme.webp"
 
 function ProductDetails() {
   const { id } = useParams()
@@ -226,11 +228,21 @@ function ProductDetails() {
     const token = localStorage.getItem("yocana_token")
 
     if (!token) {
-      navigate("/login", {
-        state: {
-          from: location.pathname,
-        },
-      })
+      setCartError("")
+      setCartStatus("loading")
+      setCartOverlay(true)
+
+      await new Promise((resolve) =>
+        setTimeout(resolve, 450)
+      )
+
+      addToGuestCart(product, quantity)
+      setCartStatus("success")
+
+      setTimeout(() => {
+        setCartOverlay(false)
+        animateProductToCart()
+      }, 550)
       return
     }
 
@@ -307,6 +319,18 @@ function ProductDetails() {
   }
 
   const handleBuyNow = async () => {
+    const token = localStorage.getItem("yocana_token")
+
+    if (!token) {
+      addToGuestCart(product, quantity)
+      navigate("/login", {
+        state: {
+          from: "/checkout",
+        },
+      })
+      return
+    }
+
     try {
       setCartError("")
       setCartStatus("loading")
@@ -442,8 +466,9 @@ function ProductDetails() {
         }
       />
 
-      <main className="min-h-screen bg-[#050505] px-4 pb-14 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:px-8 md:pb-24 md:pt-28">
-        <div className="mx-auto max-w-7xl">
+      <main className="relative min-h-screen overflow-hidden bg-[#050505] px-4 pb-14 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:px-8 md:pb-24 md:pt-28">
+        <GoldDustGalaxy />
+        <div className="relative mx-auto max-w-7xl">
 
           <Link
             to="/shop"
@@ -455,7 +480,7 @@ function ProductDetails() {
 
           <div className="grid grid-cols-1 gap-5 sm:gap-8 md:grid-cols-2 md:items-center md:gap-12 lg:gap-16">
 
-            {/* PRODUCT IMAGE */}
+            {/* PRODUCT IMAGE (Static Studio Editorial Showcase) */}
             <motion.div
               initial={{
                 opacity: 0,
@@ -468,43 +493,18 @@ function ProductDetails() {
               transition={{
                 duration: 0.65,
               }}
-              className="relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-xl sm:rounded-2xl border border-white/[0.12] bg-[#0c0c0c]/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl sm:min-h-[400px] md:min-h-[540px]"
+              className="relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-white/[0.12] bg-[#050505] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl sm:aspect-auto sm:flex sm:h-[420px] sm:items-center sm:justify-center sm:rounded-2xl sm:py-3 md:h-[540px] md:py-4"
             >
-              <div
-                className="absolute left-1/2 top-1/2 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[45px] sm:blur-[70px] sm:h-[260px] sm:w-[260px] md:h-[390px] md:w-[390px]"
-                style={{
-                  background: glow,
-                }}
-              />
-
-              <div className="absolute h-[150px] w-[150px] rounded-full border border-[#D4AF37]/10 sm:h-[280px] sm:w-[280px] md:h-[440px] md:w-[440px]" />
-
-              <div className="absolute h-[115px] w-[115px] rounded-full border border-white/[0.04] sm:h-[220px] sm:w-[220px] md:h-[350px] md:w-[350px]" />
-
-              <motion.img
+              <img
                 ref={productImageRef}
                 src={productImage}
                 alt={product.name}
-                animate={{
-                  y: [0, -9, 0],
-                }}
-                transition={{
-                  duration: 5.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="relative z-10 h-auto w-[125px] select-none object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.85)] sm:w-[240px] md:w-[380px]"
+                className="h-full w-full select-none object-cover object-center sm:w-auto sm:max-w-full sm:object-contain sm:[mask-image:linear-gradient(to_right,transparent,black_16%,black_84%,transparent)]"
                 draggable="false"
               />
 
-              <div
-                className="absolute bottom-[35px] sm:bottom-[70px] left-1/2 h-[4px] sm:h-[5px] w-[95px] sm:w-[190px] -translate-x-1/2 rounded-full blur-[6px] sm:blur-[9px]"
-                style={{
-                  background: glow,
-                }}
-              />
-
-              <div className="absolute bottom-[28px] sm:bottom-[58px] left-1/2 h-[12px] sm:h-[20px] w-[120px] sm:w-[190px] -translate-x-1/2 rounded-full bg-black/90 blur-lg sm:blur-xl" />
+              {/* Seamless Edge Vignette */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080808]/80 via-transparent to-black/25" />
             </motion.div>
 
             {/* PRODUCT INFO */}

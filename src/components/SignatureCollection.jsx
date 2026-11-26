@@ -2,8 +2,8 @@ import { Link } from "react-router-dom"
 import { motion } from "motion/react"
 import { FiArrowUpRight } from "react-icons/fi"
 
-import hommeImage from "../assets/yocana-homme.png"
-import femmeImage from "../assets/yocana-femme.png"
+import hommeImage from "../assets/collection-homme.webp"
+import femmeImage from "../assets/collection-femme.webp"
 import GoldDustGalaxy from "./GoldDustGalaxy"
 
 const products = [
@@ -139,48 +139,23 @@ function SignatureCollection() {
                   />
                 </div>
 
-                {/* IMAGE AREA (Translucent Glass Showcase) */}
-                <div className="relative flex min-h-[160px] sm:min-h-[300px] md:min-h-[440px] items-center justify-center overflow-hidden bg-gradient-to-b from-white/[0.03] via-transparent to-black/30">
-
-                  {/* Large colored ambient glow */}
-                  <div
-                    className="absolute left-1/2 top-[48%] h-[110px] w-[110px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[45px] sm:blur-[70px] transition-all duration-500 group-hover:scale-110 sm:h-[260px] sm:w-[260px] md:h-[320px] md:w-[320px]"
-                    style={{
-                      background: product.glow,
-                    }}
-                  />
-
-                  {/* Stronger light directly behind the bottle */}
-                  <div
-                    className="absolute left-1/2 top-[55%] h-[60px] w-[90px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[25px] sm:blur-[40px] sm:h-[130px] sm:w-[220px]"
-                    style={{
-                      background: product.glowStrong,
-                    }}
-                  />
-
+                {/* IMAGE AREA (Mobile: Full-Bleed 4:5 | Desktop: Framed Studio Showcase) */}
+                <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#050505] sm:aspect-auto sm:flex sm:h-[360px] sm:items-center sm:justify-center sm:py-3 md:h-[460px] md:py-4">
                   {/* Product number with glass pill */}
-                  <span className="absolute right-2.5 top-2.5 sm:right-5 sm:top-5 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[9px] font-medium tracking-[0.2em] sm:tracking-[0.25em] text-white/40 backdrop-blur-md transition-colors duration-300 group-hover:border-[#D4AF37]/40 group-hover:text-[#D4AF37]">
+                  <span className="absolute right-2.5 top-2.5 sm:right-5 sm:top-5 z-20 rounded-full border border-white/15 bg-black/50 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[9px] font-medium tracking-[0.2em] sm:tracking-[0.25em] text-white/60 backdrop-blur-md transition-colors duration-300 group-hover:border-[#D4AF37]/50 group-hover:text-[#D4AF37]">
                     {product.number}
                   </span>
 
-                  {/* Perfume Bottle (Static luxury display - 0 lag) */}
+                  {/* Studio Editorial Bottle Image */}
                   <img
                     src={product.image}
                     alt={`YOCANA ${product.name}`}
-                    className="relative z-10 h-auto w-[100px] select-none object-contain drop-shadow-[0_15px_22px_rgba(0,0,0,0.85)] transition-transform duration-500 group-hover:scale-105 sm:w-[220px] md:w-[310px]"
+                    className="h-full w-full select-none object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 sm:w-auto sm:max-w-full sm:object-contain sm:[mask-image:linear-gradient(to_right,transparent,black_16%,black_84%,transparent)]"
                     draggable="false"
                   />
 
-                  {/* Floor glow */}
-                  <div
-                    className="absolute bottom-[28px] sm:bottom-[56px] left-1/2 h-[3px] w-[60px] sm:w-[145px] md:w-[165px] -translate-x-1/2 rounded-full blur-[6px] sm:blur-[8px]"
-                    style={{
-                      background: product.glowStrong,
-                    }}
-                  />
-
-                  {/* Bottom shadow */}
-                  <div className="absolute bottom-[24px] sm:bottom-[48px] left-1/2 h-[12px] w-[80px] sm:w-[180px] -translate-x-1/2 rounded-full bg-black/85 blur-lg sm:blur-xl" />
+                  {/* Seamless Edge Vignette */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-black/25" />
                 </div>
 
                 {/* PRODUCT DETAILS (Frosted Glass Panel) */}

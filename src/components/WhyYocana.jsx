@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import GoldDustGalaxy from "./GoldDustGalaxy"
 import {
   FiFeather,
   FiClock,
@@ -28,8 +29,9 @@ const features = [
 
 function WhyYocana() {
   return (
-    <section className="relative overflow-hidden bg-[#080808] px-5 py-16 sm:py-20 md:px-8 md:py-24">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden bg-[#050505] px-5 py-16 sm:py-20 md:px-8 md:py-24">
+      <GoldDustGalaxy />
+      <div className="relative z-10 mx-auto max-w-7xl">
 
         {/* Heading */}
         <motion.div

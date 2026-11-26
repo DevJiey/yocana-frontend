@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
+import GoldDustGalaxy from "./GoldDustGalaxy"
 import {
   FiStar,
   FiChevronLeft,
@@ -59,7 +60,8 @@ function Testimonials() {
 
   return (
     <section className="relative overflow-hidden bg-[#050505] px-5 py-14 sm:py-16 md:px-8 md:py-20">
-      <div className="mx-auto max-w-7xl">
+      <GoldDustGalaxy />
+      <div className="relative z-10 mx-auto max-w-7xl">
 
         {/* Heading */}
         <motion.div
